@@ -15,8 +15,8 @@ import java.sql.SQLException;
  * @author BTF
  */
 public class Conexion {
-    String DB="ies9021_database",URL="jdbc:mysql://localhost:3306/",User="root",Password="1111"
-            ,Driver="com.mysql.cj.jdbc.Driver";//IF ERROR ERASE .cj
+    String DB="ies9021_database",URL="jdbc:mysql://ies9021.edu.ar:3306/",User="ies9021_userdb",Password="Xsw23edc.127"
+            ,Driver="com.mysql.jdbc.Driver";//IF ERROR ERASE .cj
     Connection conex;
     
     public Conexion(){}
@@ -37,7 +37,7 @@ public class Conexion {
         try {
             conex.close();
         } catch (SQLException ex) {
-            System.out.println("Conexcion terminada");
+            System.out.println("Conexion terminada");
             Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE,null,ex);
         }
     }
