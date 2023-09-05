@@ -1,50 +1,22 @@
-<<<<<<< Updated upstream
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Utils;
 
-
-=======
-package Utils;
-
->>>>>>> Stashed changes
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-<<<<<<< Updated upstream
-import java.sql.*;
-=======
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
->>>>>>> Stashed changes
 
 public class JavaFileGenerator {
     public static void createClass(String tableName) {
 
-<<<<<<< Updated upstream
-        String folderPath = "app/src/main/java/com/example/micarreraperfecta/Model/"; // Ruta de la carpeta donde se creará el archivo
-
-        // Configuración de la conexión a la base de datos
-        String url = "jdbc:mysql://ies9021.edu.ar:3306/ies9021_database";
-        String username = "ies9021_userdb";
-        String password = "Xsw23edc.127";
-
-        try {
-            // Establecer conexión a la base de datos
-            Connection connection = DriverManager.getConnection(url, username, password);
-
-=======
         String folderPath = "app/src/main/java/com/example/micarreraperfecta/Model/";
         DDBBConnection dbConnection = new DDBBConnection();
         Connection connection = dbConnection.Conectar();
 
         try {
->>>>>>> Stashed changes
             // Obtener metadatos de la tabla
             DatabaseMetaData metaData = connection.getMetaData();
             ResultSet resultSet = metaData.getColumns(null, null, tableName, null);
@@ -95,11 +67,7 @@ public class JavaFileGenerator {
             System.out.println("Archivo generado exitosamente.");
 
             // Cerrar la conexión a la base de datos
-<<<<<<< Updated upstream
-            connection.close();
-=======
             dbConnection.Disconect();
->>>>>>> Stashed changes
         } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
@@ -166,9 +134,6 @@ interface atributeType {
                 break;
         }
         return retType;
-<<<<<<< Updated upstream
-    };
-=======
     }
->>>>>>> Stashed changes
 }
+
