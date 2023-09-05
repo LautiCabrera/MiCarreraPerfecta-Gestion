@@ -12,7 +12,7 @@ import java.sql.SQLException;
 public class JavaFileGenerator {
     public static void createClass(String tableName) {
 
-        String folderPath = "app/src/main/java/com/example/micarreraperfecta/Model/";
+        String folderPath = "src/Models";
         DDBBConnection dbConnection = new DDBBConnection();
         Connection connection = dbConnection.Conectar();
 
