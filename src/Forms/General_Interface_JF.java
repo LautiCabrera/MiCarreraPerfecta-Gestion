@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Forms;
 
 import javax.swing.DefaultComboBoxModel;
@@ -11,23 +7,10 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.swing.DefaultCellEditor;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.table.TableCellEditor;
-import javax.swing.tree.DefaultTreeCellEditor;
-import Utils.Conexion;
+import Utils.DDBBConnection;
 
-/**
- *
- * @author BTF
- */
 public class General_Interface_JF extends javax.swing.JFrame {
-    
-    
-    /**
-     * Creates new form Carrer_Word_Key_JF
-     */
     
     General_Methods GM=new General_Methods();
     String Columns[];
@@ -262,7 +245,7 @@ public class General_Interface_JF extends javax.swing.JFrame {
 
     private void BTNSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNSelectActionPerformed
         // TODO add your handling code here:
-        Conexion con =new Conexion();
+        DDBBConnection con = new DDBBConnection();
         RS=con.SendAndRecibe("select * from `ies9021_database`.users");
         PintarTablaRows(RS);
         ResetButtons();

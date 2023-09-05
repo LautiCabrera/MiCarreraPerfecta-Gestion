@@ -1,18 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Models;
 
-import java.util.ArrayList;
-import Utils.Conexion;
+import Utils.DDBBConnection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/**
- *
- * @author BTF
- */
 public class CWK_Methods {
 
     public void amethod() {
@@ -351,7 +342,7 @@ public class CWK_Methods {
     //Cambiar ResultSet a ResultSetIES9021 para obtener respuesta boolean
     public ResultSet executeQuery(String Querys) {
             
-        Conexion conect=new Conexion();
+        DDBBConnection conect = new DDBBConnection();
         conect.Conectar();
         ResultSet result=conect.SendAndRecibe(Querys);
         //ResulSetIES9021 resulSetIES9021 = DBCCConnection.executeQuery(Querys);
