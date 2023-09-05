@@ -23,7 +23,7 @@ public class JsonDataFetcher<T> {
     ResultSet resultSet = null;
 
     try {
-        resultSet = DBConection.executeQuery(query);
+        resultSet = DBConnection.executeQuery(query);
 
         if (resultSet != null && resultSet.next()) {
             ObjectMapper mapper = new ObjectMapper();
@@ -45,7 +45,7 @@ public class JsonDataFetcher<T> {
     } catch (Exception e) {
         e.printStackTrace();
     } finally {
-        DBConection.closeResources(null, null, resultSet);
+        DBConnection.closeResources(null, null, resultSet);
     }
 
     return null;
@@ -63,7 +63,7 @@ public class JsonDataFetcher<T> {
     ResultSet resultSet = null;
 
     try {
-        resultSet = DBConection.executeQuery(query);
+        resultSet = DBConnection.executeQuery(query);
 
         if (resultSet != null && resultSet.next()) {
             ObjectMapper mapper = new ObjectMapper();
@@ -85,7 +85,7 @@ public class JsonDataFetcher<T> {
     } catch (Exception e) {
         e.printStackTrace();
     } finally {
-        DBConection.closeResources(null, null, resultSet);
+        DBConnection.closeResources(null, null, resultSet);
     }
 
     return null;
@@ -105,7 +105,7 @@ public class JsonDataFetcher<T> {
         ResultSet resultSet = null;
 
         try {
-            resultSet = DBConection.executeQuery(query);
+            resultSet = DBConnection.executeQuery(query);
 
             if (resultSet != null && resultSet.next()) {
                 ObjectMapper mapper = new ObjectMapper();
@@ -127,7 +127,7 @@ public class JsonDataFetcher<T> {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            DBConection.closeResources(null, null, resultSet);
+            DBConnection.closeResources(null, null, resultSet);
         }
 
         return null;
