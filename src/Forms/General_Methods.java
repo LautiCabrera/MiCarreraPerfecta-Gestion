@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Forms;
 
 import java.sql.DatabaseMetaData;
@@ -17,56 +13,50 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import Utils.DDBBConnection;
 
-/**
- *
- * @author BTF
- */
 public class General_Methods {
-    
-    //String Columns[];
-    
-    /*PintarTabla se conecta a la base de Datos para obtener el nombre de las columnas
-        de la base de datos y colocarlos en la tabla que tengamos en nuestro JTable
-    */
-    public String[] Columns(String Table){
-        DDBBConnection DBC=new DDBBConnection();
+
+    public String[] Columns(String Table) {
+        DDBBConnection DBC = new DDBBConnection();
         try {
-            DatabaseMetaData metaData=DBC.Conectar().getMetaData();
-            ResultSet Columns =metaData.getColumns(null,null,Table,null);
-            ArrayList<String> ColumnsNames=new ArrayList();
-            while(Columns.next()){
-                if(!UnWantedColumnsNames(Columns.getString("COLUMN_NAME"))){
+            DatabaseMetaData metaData = DBC.Conectar().getMetaData();
+            ResultSet Columns = metaData.getColumns(null, null, Table, null);
+            ArrayList<String> ColumnsNames = new ArrayList<>();
+            while (Columns.next()) {
+                if (!UnWantedColumnsNames(Columns.getString("COLUMN_NAME"))) {
                     ColumnsNames.add(Columns.getString("COLUMN_NAME"));
                 }
             }
             Columns.close();
-            String Colum[] = new String[ColumnsNames.size()];
-            int count=0;
+            String[] Colum = new String[ColumnsNames.size()];
+            int count = 0;
             for (String CN : ColumnsNames) {
-                Colum[count]=CN;
+                Colum[count] = CN;
                 count++;
             }
             return Colum;
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            DBC.Disconect();
         }
         return null;
     }
-    public void PintarTabla(String Table, JTable jTable){
-        DefaultTableModel Tabla= (DefaultTableModel) jTable.getModel();
-        DDBBConnection DBC=new DDBBConnection();
+
+    public void PintarTabla(String Table, JTable jTable) {
+        DefaultTableModel Tabla = (DefaultTableModel) jTable.getModel();
+        DDBBConnection DBC = new DDBBConnection();
         try {
-            DatabaseMetaData metaData=DBC.Conectar().getMetaData();
-            ResultSet Columns =metaData.getColumns(null,null,Table,null);
-            ArrayList<String> ColumnsNames=new ArrayList();
-            while(Columns.next()){
-                if(!UnWantedColumnsNames(Columns.getString("COLUMN_NAME"))){
+            DatabaseMetaData metaData = DBC.Conectar().getMetaData();
+            ResultSet Columns = metaData.getColumns(null, null, Table, null);
+            ArrayList<String> ColumnsNames = new ArrayList<>();
+            while (Columns.next()) {
+                if (!UnWantedColumnsNames(Columns.getString("COLUMN_NAME"))) {
                     ColumnsNames.add(Columns.getString("COLUMN_NAME"));
                 }
             }
             Columns.close();
             Tabla.setColumnCount(ColumnsNames.size());
-            int count=0;
+            int count = 0;
             for (String CN : ColumnsNames) {
                 JTableHeader tableHeader = jTable.getTableHeader();
                 TableColumnModel tableColumnModel = tableHeader.getColumnModel();
@@ -77,11 +67,12 @@ public class General_Methods {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            DBC.Disconect();
         }
     }
-    /*Existen nombres por defecto que se agregan a nuestro JTable
-    Si encuentran alguno que no este en la lista, por favor agregarlo*/
-    private boolean UnWantedColumnsNames(String Name){
+
+    private boolean UnWantedColumnsNames(String Name) {
         String[] unwantedColumnNames = {
             "USER", "CURRENT_CONNECTIONS", "TOTAL_CONNECTIONS",
             "MAX_SESSION_CONTROLLED_MEMORY", "MAX_SESSION_TOTAL_MEMORY"
@@ -93,35 +84,30 @@ public class General_Methods {
         }
         return false;
     }
-    
-    public void PintarComboBox(String Table, JComboBox jCombo){
-        DDBBConnection DBC=new DDBBConnection();
+
+    public void PintarComboBox(String Table, JComboBox<String> jCombo) {
+        DDBBConnection DBC = new DDBBConnection();
         try {
-            DatabaseMetaData metaData=DBC.Conectar().getMetaData();
-            ResultSet Columns =metaData.getColumns(null,null,Table,null);
-            ArrayList<String> ColumnsNames=new ArrayList();
-            while(Columns.next()){
-                if(!UnWantedColumnsNames(Columns.getString("COLUMN_NAME"))){
+            DatabaseMetaData metaData = DBC.Conectar().getMetaData();
+            ResultSet Columns = metaData.getColumns(null, null, Table, null);
+            ArrayList<String> ColumnsNames = new ArrayList<>();
+            while (Columns.next()) {
+                if (!UnWantedColumnsNames(Columns.getString("COLUMN_NAME"))) {
                     ColumnsNames.add(Columns.getString("COLUMN_NAME"));
                 }
             }
             Columns.close();
-            String Colum[] = new String[ColumnsNames.size()];
-            int count=0;
+            String[] Colum = new String[ColumnsNames.size()];
+            int count = 0;
             for (String CN : ColumnsNames) {
-                Colum[count]=CN;
+                Colum[count] = CN;
                 count++;
             }
-            //return Colum
             jCombo.setModel(new DefaultComboBoxModel<>(Colum));
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            DBC.Disconect();
         }
     }
-    
-    
 }
-
-
-
-

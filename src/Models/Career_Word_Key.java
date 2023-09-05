@@ -1,15 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Models;
 
-/**
- *
- * @author BTF
- */
 public class Career_Word_Key {
-    
 
     private int id_Career_word_key;
     private int id_Career;
@@ -19,11 +10,9 @@ public class Career_Word_Key {
     private String f_Create;
     private String f_Update;
 
-
     //Constructores
 
-    public Career_Word_Key() {
-    }
+    public Career_Word_Key() {}
 
     public Career_Word_Key(int id_Career_word_key, int id_Career, int id_Word_key,
                            int id_User_Update, int id_User_Create, String f_Create,
