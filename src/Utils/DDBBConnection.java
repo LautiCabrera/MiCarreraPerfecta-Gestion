@@ -1,90 +1,154 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Utils;
 
-import java.util.logging.Logger;
-import java.util.logging.Level;
 import java.sql.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-/**
- *
- * @author BTF
- */
-public class DDBBConnection {
-    String  DB="ies9021_database",
-            URL="jdbc:mysql://localhost:3306/",
-            User="root",
-            Password="1111",
-            Driver="com.mysql.cj.jdbc.Driver";//IF ERROR ERASE .cj
-    Connection Conection;
+import java.time.LocalDate;
 
-    public DDBBConnection() {
-    }
+public abstract class DDBBConnection {
     
-    public Connection Conectar(){
+    private static String DB = "ies9021_database";
+    private static String URL = "jdbc:mysql://ies9021.edu.ar:3306/" + DB + "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+    private static String User = "ies9021_userdb";
+    private static String Password = "Xsw23edc.127";
+    private static String Driver = "com.mysql.cj.jdbc.Driver"; 
+
+    private static Connection Conection;
+
+    private DDBBConnection() {}
+
+    protected static Connection Conectar(){
         try {
             Class.forName(Driver);
-            Conection=DriverManager.getConnection(URL+DB,User,Password);
+            Conection = DriverManager.getConnection(URL, User, Password);
             return Conection;
         } catch (ClassNotFoundException | SQLException ex) {
-            System.out.println("Error en: "+this.toString()+"\nError: "+ex.getMessage());
-             System.out.println("No se conexto a BD"+DB);
-            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE,null,ex);
+            System.out.println("Error en: DDBBConnection \nError: " + ex.getMessage());
+            System.out.println("No se conectó a BD " + DB);
         }
         return null;
     }
-    
-    public ResultSetIES9021 SendQuery(String Query){
-        ResultSetIES9021 RSIES9021=null;
-        Conection=Conectar();
-        PreparedStatement statement=null;
+
+    protected static void Disconect(){
         try {
-            statement=Conection.prepareStatement(Query);
-            RSIES9021.RS=statement.executeQuery();
-            RSIES9021.State=true;
-        } catch (Exception e) {
+            Conection.close();
+        } catch (SQLException ex) {
+            System.out.println("Conexion terminada");
+        }
+    }
+    
+    public static ResultSetIES9021 SendQuery(String Query){
+        
+        ResultSetIES9021 RSIES9021 = new ResultSetIES9021();
+        if(QueryVerification(Query)){
+        Conection = Conectar();
+        PreparedStatement statement = null;
+        
+            try {
+                statement = Conection.prepareStatement(Query);
+                RSIES9021.RS = statement.executeQuery();
+                RSIES9021.State = true;
+            } catch (Exception e) {
             e.printStackTrace();
-            RSIES9021.RS=null;
-            RSIES9021.State=false;
-            RSIES9021.Clarification=e.getMessage();
+            RSIES9021.RS = null;
+            RSIES9021.State = false;
+            RSIES9021.Clarification = e.getMessage();
         } finally{
             try {
-                if(statement!=null){
+                if(statement!= null){
                     statement.close();
                 }
-                if(Conection!=null){
+                if(Conection!= null){
                     Conection.close();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+    }
         return RSIES9021;
     }
     
-    private boolean QueryVerification(String Query){
-        String VQuery=Query.toLowerCase().substring(0, 6);
-        if(VQuery.equals("insert")||VQuery.equals("select")||
-           VQuery.equals("update")||VQuery.equals("delete")){
+    private static void logConnection(String title, String description) {
+        String insertQuery = "INSERT INTO logs (title, description, id_user, date) VALUES (?, ?, ?, ?)";
+
+        try (Connection connection = Conectar();
+            PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+
+            preparedStatement.setString(1, title);
+            preparedStatement.setString(2, description);
+            preparedStatement.setInt(3, 6);
+            preparedStatement.setString(4, LocalDate.now().toString());
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    /* 
+    public ResultSet executeQuery(String query) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet result = null;
+
+        try {
+            connection = Conectar();
+            statement = connection.prepareStatement(query);
+            result = statement.executeQuery();
+            logConnection("Conexión exitosa", query);
+
+            return result;
+        } catch (SQLException e) {
+            logConnection("Conexión fallida", query);
+            e.printStackTrace();
+        }finally{
+            closeResources(connection, statement, result);
+        }
+
+        return null;
+    } */
+    
+    private static boolean QueryVerification(String Query){
+        String testQuery = Query.toLowerCase().substring(0, 6);
+        boolean verification = false;
+        if(testQuery.equals("insert")||testQuery.equals("select")||
+        testQuery.equals("update")||testQuery.equals("delete")){
             switch(Query.toLowerCase().charAt(0)){
                 case 's':
+                verification = true;
                     break;
                 case 'i':
                     break;
                 case 'u':
+                    verification = testQuery.matches("UPDATE\\s+\\w+\\s+SET\\s+\\w+\\s*=\\s*[^;]+WHERE\\s+[^;]+;\r\n");
                     break;
                 case 'd':
+                    verification = testQuery.matches("DELETE\\s+FROM\\s'+\\w+\\s+WHERE\\s+[^;]+;");
                     break;
             }
         }
-        return false;
+        
+        if(verification){
+            logConnection("Valid Connection attempt", testQuery);
+        } else {
+            logConnection("Invalid Connection attempt", testQuery);
+        }
+
+        return verification;
+    }
+
+    public static void closeResources(Connection connection, PreparedStatement statement, ResultSet result) {
+        try {
+            if (result != null) {
+                result.close();
+            }
+            if (statement != null) {
+                statement.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
     
-    
-    
 }
-
