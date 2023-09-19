@@ -13,8 +13,7 @@ public class JavaFileGenerator {
     public static void createClass(String tableName) {
 
         String folderPath = "src/Models";
-        DDBBConnection dbConnection = new DDBBConnection();
-        Connection connection = dbConnection.Conectar();
+        Connection connection = DDBBConnection.Conectar();
 
         try {
             // Obtener metadatos de la tabla
@@ -23,13 +22,13 @@ public class JavaFileGenerator {
 
             // Generar código Java
             StringBuilder codeBuilder = new StringBuilder();
-            codeBuilder.append("package Test_Project.Models;").append("\n");
+            codeBuilder.append("package Models;").append("\n");
             codeBuilder.append("import com.fasterxml.jackson.annotation.JsonProperty;").append("\n");
             codeBuilder.append("import java.sql.Timestamp;").append("\n");
             codeBuilder.append("import java.sql.Date;").append("\n");
-            codeBuilder.append("public class ").append(toCamelCase(tableName)).append(" {\n");
-            codeBuilder.append("private final static String TABLENAME = ").append('"' + tableName + '"').append(";\n");
-            codeBuilder.append("public static String getTABLENAME() {return TABLENAME;}\n");
+            codeBuilder.append("public class ").append(toCamelCase(tableName)).append(" {\n").append("\t\n");
+            codeBuilder.append("\tprivate final static String TABLENAME = ").append('"' + tableName + '"').append(";\n").append("\t\n");
+            codeBuilder.append("\tpublic static String getTABLENAME() {return TABLENAME;}\n").append("\t\n");
 
             while (resultSet.next()) {
                 String columnName = resultSet.getString("COLUMN_NAME");
@@ -40,12 +39,12 @@ public class JavaFileGenerator {
                 codeBuilder.append("\tpublic ").append(columnType).append(" get").append(toCamelCase(columnName))
                         .append("() {\n")
                         .append("\t\treturn ").append(columnName).append(";\n")
-                        .append("\t}\n");
+                        .append("\t}\n").append("\t\n");
                 // Generar el setter
                 codeBuilder.append("\tpublic void set").append(toCamelCase(columnName)).append("(").append(columnType)
                         .append(" ").append(columnName).append(") {\n")
                         .append("\t\tthis.").append(columnName).append(" = ").append(columnName).append(";\n")
-                        .append("\t}\n");
+                        .append("\t}\n").append("\t\n");
             }
 
             codeBuilder.append("}");
@@ -67,7 +66,7 @@ public class JavaFileGenerator {
             System.out.println("Archivo generado exitosamente.");
 
             // Cerrar la conexión a la base de datos
-            dbConnection.Disconect();
+            DDBBConnection.closeResources(connection, null, resultSet);
         } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
