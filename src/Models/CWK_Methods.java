@@ -151,6 +151,8 @@ public class CWK_Methods {
     */
     //Metodos que si sirven
     //Sector de Querys
+    
+  /*  
     private String CreateQuery(String Action, int Ubication, String Values, int Where, int id_object, int id_object2) {
         return CreateQuery(Action, Ubication, Values, Where, id_object, id_object2, "");
     }
@@ -340,13 +342,10 @@ public class CWK_Methods {
     }
 
     //Cambiar ResultSet a ResultSetIES9021 para obtener respuesta boolean
-    public ResultSet executeQuery(String Querys) {
+    public ResultSet executeQuer(String Querys) {
             
-        DDBBConnection conect = new DDBBConnection();
-        conect.Conectar();
-        ResultSet result=conect.SendAndRecibe(Querys);
         //ResulSetIES9021 resulSetIES9021 = DBCCConnection.executeQuery(Querys);
-        /*
+        
         *  if(resulSetIES9021.getState){
         *   if(resulSetIES9021.getresulset!=null){
         *
@@ -357,8 +356,8 @@ public class CWK_Methods {
         *
         *
         *
-        * */
-        return result;
+        * 
+        return null;
     }
-
+*/
 }

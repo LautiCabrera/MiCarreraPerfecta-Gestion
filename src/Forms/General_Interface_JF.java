@@ -1,5 +1,10 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
 package Forms;
 
+import java.awt.Color;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -8,14 +13,24 @@ import javax.swing.table.TableColumnModel;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
-import Utils.DDBBConnection;
+import Utils.General_Methods;
+import static Utils.DDBBConnection.SendQuery;
+import Utils.ResultSetIES9021;
 
+/**
+ *
+ * @author BTF
+ */
 public class General_Interface_JF extends javax.swing.JFrame {
     
-    General_Methods GM=new General_Methods();
+    
+    /**
+     * Creates new form Carrer_Word_Key_JF
+     */
+    
+    General_Methods GEM;
     String Columns[];
     DefaultTableModel Tabla;
-    ResultSet RS;
     int SelectedRow=-1;
     
     public General_Interface_JF() {
@@ -23,10 +38,24 @@ public class General_Interface_JF extends javax.swing.JFrame {
         ConfigurationStart();
     }
     
+    public General_Interface_JF(String Modo,General_Methods GEM) {
+        initComponents();
+        this.GEM=GEM;
+        ConfigurationStart(Modo);
+    }
+    
     private void ConfigurationStart(){
-        Columns=GM.Columns("users");
+        GEM=new General_Methods();
+        ConfigurationStart("");
+        Refresh();
+    }
+    
+    private void ConfigurationStart(String Modo){
+        Columns=GEM.Columns(Modo);
+        System.out.println(Modo+" "+Columns.length);
         PintarTablaColumns();
         PintarComboBox();
+        LABTittle.setText(Modo.toUpperCase());
         jTable1.setSelectionMode(0);//2 Varios rangos; 1 Un rango; 0 Una fila
     }
     
@@ -69,17 +98,31 @@ public class General_Interface_JF extends javax.swing.JFrame {
                 }
                 Tabla.addRow(O);
             }
-            O=null;
+            //O=null;
         }
         }catch(SQLException e){
             e.printStackTrace();
         }
     }
     
-    private void enableCellEditing(){
-        
+    private void Refresh(){
+        jTable1.clearSelection();
+        int Paginador=Integer.getInteger(String.valueOf(JCBPaginador.getSelectedItem()));
+        JCBPagina.setModel(new DefaultComboBoxModel<>(GEM.Paginas(Paginador,LABTittle.getText().toLowerCase())));
+        int Pag=JCBPagina.getSelectedIndex();
+        Pagina(Pag,Paginador);
+        ResetButtons();
     }
-
+    
+    private void Pagina(int Pag, int Paginador){
+        jTable1.clearSelection();
+        ResultSetIES9021 RS=SendQuery("select * from `ies9021_database`."+
+                LABTittle.getText().toLowerCase()+" LIMIT "+Paginador+
+                " OFFSET "+(Pag*Paginador));
+        PintarTablaRows(RS.RS);
+        ResetButtons();
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -99,9 +142,16 @@ public class General_Interface_JF extends javax.swing.JFrame {
         BTNSearch = new javax.swing.JButton();
         TXTSearch = new javax.swing.JTextField();
         CBSelector = new javax.swing.JComboBox<>();
-        BTNSelect = new javax.swing.JButton();
+        JCBPaginador = new javax.swing.JComboBox<>();
+        JCBPagina = new javax.swing.JComboBox<>();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("BNLarge");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         LABTittle.setText("jLabel1");
 
@@ -170,15 +220,39 @@ public class General_Interface_JF extends javax.swing.JFrame {
         BTNSearch.setText("Buscar");
         BTNSearch.setMaximumSize(new java.awt.Dimension(82, 24));
         BTNSearch.setPreferredSize(new java.awt.Dimension(82, 24));
-
-        TXTSearch.setText("Buscar");
-
-        BTNSelect.setText("Select *");
-        BTNSelect.setMaximumSize(new java.awt.Dimension(82, 24));
-        BTNSelect.setPreferredSize(new java.awt.Dimension(82, 24));
-        BTNSelect.addActionListener(new java.awt.event.ActionListener() {
+        BTNSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BTNSelectActionPerformed(evt);
+                BTNSearchActionPerformed(evt);
+            }
+        });
+
+        TXTSearch.setForeground(Color.lightGray);
+        TXTSearch.setText("Buscar");
+        TXTSearch.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                TXTSearchFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                TXTSearchFocusLost(evt);
+            }
+        });
+        TXTSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TXTSearchKeyTyped(evt);
+            }
+        });
+
+        JCBPaginador.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "20", "50", "100", "150", "200" }));
+        JCBPaginador.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JCBPaginadorActionPerformed(evt);
+            }
+        });
+
+        JCBPagina.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1" }));
+        JCBPagina.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JCBPaginaActionPerformed(evt);
             }
         });
 
@@ -203,8 +277,10 @@ public class General_Interface_JF extends javax.swing.JFrame {
                                 .addComponent(BTNSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(BTNRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(BTNSelect, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(JCBPagina, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(JCBPaginador, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(BTNAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -228,7 +304,8 @@ public class General_Interface_JF extends javax.swing.JFrame {
                     .addComponent(BTNDelete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(BTNModify, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(BTNAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(BTNSelect, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(JCBPaginador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(JCBPagina, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(14, Short.MAX_VALUE))
@@ -239,17 +316,8 @@ public class General_Interface_JF extends javax.swing.JFrame {
 
     private void BTNRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNRefreshActionPerformed
         // TODO add your handling code here:
-        jTable1.clearSelection();
-        ResetButtons();
+        Refresh();
     }//GEN-LAST:event_BTNRefreshActionPerformed
-
-    private void BTNSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNSelectActionPerformed
-        // TODO add your handling code here:
-        DDBBConnection con = new DDBBConnection();
-        RS=con.SendAndRecibe("select * from `ies9021_database`.users");
-        PintarTablaRows(RS);
-        ResetButtons();
-    }//GEN-LAST:event_BTNSelectActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         // TODO add your handling code here:
@@ -264,8 +332,10 @@ public class General_Interface_JF extends javax.swing.JFrame {
     private void BTNDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNDeleteActionPerformed
         // TODO add your handling code here:
         if(BTNDelete.getText().equals("Borrar")){
+            if(GEM.Deleteable(LABTittle.getText())){
             BTNAdd.setText("Aceptar");
             BTNModify.setText("Cancelar");
+            }
             BTNDelete.setEnabled(false);
         }else{
             ResetButtons();
@@ -275,7 +345,8 @@ public class General_Interface_JF extends javax.swing.JFrame {
     private void BTNModifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNModifyActionPerformed
         // TODO add your handling code here:
         if(BTNModify.getText().equals("Modificar")){
-            JOptionPane.showMessageDialog(null,"Ongoing");
+            Object Fila[]=GEM.DatosAModificar(Columns.length, jTable1);
+            GEM.CallAdd(LABTittle.getText(),false,Fila);
             //Insertar La misma tabla de Añadir pero con funcionalidad de botones distinta
         }else{
             jTable1.clearSelection();
@@ -286,11 +357,71 @@ public class General_Interface_JF extends javax.swing.JFrame {
 
     private void BTNAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNAddActionPerformed
         // TODO add your handling code here:
-        JOptionPane.showMessageDialog(null,"Ongoing");
-        /*  Añadir la ventana de su parte, funcionara a base de Switch
-            o podemos usar General Methods para lograrlo
-        */
+        if(BTNAdd.getText().equals("Añadir")){
+        GEM.CallAdd(LABTittle.getText(),true,null);
+        }else{
+            GEM.DELETING(LABTittle.getText(),jTable1);
+            jTable1.clearSelection();
+            ResetButtons();
+        }
+        
     }//GEN-LAST:event_BTNAddActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        Tablon_JF TJF=new Tablon_JF(GEM);
+        TJF.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_formWindowClosing
+
+    private void BTNSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNSearchActionPerformed
+        // TODO add your handling code here:
+        System.out.println("select * from `ies9021_database`."+LABTittle.getText().toLowerCase()+" WHERE "+CBSelector.getItemAt(CBSelector.getSelectedIndex())+"= '"+TXTSearch.getText()+"'");
+        ResultSetIES9021 RSI=SendQuery("select * from `ies9021_database`."+LABTittle.getText().toLowerCase()+" WHERE "+CBSelector.getItemAt(CBSelector.getSelectedIndex())+"= '"+TXTSearch.getText()+"'");
+        PintarTablaRows(RSI.RS);
+        ResetButtons();
+    }//GEN-LAST:event_BTNSearchActionPerformed
+
+    private void TXTSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TXTSearchFocusGained
+        // TODO add your handling code here:
+        if(TXTSearch.getForeground().equals(Color.lightGray)){
+            TXTSearch.setForeground(Color.BLACK);
+            TXTSearch.setText("");
+        }
+    }//GEN-LAST:event_TXTSearchFocusGained
+
+    private void TXTSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TXTSearchFocusLost
+        // TODO add your handling code here:
+        if(TXTSearch.getText().isEmpty()){
+            TXTSearch.setForeground(Color.lightGray);
+            TXTSearch.setText("Buscar");
+        }
+    }//GEN-LAST:event_TXTSearchFocusLost
+
+    private void JCBPaginaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JCBPaginaActionPerformed
+        // TODO add your handling code here:
+        int Paginador=Integer.getInteger(String.valueOf(JCBPaginador.getSelectedItem()));
+        int Pag=JCBPagina.getSelectedIndex();
+        Pagina(Pag,Paginador);
+    }//GEN-LAST:event_JCBPaginaActionPerformed
+
+    private void JCBPaginadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JCBPaginadorActionPerformed
+        // TODO add your handling code here:
+        Refresh();
+    }//GEN-LAST:event_JCBPaginadorActionPerformed
+
+    private void TXTSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TXTSearchKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        if(TXTSearch.getText().length()>=100){
+            evt.consume();
+        }else {
+            if(!(Character.isLetterOrDigit(c) || c == 8 || c == 127 
+                    || c == '\n' || c == '\t' || c == 44 || c == 46)){
+                evt.consume();
+            }
+        }
+    }//GEN-LAST:event_TXTSearchKeyTyped
 
     /**
      * @param args the command line arguments
@@ -308,15 +439,12 @@ public class General_Interface_JF extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(General_Interface_JF.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(General_Interface_JF.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(General_Interface_JF.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(General_Interface_JF.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        
         //</editor-fold>
         //</editor-fold>
 
@@ -334,8 +462,9 @@ public class General_Interface_JF extends javax.swing.JFrame {
     private javax.swing.JButton BTNModify;
     private javax.swing.JButton BTNRefresh;
     private javax.swing.JButton BTNSearch;
-    private javax.swing.JButton BTNSelect;
     private javax.swing.JComboBox<String> CBSelector;
+    private javax.swing.JComboBox<String> JCBPagina;
+    private javax.swing.JComboBox<String> JCBPaginador;
     private javax.swing.JLabel LABTittle;
     private javax.swing.JTextField TXTSearch;
     private javax.swing.JScrollPane jScrollPane1;
