@@ -106,15 +106,14 @@ public class JsonDataFetcher<T> {
             }
             result.setState(true);
             result.setClarification("Consulta resuelta satisfactoriamente");
-            return result;
-
+            
         } catch (Exception e) {
             e.printStackTrace();
             result.setState(false);
             result.setClarification(e.getMessage());
         }
-
-        return null;
+        
+        return result;
     }
 
     /**
@@ -138,7 +137,7 @@ public class JsonDataFetcher<T> {
      *         parámetro
      *         returnType.
      */
-    public static <T> T fetchSingletonTableData(String tableName, String whereClause, Class<T> returnType) {
+    public ResultSetIES9021<T> fetchSingletonTableData(String tableName, String whereClause, Class<T> returnType) {
         String query = "SELECT * FROM " + tableName;
         if (whereClause != null && !whereClause.isEmpty()) {
             query += " WHERE " + whereClause;
@@ -146,14 +145,18 @@ public class JsonDataFetcher<T> {
 
         ResultSet resultSet = null;
 
-        try {
-            resultSet = DDBBConnection.SendQuery(query).RS;
+        ResultSetIES9021<T> result = new ResultSetIES9021<>();
 
-            if (resultSet != null && resultSet.next()) {
-                ObjectMapper mapper = new ObjectMapper();
-                ResultSetMetaData metaData = resultSet.getMetaData();
-                int columnCount = metaData.getColumnCount();
-                ObjectNode rowNode = mapper.createObjectNode();
+        try {
+            resultSet = DDBBConnection.fetchData(query);
+
+            ObjectMapper mapper = new ObjectMapper();
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int columnCount = metaData.getColumnCount();
+            ObjectNode rowNode = mapper.createObjectNode();
+            String jsonResult = null;
+
+            while (resultSet != null && resultSet.next()) {
 
                 for (int i = 1; i <= columnCount; i++) {
                     String columnName = metaData.getColumnName(i);
@@ -161,15 +164,20 @@ public class JsonDataFetcher<T> {
                     rowNode.put(columnName, columnValue.toString());
                 }
 
-                String jsonResult = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(rowNode);
+                jsonResult = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(rowNode);
+                result.addObject(mapper.readValue(jsonResult, returnType));
 
-                return (T) mapper.readValue(jsonResult, returnType.getMethod("getInstance").getReturnType());
             }
-
+            result.setState(true);
+            result.setClarification("Consulta resuelta satisfactoriamente");
+            result.addObject((T) mapper.readValue(jsonResult, returnType.getMethod("getInstance").getReturnType()));
+            
         } catch (Exception e) {
             e.printStackTrace();
+            result.setState(false);
+            result.setClarification(e.getMessage());
         }
-
-        return null;
+        
+        return result;
     }
 }
