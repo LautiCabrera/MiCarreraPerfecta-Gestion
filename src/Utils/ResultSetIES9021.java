@@ -1,9 +1,38 @@
 package Utils;
 
-import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
-public class ResultSetIES9021 {
-    public ResultSet RS = null;
-    public boolean State = false;
-    public String Clarification = null;
+public class ResultSetIES9021<T> {
+    private List<T> datos = new ArrayList<T>();
+    private boolean State = false;
+    private String Clarification = null;
+
+    public ResultSetIES9021() {
+
+    }
+
+    public void setState(boolean state) {
+        State = state;
+    }
+
+    public void setClarification(String clarification) {
+        Clarification = clarification;
+    }
+
+    public void addObject(T objectInstance) {
+        datos.add(objectInstance);
+    }
+
+    public List<T> getDatos() {
+        return this.datos;
+    }
+
+    public boolean getState() {
+        return this.State;
+    }
+
+    public String getClarification() {
+        return this.Clarification;
+    }
 }
