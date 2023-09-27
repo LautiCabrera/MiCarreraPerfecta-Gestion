@@ -1,15 +1,14 @@
-package Forms;
+package ModalityForms.newpackage;
 
-import javax.swing.DefaultComboBoxModel;
+import Forms.Carrer_Word_Key_JF;
+import Forms.General_Methods;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.swing.JOptionPane;
 import Utils.DDBBConnection;
-import Utils.ResultSetIES9021;
 
 public class Modality_Interface_JF extends javax.swing.JFrame {
 
@@ -27,7 +26,6 @@ public class Modality_Interface_JF extends javax.swing.JFrame {
     private void ConfigurationStart() {
         Columns = GM.Columns("modality");
         PintarTablaColumns();
-        PintarComboBox();
         jTable1.setSelectionMode(0); // 0 Una fila
     }
 
@@ -53,10 +51,6 @@ public class Modality_Interface_JF extends javax.swing.JFrame {
             tableHeader.repaint();
             count++;
         }
-    }
-
-    private void PintarComboBox() {
-        CBSelector.setModel(new DefaultComboBoxModel<>(Columns));
     }
 
     private void PintarTablaRows(ResultSet RSult) {
@@ -99,12 +93,11 @@ public class Modality_Interface_JF extends javax.swing.JFrame {
         BTNAdd = new javax.swing.JButton();
         BTNSearch = new javax.swing.JButton();
         TXTSearch = new javax.swing.JTextField();
-        CBSelector = new javax.swing.JComboBox<>();
         BTNSelect = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        LABTittle.setText("modality");
+        LABTittle.setText("Modality");
 
         BTNRefresh.setText("Refrescar");
         BTNRefresh.setMaximumSize(new java.awt.Dimension(82, 24));
@@ -192,21 +185,21 @@ public class Modality_Interface_JF extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(13, 13, 13)
-                                .addComponent(LABTittle)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(TXTSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(CBSelector, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(BTNSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(BTNRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(BTNSelect, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(BTNSelect, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(13, 13, 13)
+                                .addComponent(LABTittle)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(TXTSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(BTNSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(BTNAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(BTNModify, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -220,7 +213,6 @@ public class Modality_Interface_JF extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(BTNSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(CBSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(TXTSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(LABTittle))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -232,7 +224,7 @@ public class Modality_Interface_JF extends javax.swing.JFrame {
                     .addComponent(BTNSelect, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         pack();
@@ -271,50 +263,39 @@ public class Modality_Interface_JF extends javax.swing.JFrame {
     }//GEN-LAST:event_BTNDeleteActionPerformed
 
     private void BTNModifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNModifyActionPerformed
-        if (BTNModify.getText().equals("Modificar")) {
-            JOptionPane.showMessageDialog(null, "Ongoing");
-            // Insertar La misma tabla de Añadir pero con funcionalidad de botones distinta
-        } else {
-            jTable1.clearSelection();
-            ResetButtons();
-        }
+       
     }//GEN-LAST:event_BTNModifyActionPerformed
 
     private void BTNAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNAddActionPerformed
-        
-        if (BTNAdd.getText().equals("Aceptar")) {
-            // Realizar la acción de borrado
-            int selectedRow = jTable1.getSelectedRow();
-            if (selectedRow >= 0) {
-                int response = JOptionPane.showConfirmDialog(null,
-                        "¿Estás seguro de que deseas eliminar esta fila?",
-                        "Confirmar eliminación",
-                        JOptionPane.YES_NO_OPTION);
-                if (response == JOptionPane.YES_OPTION) {
-                    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-                    model.removeRow(selectedRow);
-                    // Realiza aquí la eliminación en la base de datos
-                    DDBBConnection con = new DDBBConnection();
-                    String idToDelete = jTable1.getValueAt(selectedRow, 0).toString(); // Supongo que el ID está en la primera columna
-                    String query = "DELETE FROM modality WHERE id = '" + idToDelete + "'";
-                    ResultSetIES9021 result = con.SendQuery(query);
-                    if (result.State) {
-                        JOptionPane.showMessageDialog(null, "Registro eliminado con éxito.");
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Error al eliminar el registro: " + result.Clarification);
-                    }
-                    con.Disconect();
+           
+    }//GEN-LAST:event_BTNAddActionPerformed
+    
+   public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
                 }
             }
-            ResetButtons();
-        } else {
-            DDBBConnection con = new DDBBConnection();
-            RS = con.SendAndRecibe("insert into ies9021_database.modality ");
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Carrer_Word_Key_JF.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Carrer_Word_Key_JF.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Carrer_Word_Key_JF.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Carrer_Word_Key_JF.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_BTNAddActionPerformed
+        //</editor-fold>
+        //</editor-fold>
 
-    
-    public static void main(String args[]) {
+        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Modality_Interface_JF().setVisible(true);
@@ -329,7 +310,6 @@ public class Modality_Interface_JF extends javax.swing.JFrame {
     private javax.swing.JButton BTNRefresh;
     private javax.swing.JButton BTNSearch;
     private javax.swing.JButton BTNSelect;
-    private javax.swing.JComboBox<String> CBSelector;
     private javax.swing.JLabel LABTittle;
     private javax.swing.JTextField TXTSearch;
     private javax.swing.JScrollPane jScrollPane1;
