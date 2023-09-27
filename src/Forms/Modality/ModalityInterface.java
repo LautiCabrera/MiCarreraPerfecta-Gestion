@@ -1,80 +1,67 @@
-package ModalityForms.newpackage;
+package Forms.Modality;
 
-import Forms.Carrer_Word_Key_JF;
-import Forms.General_Methods;
+import Utils.JsonDataFetcher;
+import Utils.ResultSetIES9021;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import Utils.DDBBConnection;
 
-public class Modality_Interface_JF extends javax.swing.JFrame {
+public class ModalityInterface extends javax.swing.JFrame {
 
-    General_Methods GM = new General_Methods();
-    String[] Columns;
-    DefaultTableModel Tabla;
-    ResultSet RS;
-    int SelectedRow = -1;
+    JsonDataFetcher dataFetcher = new JsonDataFetcher(); // Crea una instancia
 
-    public Modality_Interface_JF() {
-        initComponents();
-        ConfigurationStart();
-    }
+    //Metodo para mostrar la tabla modality cuando se inicie la vista
+    private void loadTableData() {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0);
+        model.setColumnIdentifiers(new String[]{"id_modality", "modality", "virtual", "id_user_create", "id_user_update", "fcreate", "fupdate"});
+        String tableName = "modality";//Nombre de la tabla
+        String whereClause = null;// Clausula where 
+        Class<Modality> returnType = Modality.class;  //Clase que se utiliza para mapear los resultados 
+        ResultSetIES9021<Modality> result = dataFetcher.fetchTableData(tableName, whereClause, returnType); // Llama al método para obtener los datos
 
-    private void ConfigurationStart() {
-        Columns = GM.Columns("modality");
-        PintarTablaColumns();
-        jTable1.setSelectionMode(0); // 0 Una fila
-    }
-
-    private void ResetButtons() {
-        BTNAdd.setText("Añadir");
-        BTNAdd.setEnabled(true);
-        BTNModify.setText("Modificar");
-        BTNModify.setEnabled(false);
-        BTNDelete.setText("Borrar");
-        BTNDelete.setEnabled(false);
-        SelectedRow = -1;
-    }
-
-    private void PintarTablaColumns() {
-        Tabla = (DefaultTableModel) jTable1.getModel();
-        Tabla.setColumnCount(Columns.length);
-        int count = 0;
-        for (String CN : Columns) {
-            JTableHeader tableHeader = jTable1.getTableHeader();
-            TableColumnModel tableColumnModel = tableHeader.getColumnModel();
-            TableColumn tableColumn = tableColumnModel.getColumn(count);
-            tableColumn.setHeaderValue(CN);
-            tableHeader.repaint();
-            count++;
-        }
-    }
-
-    private void PintarTablaRows(ResultSet RSult) {
-        try {
-            Tabla.setRowCount(0);
-            Object[] O = new Object[Columns.length];
-            if (RSult != null) {
-                while (RSult.next()) {
-                    for (int i = 0; i < Columns.length; i++) {
-                        O[i] = RSult.getObject(Columns[i]);
-                    }
-                    Tabla.addRow(O);
-                }
+        if (result.getState()) {
+            //carga los nuevos datos 
+            List<Modality> modalityList = result.getDatos();
+            //Recorre la lista de objetos de modality y los agrega a la tabla 
+            for (Modality modality : modalityList) {
+                Object[] rowData = {modality.getId_modality(), modality.getmodality(), modality.getvirtual(), modality.getId_user_create(), modality.getId_user_update(), modality.getfcreate(), modality.getfupdate()};
+                model.addRow(rowData);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } else {
+            //Si no se puede muestra el mensaje de error 
+            String clarification = result.getClarification();
+            JOptionPane.showMessageDialog(this, "Error al cargar los datos: " + clarification, "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+    //Fin del metodo
+
+    //Metodo para activar el boton de Modificar y borrar 
+    private void configSelectionListener() {
+        jTable1.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
+            // Verifica si hay una fila seleccionada
+            if (!e.getValueIsAdjusting() && jTable1.getSelectedRow() != -1) {
+                // Hay una fila seleccionada, habilita los botones "Modificar" y "Borrar"
+                BTNModify.setEnabled(true);
+                BTNDelete.setEnabled(true);
+            }
+        });
+    }
+    //Fin del metodo 
+
+    public ModalityInterface() {
+        initComponents();
+        this.setLocationRelativeTo(null);
+        loadTableData();
+        configSelectionListener();
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
      */
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -86,14 +73,13 @@ public class Modality_Interface_JF extends javax.swing.JFrame {
 
         LABTittle = new javax.swing.JLabel();
         BTNRefresh = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
         BTNDelete = new javax.swing.JButton();
         BTNModify = new javax.swing.JButton();
         BTNAdd = new javax.swing.JButton();
         BTNSearch = new javax.swing.JButton();
         TXTSearch = new javax.swing.JTextField();
-        BTNSelect = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -107,30 +93,6 @@ public class Modality_Interface_JF extends javax.swing.JFrame {
                 BTNRefreshActionPerformed(evt);
             }
         });
-
-        jTable1 = new javax.swing.JTable(){
-            public boolean isCellEditable(int rowIndex, int colIndex){
-                return false;
-            }
-        };
-
-        jTable1.setAutoCreateRowSorter(true);
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-
-            }
-        ));
-        jTable1.setFocusable(false);
-        jTable1.getTableHeader().setReorderingAllowed(false);
-        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTable1MouseClicked(evt);
-            }
-        });
-        jScrollPane1.setViewportView(jTable1);
 
         BTNDelete.setText("Borrar");
         BTNDelete.setEnabled(false);
@@ -165,16 +127,24 @@ public class Modality_Interface_JF extends javax.swing.JFrame {
         BTNSearch.setMaximumSize(new java.awt.Dimension(82, 24));
         BTNSearch.setPreferredSize(new java.awt.Dimension(82, 24));
 
-        TXTSearch.setText("Buscar");
-
-        BTNSelect.setText("Select *");
-        BTNSelect.setMaximumSize(new java.awt.Dimension(82, 24));
-        BTNSelect.setPreferredSize(new java.awt.Dimension(82, 24));
-        BTNSelect.addActionListener(new java.awt.event.ActionListener() {
+        TXTSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BTNSelectActionPerformed(evt);
+                TXTSearchActionPerformed(evt);
             }
         });
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jTable1.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane1.setViewportView(jTable1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -183,17 +153,14 @@ public class Modality_Interface_JF extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(BTNRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(BTNSelect, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(BTNRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(13, 13, 13)
                                 .addComponent(LABTittle)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 366, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(TXTSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -204,8 +171,8 @@ public class Modality_Interface_JF extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(BTNModify, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(BTNDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap())))
+                                .addComponent(BTNDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -220,85 +187,40 @@ public class Modality_Interface_JF extends javax.swing.JFrame {
                     .addComponent(BTNRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(BTNDelete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(BTNModify, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(BTNAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(BTNSelect, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+                    .addComponent(BTNAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void BTNRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNRefreshActionPerformed
-        jTable1.clearSelection();
-        ResetButtons();
+
     }//GEN-LAST:event_BTNRefreshActionPerformed
 
-    private void BTNSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNSelectActionPerformed
-        DDBBConnection con = new DDBBConnection();
-        RS = con.SendAndRecibe("SELECT * FROM modality");
-        PintarTablaRows(RS);
-        ResetButtons();
-        con.Disconect();
-    }//GEN-LAST:event_BTNSelectActionPerformed
-
-    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-        if (jTable1.getSelectedRow() != SelectedRow) {
-            ResetButtons();
-            BTNModify.setEnabled(true);
-            BTNDelete.setEnabled(true);
-            SelectedRow = jTable1.getSelectedRow();
-        }
-    }//GEN-LAST:event_jTable1MouseClicked
-
     private void BTNDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNDeleteActionPerformed
-        if (BTNDelete.getText().equals("Borrar")) {
-            BTNAdd.setText("Aceptar");
-            BTNModify.setText("Cancelar");
-            BTNDelete.setEnabled(false);
-        } else {
-            ResetButtons();
-        }
+
     }//GEN-LAST:event_BTNDeleteActionPerformed
 
     private void BTNModifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNModifyActionPerformed
-       
+
     }//GEN-LAST:event_BTNModifyActionPerformed
 
     private void BTNAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNAddActionPerformed
-           
-    }//GEN-LAST:event_BTNAddActionPerformed
-    
-   public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Carrer_Word_Key_JF.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Carrer_Word_Key_JF.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Carrer_Word_Key_JF.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Carrer_Word_Key_JF.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
 
-        /* Create and display the form */
+    }//GEN-LAST:event_BTNAddActionPerformed
+
+    private void TXTSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTSearchActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TXTSearchActionPerformed
+
+    public static void main(String args[]) {
+
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
-                new Modality_Interface_JF().setVisible(true);
+                new ModalityInterface().setVisible(true);
             }
         });
     }
@@ -309,7 +231,6 @@ public class Modality_Interface_JF extends javax.swing.JFrame {
     private javax.swing.JButton BTNModify;
     private javax.swing.JButton BTNRefresh;
     private javax.swing.JButton BTNSearch;
-    private javax.swing.JButton BTNSelect;
     private javax.swing.JLabel LABTittle;
     private javax.swing.JTextField TXTSearch;
     private javax.swing.JScrollPane jScrollPane1;
