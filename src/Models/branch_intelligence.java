@@ -41,6 +41,7 @@ public class branch_intelligence {
     public void agregarOpcionElegida(Opcion opcion) {
         opcionesElegidas.add(opcion);
     }
+   ///ESTE METODO ES PARA DEBOLVER LO QUE LE PIDO
     public String toString() {
         return "branch_intelligence [id=" + id_branch_intelligence + ", id_branch=" + id_branch + ", id_intelligence=" + id_intelligence
                 + ", opcionesElegidas=" + opcionesElegidas + "]";
@@ -95,27 +96,19 @@ public class branch_intelligence {
         this.id_user_update = id_user_update;
     }
 
-  
-    public String getFcreate() {
+    public Date getF_create() {
         return f_create;
     }
 
-  
-    public void setFcreate(String f_create) {
+    public void setF_create(Date f_create) {
         this.f_create = f_create;
     }
 
-   
-    public String getFupdate() {
+    public Date getF_update() {
         return f_update;
     }
-
-
-    public void setFupdate(String f_update) {
+    
+    public void setF_update(Date f_update) {
         this.f_update = f_update;
     }
-}
-
-
     
-  
