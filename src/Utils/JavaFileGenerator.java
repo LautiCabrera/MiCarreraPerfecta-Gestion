@@ -12,9 +12,8 @@ import java.sql.SQLException;
 public class JavaFileGenerator {
     public static void createClass(String tableName) {
 
-        String folderPath = "app/src/main/java/com/example/micarreraperfecta/Model/";
-        DDBBConnection dbConnection = new DDBBConnection();
-        Connection connection = dbConnection.Conectar();
+        String folderPath = "src/Models";
+        Connection connection = DDBBConnection.Conectar();
 
         try {
             // Obtener metadatos de la tabla
@@ -67,7 +66,7 @@ public class JavaFileGenerator {
             System.out.println("Archivo generado exitosamente.");
 
             // Cerrar la conexión a la base de datos
-            dbConnection.Disconect();
+            DDBBConnection.closeResources(connection, null, resultSet);
         } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
