@@ -1,6 +1,6 @@
 package micarreraperfecta;
 
-import Models.Career;
+import Models.WordsKey;
 import Utils.DDBBConnection;
 import Utils.JavaFileGenerator;
 import Utils.JsonDataFetcher;
@@ -13,18 +13,17 @@ public class MiCarreraPerfecta {
     }
 
     public void ejemplo(){
-        ResultSetIES9021<Career> carreras = new JsonDataFetcher<Career>().fetchTableData(
-            "career", "id_career < 10",Career.class);
+        ResultSetIES9021<WordsKey> words = new JsonDataFetcher<WordsKey>().fetchTableData(
+            "words_key", "id_words_key < 10",WordsKey.class);
 
-        System.out.println(carreras.getState());
-        System.out.println(carreras.getClarification());
+        System.out.println(words.getState());
+        System.out.println(words.getClarification());
         System.out.println("-------------------------");
 
-        for (Career carrer : carreras.getDatos()) {
-            System.out.print("Id: " + carrer.getIdCareer());
-            System.out.print(" Nombre: " + carrer.getName());
-            System.out.print(" Descipción: " + carrer.getDescription());
-            System.out.print(" Range: " + carrer.getIdRange());
+        for (WordsKey wordskey : words.getDatos()) {
+            System.out.print("ID: " + wordskey.getId_word_key());
+            System.out.print(" WordsKey: " + wordskey.getWord());
+            System.out.print(" ID User Create: " + wordskey.getId_user_create());
             System.out.println("");
             System.out.println("-------------------------");
         }
@@ -35,5 +34,5 @@ public class MiCarreraPerfecta {
         System.out.println("State: " + query.getState());
         System.out.println("Clarification: " + query.getClarification());
         System.out.println("-------------------------");
-    }
+    } 
 }
