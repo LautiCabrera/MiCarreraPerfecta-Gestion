@@ -1,5 +1,7 @@
 package Forms.Modality;
 
+import Models.Modality;
+import Utils.DDBBConnection;
 import Utils.JsonDataFetcher;
 import Utils.ResultSetIES9021;
 import java.util.List;
@@ -45,10 +47,62 @@ public class ModalityInterface extends javax.swing.JFrame {
                 // Hay una fila seleccionada, habilita los botones "Modificar" y "Borrar"
                 BTNModify.setEnabled(true);
                 BTNDelete.setEnabled(true);
+
+                //Obtengo los datos de la fila seleccionada 
+                int selectedRowIndex = jTable1.getSelectedRow();
+                DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+                selectedRowData = new Object[model.getColumnCount()];
+                for (int i = 0; i < model.getColumnCount(); i++) {
+                    selectedRowData[i] = model.getValueAt(selectedRowIndex, i);
+                }
             }
         });
     }
     //Fin del metodo 
+
+    //Instancia para almacenar los datos de una fila
+    private Object[] selectedRowData;
+    //Fin instancia
+
+    // Método para generar un texto aleatorio
+    private String generateRandomText() {
+        int length = 6; // Longitud del texto aleatorio
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        StringBuilder randomText = new StringBuilder();
+
+        for (int i = 0; i < length; i++) {
+            int index = (int) (Math.random() * characters.length());
+            randomText.append(characters.charAt(index));
+        }
+
+        return randomText.toString();
+    }
+    //Fin del metodo 
+
+    private void deleteSelectedRow() {
+        if (selectedRowData != null) {
+            // Obtén el ID de la fila seleccionada 
+            int selectedID = (int) selectedRowData[0];
+            // Construye y envía la consulta SQL para eliminar la fila
+            String query = "DELETE FROM modality WHERE id_modality = " + selectedID;
+            ResultSetIES9021 result = DDBBConnection.SendQuery(query);
+
+            if (result.getState()) {
+                // Eliminación exitosa, ahora elimina la fila de la tabla
+                DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+
+                // Encuentra el índice de la fila seleccionada en el modelo de la tabla
+                for (int i = 0; i < model.getRowCount(); i++) {
+                    int rowID = (int) model.getValueAt(i, 0); // 
+                    if (rowID == selectedID) {
+                        // Elimina la fila de la tabla
+                        model.removeRow(i);
+                        break;
+                    }
+                }
+            }
+        }
+    }
 
     public ModalityInterface() {
         initComponents();
@@ -82,6 +136,7 @@ public class ModalityInterface extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Mi Carrera Perfecta");
 
         LABTittle.setText("Modality");
 
@@ -144,6 +199,7 @@ public class ModalityInterface extends javax.swing.JFrame {
         jTable1.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jTable1.setShowVerticalLines(false);
         jScrollPane1.setViewportView(jTable1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -196,19 +252,49 @@ public class ModalityInterface extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BTNRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNRefreshActionPerformed
-
+        loadTableData();
     }//GEN-LAST:event_BTNRefreshActionPerformed
 
     private void BTNDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNDeleteActionPerformed
+        if (selectedRowData != null) {
+            int confirmInitial = JOptionPane.showConfirmDialog(this, "¿Está seguro de que desea borrar la fila seleccionada?", "Confirmar Borrado", JOptionPane.YES_NO_OPTION);
+            if (confirmInitial == JOptionPane.YES_OPTION) {
+                // El usuario ha confirmado la eliminación, genera un texto aleatorio
+                String randomText = generateRandomText();
+                String userInput = JOptionPane.showInputDialog(this, "Para confirmar, ingrese el siguiente texto:\n" + randomText);
 
+                // Verifica si el usuario ingresó el texto aleatorio correctamente
+                if (userInput != null && userInput.equals(randomText)) {
+                    // El usuario ingresó correctamente el texto, procede a borrar la fila
+                    deleteSelectedRow();
+                    JOptionPane.showMessageDialog(this, "Fila borrada con exito.", "Exito", JOptionPane.INFORMATION_MESSAGE);
+                } else if (userInput != null && !userInput.equals(randomText)) {
+                    // El usuario no ingresó correctamente el texto, muestra un mensaje de error
+                    JOptionPane.showMessageDialog(this, "Texto incorrecto. La fila no se ha borrado.", "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Ejecución terminada.", "Terminado", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        } else {
+            // Mostrar un mensaje de error si no se ha seleccionado ninguna fila
+            JOptionPane.showMessageDialog(this, "Seleccione una fila para borrar.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_BTNDeleteActionPerformed
 
     private void BTNModifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNModifyActionPerformed
-
+        if (selectedRowData != null) {
+            ModalityUpdateInterface updateInterface = new ModalityUpdateInterface(); //Instancia de la vista de modificar
+            updateInterface.setModalityData(selectedRowData);//Envio los datos de la fila seleccionada a la vista Update 
+            updateInterface.setVisible(true); //Cuando se aprete el boton de modificar se abre la vista ModalityUpdateInterface
+        } else {
+            // Mostrar un mensaje de error si no se ha seleccionado ninguna fila
+            JOptionPane.showMessageDialog(this, "Seleccione una fila para modificar.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_BTNModifyActionPerformed
 
     private void BTNAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNAddActionPerformed
-
+        ModalityAddInterface addInterface = new ModalityAddInterface();
+        addInterface.setVisible(true);
     }//GEN-LAST:event_BTNAddActionPerformed
 
     private void TXTSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTSearchActionPerformed

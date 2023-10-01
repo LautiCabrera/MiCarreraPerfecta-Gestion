@@ -40,7 +40,7 @@ public abstract class DDBBConnection {
     public static ResultSetIES9021 SendQuery(String query) {
 
         ResultSetIES9021 RSIES9021 = new ResultSetIES9021();
-        if (/* QueryVerification(query) */ true) {
+        if (/* QueryVerification(query) */true) {
             Conection = Conectar();
             PreparedStatement statement = null;
             boolean result = false;
@@ -54,7 +54,6 @@ public abstract class DDBBConnection {
                 logConnection("Conexión exitosa", query);
                 Disconect();
 
-                
             } catch (SQLException e) {
                 logConnection("Conexión fallida", query);
                 e.printStackTrace();
@@ -69,8 +68,7 @@ public abstract class DDBBConnection {
     private static void logConnection(String title, String description) {
         String insertQuery = "INSERT INTO logs (title, description, id_user, date) VALUES (?, ?, ?, ?)";
 
-        try (Connection connection = Conectar();
-                PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+        try (Connection connection = Conectar(); PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
 
             preparedStatement.setString(1, title);
             preparedStatement.setString(2, description);
@@ -107,8 +105,8 @@ public abstract class DDBBConnection {
     private static boolean QueryVerification(String Query) {
         String testQuery = Query.toLowerCase().substring(0, 6);
         boolean verification = false;
-        if (testQuery.equals("insert") || testQuery.equals("select") ||
-                testQuery.equals("update") || testQuery.equals("delete")) {
+        if (testQuery.equals("insert") || testQuery.equals("select")
+                || testQuery.equals("update") || testQuery.equals("delete")) {
             switch (Query.toLowerCase().charAt(0)) {
                 case 's':
                     verification = true;

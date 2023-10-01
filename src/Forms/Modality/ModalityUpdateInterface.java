@@ -4,17 +4,35 @@
  */
 package Forms.Modality;
 
+import Utils.DDBBConnection;
+import Utils.ResultSetIES9021;
+import java.text.SimpleDateFormat;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Agustin Coria
  */
 public class ModalityUpdateInterface extends javax.swing.JFrame {
 
+    private int id;//Declaro id como variable de isntacia para poder usarla en otro metodos 
+
+    // Método para configurar los campos con los datos de la fila seleccionada
+    public void setModalityData(Object[] rowData) {
+        // Configura los campos en el formulario de actualización con los datos de la fila seleccionada
+        modalityUpdateTxt.setText(rowData[1].toString());
+        int virtualValue = (int) rowData[2]; // Obtener el valor numérico
+        comboBoxVirtualUpdate.setSelectedItem(virtualValue == 1 ? "SI" : "NO"); // Seleccionar la opción en el JComboBox
+        idUserUpdateTxt.setText(rowData[4].toString());
+        id = (int) rowData[0];
+    }
+
     /**
      * Creates new form ModalityUpdateInterface
      */
     public ModalityUpdateInterface() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -28,47 +46,63 @@ public class ModalityUpdateInterface extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        modalityUpdateTxt = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
         cancelBTN = new javax.swing.JButton();
         saveBTN = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        idUserUpdateTxt = new javax.swing.JTextField();
+        comboBoxVirtualUpdate = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Modificar");
 
-        jLabel1.setText("Modificar campos");
+        jLabel1.setText("Modificar campos necesarios");
 
         jLabel2.setText("modality");
 
         jLabel3.setText("virtual");
 
         cancelBTN.setText("CANCELAR");
+        cancelBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelBTNActionPerformed(evt);
+            }
+        });
 
         saveBTN.setText("GUARDAR");
+        saveBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveBTNActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("id_user_update");
+
+        comboBoxVirtualUpdate.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NO", "SI" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(143, Short.MAX_VALUE)
+                .addContainerGap(111, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addGap(143, 143, 143))
+                .addGap(110, 110, 110))
             .addGroup(layout.createSequentialGroup()
                 .addGap(61, 61, 61)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(cancelBTN)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(saveBTN))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField2)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE))))
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3)
+                    .addComponent(cancelBTN)
+                    .addComponent(jLabel4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(saveBTN, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(modalityUpdateTxt, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE)
+                        .addComponent(idUserUpdateTxt))
+                    .addComponent(comboBoxVirtualUpdate, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(61, 61, 61))
         );
         layout.setVerticalGroup(
@@ -79,20 +113,61 @@ public class ModalityUpdateInterface extends javax.swing.JFrame {
                 .addGap(23, 23, 23)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
+                    .addComponent(modalityUpdateTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(28, 28, 28)
+                    .addComponent(comboBoxVirtualUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(idUserUpdateTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelBTN)
                     .addComponent(saveBTN))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addGap(27, 27, 27))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void saveBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBTNActionPerformed
+        String modality = modalityUpdateTxt.getText().toUpperCase();
+        String virtualOptionUpdate = comboBoxVirtualUpdate.getSelectedItem().toString();
+        int virtual = virtualOptionUpdate.equals("SI") ? 1 : 0; // Convertir "SI" a 1, "NO" a 0
+        String idUserUpdate = idUserUpdateTxt.getText();
+        // Obtener la fecha actual
+        java.util.Date currentDate = new java.util.Date();
+        // Convertir la fecha actual a un formato de fecha adecuado
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String fUpdate = dateFormat.format(currentDate);
+        try {
+            // Ejecuta la consulta SQL utilizando el método SendQuery
+            String query = "UPDATE modality SET modality = '" + modality + "', virtual = '" + virtual + "', id_user_update = '" + idUserUpdate + "', fupdate = '" + fUpdate + "' WHERE id_modality = " + id;
+            ResultSetIES9021 result = DDBBConnection.SendQuery(query);
+
+            // Verifica si la actualización se realizó con éxito
+            if (result != null && result.getState()) {
+                JOptionPane.showMessageDialog(this, "Cambios realizados con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                // Cierra la ventana ModalityUpdateInterface
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "No se pudo actualizar el registro.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al actualizar el registro: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_saveBTNActionPerformed
+
+    private void cancelBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBTNActionPerformed
+        int confirm = JOptionPane.showConfirmDialog(this, "¿Seguro que desea salir sin guardar los cambios?", "Confirmar Salida", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            // El usuario ha confirmado la salida, cierra la ventana
+            this.dispose();
+        }
+    }//GEN-LAST:event_cancelBTNActionPerformed
 
     /**
      * @param args the command line arguments
@@ -131,11 +206,13 @@ public class ModalityUpdateInterface extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelBTN;
+    private javax.swing.JComboBox<String> comboBoxVirtualUpdate;
+    private javax.swing.JTextField idUserUpdateTxt;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JTextField modalityUpdateTxt;
     private javax.swing.JButton saveBTN;
     // End of variables declaration//GEN-END:variables
 }
