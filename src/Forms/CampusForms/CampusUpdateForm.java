@@ -3,6 +3,7 @@ package Forms.CampusForms;
 import Models.University;
 import Models.Users;
 import Utils.DDBBConnection;
+import Utils.FormsUtils;
 import Utils.JsonDataFetcher;
 import Utils.ResultSetIES9021;
 import java.text.SimpleDateFormat;
@@ -13,13 +14,14 @@ import java.util.Map;
 public class CampusUpdateForm extends javax.swing.JFrame {
 
     JsonDataFetcher dataFetcher = new JsonDataFetcher();
+    FormsUtils formsUtils = new FormsUtils();
     private Campus_Interface_JF parentForm;
     private String idCampus;
     private String idUniversity;
     private String idUser;
     private int selectedUniversityId;
     private int selectedUserId;
-    private int selectedMainValue = 1;
+    private int selectedMainValue;
 
     public CampusUpdateForm() {
         initComponents();
@@ -33,137 +35,22 @@ public class CampusUpdateForm extends javax.swing.JFrame {
     }
 
     public void setCampusData(String idCampus, String idUniversity, String name, String location, String latitude, String longitude, String main, String www, String email, String idUser) {
-        // Asigna los datos a los elementos correspondientes de tu formulario
+        // Asigna los datos a los elementos correspondientes del formulario
         this.idCampus = idCampus;
         this.idUniversity = idUniversity;
         txtName.setText(name);
         txtLocation.setText(location);
         txtLatitude.setText(latitude);
         txtLongitude.setText(longitude);
-        if ("1".equals(main)) {
-            comboBoxMain.setSelectedItem("Si");
-        } else if ("0".equals(main)) {
-            comboBoxMain.setSelectedItem("No");
-        }
+        comboBoxMain.setSelectedItem(main.equals("1") ? "Si" : "No");
         txtWww.setText(www);
         txtEmail.setText(email);
         this.idUser = idUser;
-        initializeUniversitiesComboBox();
-        initializeUsersComboBox();
-        handleUniversitySelection();
-        handleUserSelection();
-        handleMainSelection();
+        // Carga y maneja selecciones de universidades y usuarios
+        formsUtils.loadUniversities(dataFetcher, comboBoxUniversity, idUniversity);
+        formsUtils.loadUsers(dataFetcher, comboBoxUsers, idUser);
     }
-
-    private void initializeUniversitiesComboBox() {
-        // Cargar todas las universidades
-        String tableName = "university";
-        String whereClause = null;
-        Class<University> returnType = University.class;
-        ResultSetIES9021<University> result = dataFetcher.fetchTableData(tableName, whereClause, returnType);
-
-        if (result.getState()) {
-            // Limpiar el comboBox
-            comboBoxUniversity.removeAllItems();
-
-            // Crear un mapa para asociar nombres de universidades con objetos University
-            Map<String, University> universityMap = new HashMap<>();
-
-            // Agregar cada universidad al comboBox y al mapa
-            for (University university : result.getDatos()) {
-                comboBoxUniversity.addItem(university.getName()); // Agregar el nombre al comboBox
-                universityMap.put(university.getName(), university); // Asociar el nombre con el objeto University
-            }
-
-            // Asignar el mapa al comboBox para acceder a los objetos University más adelante
-            comboBoxUniversity.putClientProperty("universityMap", universityMap);
-            
-            // Seleccionar la universidad por defecto
-            if (idUniversity != null) {
-                for (int i = 0; i < comboBoxUniversity.getItemCount(); i++) {
-                    String universityName = comboBoxUniversity.getItemAt(i);
-                    University university = universityMap.get(universityName); // Obtén el objeto University desde el mapa
-                    if (idUniversity.equals(String.valueOf(university.getId()))) {
-                        comboBoxUniversity.setSelectedIndex(i);
-                        break;
-                    }
-                }
-            }
-        } 
-    }
-
-    private void initializeUsersComboBox() {
-        // Cargar todas las universidades
-        String tableName = "users";
-        String whereClause = null;
-        Class<Users> returnType = Users.class;
-        ResultSetIES9021<Users> result = dataFetcher.fetchTableData(tableName, whereClause, returnType);
-
-        if (result.getState()) {
-            // Limpiar el comboBox
-            comboBoxUsers.removeAllItems();
-
-            // Crear un mapa para asociar nombres de universidades con objetos User
-            Map<String, Users> userMap = new HashMap<>();
-
-            // Agregar cada universidad al comboBox y al mapa
-            for (Users user : result.getDatos()) {
-                comboBoxUsers.addItem(user.getName()); // Agregar el nombre al comboBox
-                userMap.put(user.getName(), user); // Asociar el nombre con el objeto User
-            }
-
-            // Asignar el mapa al comboBox para acceder a los objetos User más adelante
-            comboBoxUsers.putClientProperty("userMap", userMap);
-            
-            // Seleccionar la universidad por defecto
-            if (idUser != null) {
-                for (int i = 0; i < comboBoxUsers.getItemCount(); i++) {
-                    String userName = comboBoxUsers.getItemAt(i);
-                    Users user = userMap.get(userName); // Obtén el objeto Users desde el mapa
-                    if (idUser.equals(String.valueOf(user.getId_user()))) {
-                        comboBoxUsers.setSelectedIndex(i);
-                        break;
-                    }
-                }
-            }
-        } 
-    }
-    
-    private void handleMainSelection() {
-        String selectedMainOption = comboBoxMain.getSelectedItem().toString();
-        if ("Si".equals(selectedMainOption)) {
-            selectedMainValue = 1; // SI
-        } else if ("No".equals(selectedMainOption)) {
-            selectedMainValue = 0; // NO
-        }
-    }
-    
-    private void handleUniversitySelection() {
-        int selectedIndex = comboBoxUniversity.getSelectedIndex();
-        if (selectedIndex != -1) {
-            String selectedUniversityName = comboBoxUniversity.getItemAt(selectedIndex);
-            Map<String, University> universityMap = (Map<String, University>) comboBoxUniversity.getClientProperty("universityMap");
-
-            if (universityMap != null && universityMap.containsKey(selectedUniversityName)) {
-                University selectedUniversity = universityMap.get(selectedUniversityName);
-                selectedUniversityId = selectedUniversity.getId();
-            }
-        }
-    }
-    
-    private void handleUserSelection() {
-        int selectedIndex = comboBoxUsers.getSelectedIndex();
-        if (selectedIndex != -1) {
-            String selectedUserName = comboBoxUsers.getItemAt(selectedIndex);
-            Map<String, Users> userMap = (Map<String, Users>) comboBoxUsers.getClientProperty("userMap");
-
-            if (userMap != null && userMap.containsKey(selectedUserName)) {
-                Users selectedUser = userMap.get(selectedUserName);
-                selectedUserId = selectedUser.getId_user();
-            }
-        }
-    }
-    
+           
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -360,12 +247,11 @@ public class CampusUpdateForm extends javax.swing.JFrame {
         String location = txtLocation.getText();
         String latitude = txtLatitude.getText();
         String longitude = txtLongitude.getText();
-        int mainValue = selectedMainValue;
         String www = txtWww.getText();
         String email = txtEmail.getText();
-        int idUserUpdate = selectedUserId;
-        
-        System.out.println("el id que actualiza es; "+idUserUpdate);
+        selectedMainValue = FormsUtils.handleComboBoxSelection(comboBoxMain);
+        selectedUserId = FormsUtils.handleUserSelection(comboBoxUsers);
+        selectedUniversityId = FormsUtils.handleUniversitySelection(comboBoxUniversity);
 
         // Obtener la fecha actual
         java.util.Date currentDate = new java.util.Date();
@@ -375,9 +261,11 @@ public class CampusUpdateForm extends javax.swing.JFrame {
         String f_update = dateFormat.format(currentDate);
 
         // Crear la consulta SQL para la actualización en la tabla "campus"
-        String updateQuery = "UPDATE campus SET name = '" + name + "', location = '" + location + "', latitude = " + Float.parseFloat(latitude) +
-                             ", longitude = " + Float.parseFloat(longitude) + ", main = " + mainValue + ", www = '" + www + "', email = '" + email +
-                             "', id_user_update = " + idUserUpdate + ", f_update = '" + f_update + "' WHERE id_campus = " + idCampus + ";";
+        String updateQuery = "UPDATE campus SET id_university = " + selectedUniversityId + ", name = '" + name + "', location = '" + location +
+                     "', latitude = " + Float.parseFloat(latitude) + ", longitude = " + Float.parseFloat(longitude) +
+                     ", main = " + selectedMainValue + ", www = '" + www + "', email = '" + email +
+                     "', id_user_update = " + selectedUserId + ", f_update = '" + f_update + "' WHERE id_campus = " + idCampus + ";";
+
 
         // Ejecutar la consulta utilizando el método SendQuery
         ResultSetIES9021 result = DDBBConnection.SendQuery(updateQuery);
