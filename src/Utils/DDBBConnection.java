@@ -1,5 +1,6 @@
 package Utils;
 
+import Models.University;
 import java.sql.*;
 import java.time.LocalDate;
 
@@ -13,6 +14,10 @@ public abstract class DDBBConnection {
     private static String Driver = "com.mysql.cj.jdbc.Driver";
 
     private static Connection Conection;
+
+    public static ResultSetIES9021 insertUniversity(University university) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 
     private DDBBConnection() {
     }
@@ -129,7 +134,6 @@ public abstract class DDBBConnection {
         } else {
             logConnection("Invalid Connection attempt", testQuery);
         }
-
         return verification;
     }
 
