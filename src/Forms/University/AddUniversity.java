@@ -8,10 +8,8 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 public class AddUniversity extends javax.swing.JFrame {
-
-    /**
-     * Creates new form AddUniversity
-     */
+    DefaultTableModel modelo;
+  
     public AddUniversity() {
         initComponents();
         setLocationRelativeTo(null);
@@ -33,7 +31,7 @@ public class AddUniversity extends javax.swing.JFrame {
         btnCancelar = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        Tabla = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -80,21 +78,24 @@ public class AddUniversity extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4))
+                .addGap(27, 27, 27)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel2)
+                        .addComponent(jLabel3)
+                        .addComponent(jLabel4))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnGuardar)
+                        .addGap(23, 23, 23)))
                 .addGap(54, 54, 54)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(TXTmagnamet, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
-                    .addComponent(TXTuniversity)
-                    .addComponent(TXTupdateuser))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(TXTmagnamet, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+                        .addComponent(TXTupdateuser))
+                    .addComponent(TXTuniversity, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(232, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnGuardar)
-                .addGap(18, 18, 18)
                 .addComponent(btnCancelar)
                 .addGap(15, 15, 15))
         );
@@ -122,50 +123,31 @@ public class AddUniversity extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("University"));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        Tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {"", null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+
             },
             new String [] {
                 "ID", "University Name", "ID Magnement", "ID User Create", "ID User Update", "F Create", "F Update"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(Tabla);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
+                .addGap(21, 21, 21)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 491, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(24, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(17, 17, 17)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(15, 15, 15))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -178,9 +160,9 @@ public class AddUniversity extends javax.swing.JFrame {
                 .addGap(239, 239, 239))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -190,9 +172,9 @@ public class AddUniversity extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(125, Short.MAX_VALUE))
         );
 
         jPanel1.getAccessibleContext().setAccessibleName("datos");
@@ -201,7 +183,7 @@ public class AddUniversity extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void TXTuniversityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTuniversityActionPerformed
-        String Uname;
+        String name;
     }//GEN-LAST:event_TXTuniversityActionPerformed
 
     private void TXTmagnametActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTmagnametActionPerformed
@@ -209,7 +191,10 @@ public class AddUniversity extends javax.swing.JFrame {
     }//GEN-LAST:event_TXTmagnametActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-
+   this.dispose(); 
+        if (parentForm != null) {
+            parentForm.setVisible(true);
+        }
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
@@ -255,23 +240,43 @@ public class AddUniversity extends javax.swing.JFrame {
         String name = TXTuniversity.getText();
         String idManagement = TXTmagnamet.getText();
         String idUserCreate = TXTupdateuser.getText();
+        java.util.Date currentDate = new java.util.Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String f_create = dateFormat.format(currentDate);
 
         if (idUserCreate.equals("") || idManagement.equals("") || name.equals("")) {
             JOptionPane.showMessageDialog(null, "Alguno de los campos está vacío");
         } else {
-            University university = new University();
-            university.setName(name);
-            university.setIdManagement(Integer.parseInt(idManagement));
-            university.setIdUserCreate(Integer.parseInt(idUserCreate));
+            String insertQuery = "INSERT INTO university (name, id_management, id_user_create,f_create, f_update) VALUES('" + name + "','" + idManagement + "','" + idUserCreate + "', '" + f_create + "','"f_create"');";          
+            ResultSetIES9021 result = DDBBConnection.SendQuery(insertQuery);
 
-            ResultSetIES9021 result = DDBBConnection.insertUniversity(university);
-
-            if (result.getState()) {
-                JOptionPane.showMessageDialog(null, "Universidad insertada correctamente");
-            } else {
-                JOptionPane.showMessageDialog(null, "Error al insertar la universidad: " + result.getClarification());
-            }
+        // Verificar el estado del resultado
+        if (result.getState()) {
+            JOptionPane.showMessageDialog(this, "Universidad creada con éxito.", "Actualización Exitosa", JOptionPane.INFORMATION_MESSAGE);
+            // Cierra la ventana de CampusAddForm después de la inserción
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "No se pudo crear la universidad.", "Error de Creación", JOptionPane.ERROR_MESSAGE);
         }
+        }
+    }
+    
+    
+    void listar(){
+        insertQuery="select * from university";
+        ResultSetIES9021 result = DDBBConnection.SendQuery(insertQuery);
+        ojbject[]University=new object[7];
+        while (result.next()) {
+            university[0]=result.getInt("ID");
+            university[1]=result.getString("University Name");
+            university[2]=result.getInt("ID Magnement");
+            university[3]=result.getInt("ID User Create");
+            university[4]=result.getInt("ID User Update");
+            university[5]=result.getString("F Create");
+            university[6]=result.getString("F Update");
+            modelo.addRow(university);
+        }
+        Tabla.setModel(modelo);
     }
 
 
@@ -279,6 +284,7 @@ public class AddUniversity extends javax.swing.JFrame {
     private javax.swing.JTextField TXTmagnamet;
     private javax.swing.JTextField TXTuniversity;
     private javax.swing.JTextField TXTupdateuser;
+    private javax.swing.JTable Tabla;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JLabel jLabel1;
@@ -288,7 +294,6 @@ public class AddUniversity extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }
-el seba es un genio y va a aprobar esta materia con un 10 a costa de su salud mental
+
