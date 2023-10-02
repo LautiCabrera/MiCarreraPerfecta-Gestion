@@ -42,7 +42,7 @@ public class General_Methods {
         try {
             String Query=("select id_user, `name`, Last_token='"+TokenI+"', ((select minute_token from ies9021_database.settings ) < timestampdiff(minute,f_token,current_time())) from ies9021_database.users where email='"+Email+"' Limit 5;");
             ResultSetIES9021 result = SendQuery("select Last_token, id_user from `ies9021_database`.users where email='" + Email.toLowerCase() + "';");
-            if(result.State){
+            if(result.getState()){
                 if(result.RS.next()){
                     if(result.RS.getInt(4)==1){
                         if(result.RS.getInt(3)==1){

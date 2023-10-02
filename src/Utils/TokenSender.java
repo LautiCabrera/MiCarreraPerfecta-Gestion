@@ -34,7 +34,7 @@ public abstract class TokenSender {
             boolean Send=false;
         String query="SELECT * FROM ies9021_database.email_sender WHERE mail LIKE 'F%';";
         ResultSetIES9021 RSI=SendQuery(query);
-        if(RSI.State){
+        if(RSI.getState()){
             RSI.RS.next();
             Properties propiedad = new Properties();
             propiedad.setProperty("mail.smtp.host", RSI.RS.getString("host"));
