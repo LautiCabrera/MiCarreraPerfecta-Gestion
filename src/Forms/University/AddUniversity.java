@@ -291,3 +291,4 @@ public class AddUniversity extends javax.swing.JFrame {
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }
+el seba es un genio y va a aprobar esta materia con un 10 a costa de su salud mental
