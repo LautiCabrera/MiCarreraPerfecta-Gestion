@@ -5,11 +5,22 @@ import Utils.DDBBConnection;
 import Utils.ResultSetIES9021;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+<<<<<<< Updated upstream
 import javax.swing.*;
 
 public class AddUniversity extends javax.swing.JFrame {
     DefaultTableModel modelo;
   
+=======
+import java.text.SimpleDateFormat;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
+public class AddUniversity extends javax.swing.JFrame {
+
+    DefaultTableModel modelo;
+
+>>>>>>> Stashed changes
     public AddUniversity() {
         initComponents();
         setLocationRelativeTo(null);
@@ -191,7 +202,12 @@ public class AddUniversity extends javax.swing.JFrame {
     }//GEN-LAST:event_TXTmagnametActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+<<<<<<< Updated upstream
    this.dispose(); 
+=======
+        this.dispose();
+        Object parentForm;
+>>>>>>> Stashed changes
         if (parentForm != null) {
             parentForm.setVisible(true);
         }
@@ -247,6 +263,7 @@ public class AddUniversity extends javax.swing.JFrame {
         if (idUserCreate.equals("") || idManagement.equals("") || name.equals("")) {
             JOptionPane.showMessageDialog(null, "Alguno de los campos está vacío");
         } else {
+<<<<<<< Updated upstream
             String insertQuery = "INSERT INTO university (name, id_management, id_user_create,f_create, f_update) VALUES('" + name + "','" + idManagement + "','" + idUserCreate + "', '" + f_create + "','"f_create"');";          
             ResultSetIES9021 result = DDBBConnection.SendQuery(insertQuery);
 
@@ -278,6 +295,56 @@ public class AddUniversity extends javax.swing.JFrame {
         }
         Tabla.setModel(modelo);
     }
+=======
+            String insertQuery = "INSERT INTO university (name, id_management, id_user_create, f_create, f_update) VALUES('" + name + "','" + idManagement + "','" + idUserCreate + "', '" + f_create + "','" + f_create + "');";          
+            ResultSetIES9021 result = DDBBConnection.SendQuery(insertQuery);
+
+            // Verificar el estado del resultado
+            if (result.getState()) {
+                JOptionPane.showMessageDialog(this, "Universidad creada con éxito.", "Actualización Exitosa", JOptionPane.INFORMATION_MESSAGE);
+                // Cierra la ventana de CampusAddForm después de la inserción
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "No se pudo crear la universidad.", "Error de Creación", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+void listar() {
+    try {
+        String selectQuery = "SELECT * FROM university";
+        ResultSetIES9021<University> result = DDBBConnection.SendQuery(selectQuery);
+
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("ID");
+        modelo.addColumn("University Name");
+        modelo.addColumn("ID Management");
+        modelo.addColumn("ID User Create");
+        modelo.addColumn("ID User Update");
+        modelo.addColumn("F Create");
+        modelo.addColumn("F Update");
+
+        List<University> universities = result.getDatos();
+
+        for (University university : universities) {
+            Object[] rowData = new Object[7];
+            rowData[0] = university.getId();
+            rowData[1] = university.getName();
+            rowData[2] = university.getIdManagement();
+            rowData[3] = university.getIdUserCreate();
+            rowData[4] = university.getIdUserUpdate();
+            rowData[5] = university.getFCreate();
+            rowData[6] = university.getFUpdate();
+            modelo.addRow(rowData);
+        }
+
+        Tabla.setModel(modelo);
+    } catch (Exception e) {
+        e.printStackTrace(); // Manejo de errores de base de datos
+        JOptionPane.showMessageDialog(this, "Error al listar universidades.", "Error de Listado", JOptionPane.ERROR_MESSAGE);
+    }
+}
+>>>>>>> Stashed changes
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -296,4 +363,7 @@ public class AddUniversity extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
