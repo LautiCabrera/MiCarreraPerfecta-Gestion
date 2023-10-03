@@ -181,7 +181,7 @@ public class InicioJF extends javax.swing.JFrame {
                 case 0: JOptionPane.showMessageDialog(this,
                   "Su Email ha sido deshabilitado\nPor favor, contacte a Soporte");
                     break;
-                case 1:SendMessage(TXTEmail.getText());
+                case 1: SendMessage(TXTEmail.getText());
                     break;
                 default:
                     JOptionPane.showMessageDialog(this,

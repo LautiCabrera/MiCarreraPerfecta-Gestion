@@ -65,7 +65,7 @@ public class General_Methods {
             return false;
             
 
-        } catch (HeadlessException | SQLException e) {
+        } catch (HeadlessException e) {
             System.out.println("Fail detected\n");
             System.out.println(e.getMessage());
         }
@@ -74,16 +74,16 @@ public class General_Methods {
     //Existe Pertenece a InicioJF
     public int Existe(String Email){
         try{
-        String Query= "SELECT enabled_state FROM `ies9021_database`.users WHERE email='"+Email.toLowerCase()+"';";
-        ResultSetIES9021 RS21= DDBBConnection.SendQuery(Query);
-        ResultSet result=RS21.RS;
-            System.out.println("Alfa");
-            int ret=-1;
-            if(result.next()){
-                System.out.println("Beta");
-                ret+=1+result.getInt(1);}
+        String Query= "email='"+Email.toLowerCase()+"';";
+        ResultSetIES9021 RS21= new JsonDataFetcher<>().fetchTableData("users",Query,Object.class);
+        int ret=-1;
+        if(RS21.getState()){
+            if(!RS21.getDatos().isEmpty()){
+                ret=Integer.getInteger(String.valueOf(RS21.getDatos().get(8)));
+            }
+        }
             return ret;
-        } catch (SQLException e) {
+        } catch (Exception e) {
             System.out.println("Error en: GEM.Existe\nError:"+e.getMessage());
         }
         
@@ -133,7 +133,7 @@ public class General_Methods {
     }
     
     public String[] Paginas(int Paginador,String Tabla){
-        String query="SELECT COUNT(*) FROM "+Tabla+";";
+        String query="SELECT COUNT(*) FROM "+Tabla+";"; //Se utiliza para consultar cuantos registros hay para poder paginarlo
         ResultSetIES9021 RSI=SendQuery(query);
         if(RSI.State){
             try {
@@ -154,6 +154,7 @@ public class General_Methods {
                     return Pags;
                 }
             } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
         return null;

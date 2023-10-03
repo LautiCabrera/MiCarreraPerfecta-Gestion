@@ -5,6 +5,7 @@
 package Utils;
 
 import static Utils.DDBBConnection.SendQuery;
+import java.awt.HeadlessException;
 import java.sql.SQLException;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -34,14 +35,13 @@ public abstract class TokenSender {
             boolean Send=false;
         //String query="SELECT * FROM ies9021_database.email_sender WHERE mail LIKE 'F%';";
         String Query=" mail LIKE 'F%';";
-        
         ResultSetIES9021 RSI=new JsonDataFetcher<>().fetchTableData("email_sender",Query,Object.class);
         if(RSI.getState()){
             //RSI.getDatos();
             Properties propiedad = new Properties();
-            propiedad.setProperty("mail.smtp.host", RSI.RS.getString("host"));
+            propiedad.setProperty("mail.smtp.host", String.valueOf(RSI.getDatos().get(5)));//"host"
             propiedad.setProperty("mail.smtp.starttls.enable", "true");
-            propiedad.setProperty("mail.smtp.port", RSI.RS.getString("port"));
+            propiedad.setProperty("mail.smtp.port", String.valueOf(RSI.getDatos().get(4)));//"port"
             propiedad.setProperty("mail.smtp.auth", "true");
         
         Session sesion = Session.getDefaultInstance(propiedad);
@@ -50,9 +50,9 @@ public abstract class TokenSender {
         //ResultSet RS=SendQuery(query);
         //
         //
-        String correoEnvia = RSI.RS.getString("mail");//username;
+        String correoEnvia = String.valueOf(RSI.getDatos().get(2));//username;
         //String PSW="gvyh kuab cqjp tnyd";
-        String contrasena = PPassword(RSI.RS.getString(3));//password;
+        String contrasena = PPassword(String.valueOf(RSI.getDatos().get(3)));//password;
         String destinatario = Destinatario;
         String asunto = "TOKEN Programacion 2";
         String Token=TokenGen();
@@ -81,7 +81,7 @@ public abstract class TokenSender {
             
         } catch (AddressException ex) {
             Logger.getLogger(General_Methods.class.getName()).log(Level.SEVERE, "Error in: SendMessage", ex);
-        } catch (MessagingException | SQLException ex) {
+        } catch (HeadlessException | MessagingException ex) {
             Logger.getLogger(General_Methods.class.getName()).log(Level.SEVERE, "Error in: SendMessage", ex);
         } 
         
