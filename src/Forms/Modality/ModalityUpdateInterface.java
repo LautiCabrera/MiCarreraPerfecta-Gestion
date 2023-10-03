@@ -19,12 +19,16 @@ public class ModalityUpdateInterface extends javax.swing.JFrame {
 
     // Método para configurar los campos con los datos de la fila seleccionada
     public void setModalityData(Object[] rowData) {
-        // Configura los campos en el formulario de actualización con los datos de la fila seleccionada
-        modalityUpdateTxt.setText(rowData[1].toString());
-        int virtualValue = (int) rowData[2]; // Obtener el valor numérico
-        comboBoxVirtualUpdate.setSelectedItem(virtualValue == 1 ? "SI" : "NO"); // Seleccionar la opción en el JComboBox
-        idUserUpdateTxt.setText(rowData[4].toString());
-        id = (int) rowData[0];
+        try {
+            // Configura los campos en el formulario de actualización con los datos de la fila seleccionada
+            modalityUpdateTxt.setText(rowData[1].toString());
+            int virtualValue = (int) rowData[2]; // Obtener el valor numérico
+            comboBoxVirtualUpdate.setSelectedItem(virtualValue == 1 ? "SI" : "NO"); // Seleccionar la opción en el JComboBox
+            idUserUpdateTxt.setText(rowData[4].toString());
+            id = (int) rowData[0];
+        } catch (Exception error) {
+            JOptionPane.showMessageDialog(this, "Error al llenar los campos: " + error.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -142,6 +146,14 @@ public class ModalityUpdateInterface extends javax.swing.JFrame {
         // Convertir la fecha actual a un formato de fecha adecuado
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String fUpdate = dateFormat.format(currentDate);
+        
+        // Verificar que id_user_update sea un numero
+        try {
+            Integer.parseInt(idUserUpdate);
+        } catch (NumberFormatException error) {
+            JOptionPane.showMessageDialog(this, "El campo 'id_user_create' debe ser un número.", "Error", JOptionPane.ERROR_MESSAGE);
+            return; // Detener la ejecución si idUserUpdate no es un numero
+        }
         try {
             // Ejecuta la consulta SQL utilizando el método SendQuery
             String query = "UPDATE modality SET modality = '" + modality + "', virtual = '" + virtual + "', id_user_update = '" + idUserUpdate + "', fupdate = '" + fUpdate + "' WHERE id_modality = " + id;

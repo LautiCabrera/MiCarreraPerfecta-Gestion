@@ -44,7 +44,7 @@ public class ModalityAddInterface extends javax.swing.JFrame {
 
         jLabel1.setText("Añadir nueva modalida");
 
-        jLabel2.setText("modalidad");
+        jLabel2.setText("modality");
 
         jLabel3.setText("virtual");
 
@@ -122,41 +122,49 @@ public class ModalityAddInterface extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void saveBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBTNActionPerformed
-        String modality = modalityAddTxt.getText().toUpperCase();
-        String virtualOption = comboBoxVirtualAdd.getSelectedItem().toString();//Obtengo la opcion seleccionada
-        int virtual = virtualOption.equals("SI") ? 1 : 0; // Convertir "SI" a 1, "NO" a 0
-        String idCreate = idUserCreateTxt.getText();
-        String idUpdate = idCreate;
-        // Obtener la fecha actual
-        java.util.Date currentDate = new java.util.Date();
-        // Convertir la fecha actual a un formato de fecha adecuado
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String fCreateAdd = dateFormat.format(currentDate);
-        String fUpdateAdd = fCreateAdd;
-        // Verificar que virtual sea un número
         try {
-            Integer.parseInt(idCreate);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "El campo 'id_user_create' debe ser un número.", "Error", JOptionPane.ERROR_MESSAGE);
-            return; // Detener la ejecución si 'virtual' no es un número
-        }
+            String modality = modalityAddTxt.getText().toUpperCase();
+            String virtualOption = comboBoxVirtualAdd.getSelectedItem().toString();//Obtengo la opcion seleccionada
+            int virtual = virtualOption.equals("SI") ? 1 : 0; // Convertir "SI" a 1, "NO" a 0
+            String idCreate = idUserCreateTxt.getText();
+            String idUpdate = idCreate;
+            // Obtener la fecha actual
+            java.util.Date currentDate = new java.util.Date();
+            // Convertir la fecha actual a un formato de fecha adecuado
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String fCreateAdd = dateFormat.format(currentDate);
+            String fUpdateAdd = fCreateAdd;
+            // Verificar que 'modality' sea una cadena no vacía
+            if (modality.trim().length() == 0 || modality.matches("[0-9]+")) {
+                JOptionPane.showMessageDialog(this, "El campo 'modality' debe ser una cadena de texto.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            // Verificar que id_user_create sea un numero
+            try {
+                Integer.parseInt(idCreate);
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "El campo 'id_user_create' debe ser un número.", "Error", JOptionPane.ERROR_MESSAGE);
+                return; // Detener la ejecución si 'virtual' no es un número
+            }
+            // Verificar que los campos estén llenos
+            if (modality.isEmpty() || idCreate.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Todos los campos deben estar llenos.", "Error", JOptionPane.ERROR_MESSAGE);
+                return; // Detener la ejecución si faltan campos
+            }
+            // Guardar los datos en la base de datos
+            String query = "INSERT INTO modality (modality, virtual, id_user_create, id_user_update, fcreate, fupdate) " + "VALUES ('" + modality + "', '" + virtual + "', " + idCreate + ", " + idUpdate + ", '" + fCreateAdd + "', '" + fUpdateAdd + "')";
+            ResultSetIES9021 result = DDBBConnection.SendQuery(query);
+            if (result.getState()) {
+                JOptionPane.showMessageDialog(this, "Los datos se han guardado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                // Cerrar la ventana
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "No se pudieron guardar los datos.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception error) {
+            //Excepcion general 
+            JOptionPane.showMessageDialog(this, "Se produjo un error inesperado: " + error.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 
-        // Verificar que los campos estén llenos
-        if (modality.isEmpty() || idCreate.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Todos los campos deben estar llenos.", "Error", JOptionPane.ERROR_MESSAGE);
-            return; // Detener la ejecución si faltan campos
-        }
-
-        // Guardar los datos en la base de datos
-        String query = "INSERT INTO modality (modality, virtual, id_user_create, id_user_update, fcreate, fupdate) " + "VALUES ('" + modality + "', '" + virtual + "', " + idCreate + ", " + idUpdate + ", '" + fCreateAdd + "', '" + fUpdateAdd + "')";
-        ResultSetIES9021 result = DDBBConnection.SendQuery(query);
-
-        if (result.getState()) {
-            JOptionPane.showMessageDialog(this, "Los datos se han guardado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            // Cerrar la ventana
-            this.dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "No se pudieron guardar los datos.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_saveBTNActionPerformed
 

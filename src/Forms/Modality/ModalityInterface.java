@@ -4,6 +4,7 @@ import Models.Modality;
 import Utils.DDBBConnection;
 import Utils.JsonDataFetcher;
 import Utils.ResultSetIES9021;
+import java.util.Arrays;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
@@ -21,20 +22,24 @@ public class ModalityInterface extends javax.swing.JFrame {
         String tableName = "modality";//Nombre de la tabla
         String whereClause = null;// Clausula where 
         Class<Modality> returnType = Modality.class;  //Clase que se utiliza para mapear los resultados 
-        ResultSetIES9021<Modality> result = dataFetcher.fetchTableData(tableName, whereClause, returnType); // Llama al método para obtener los datos
+        try {
+            ResultSetIES9021<Modality> result = dataFetcher.fetchTableData(tableName, whereClause, returnType); // Llama al método para obtener los datos
 
-        if (result.getState()) {
-            //carga los nuevos datos 
-            List<Modality> modalityList = result.getDatos();
-            //Recorre la lista de objetos de modality y los agrega a la tabla 
-            for (Modality modality : modalityList) {
-                Object[] rowData = {modality.getId_modality(), modality.getmodality(), modality.getvirtual(), modality.getId_user_create(), modality.getId_user_update(), modality.getfcreate(), modality.getfupdate()};
-                model.addRow(rowData);
+            if (result.getState()) {
+                //carga los nuevos datos 
+                List<Modality> modalityList = result.getDatos();
+                //Recorre la lista de objetos de modality y los agrega a la tabla 
+                for (Modality modality : modalityList) {
+                    Object[] rowData = {modality.getId_modality(), modality.getmodality(), modality.getvirtual(), modality.getId_user_create(), modality.getId_user_update(), modality.getfcreate(), modality.getfupdate()};
+                    model.addRow(rowData);
+                }
+            } else {
+                //Si no se puede muestra el mensaje de error 
+                String clarification = result.getClarification();
+                JOptionPane.showMessageDialog(this, "Error al cargar los datos: " + clarification, "Error", JOptionPane.ERROR_MESSAGE);
             }
-        } else {
-            //Si no se puede muestra el mensaje de error 
-            String clarification = result.getClarification();
-            JOptionPane.showMessageDialog(this, "Error al cargar los datos: " + clarification, "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception error) {
+            JOptionPane.showMessageDialog(this, "Error  al cargar los datos" + error.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     //Fin del metodo
@@ -42,19 +47,23 @@ public class ModalityInterface extends javax.swing.JFrame {
     //Metodo para activar el boton de Modificar y borrar 
     private void configSelectionListener() {
         jTable1.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
-            // Verifica si hay una fila seleccionada
-            if (!e.getValueIsAdjusting() && jTable1.getSelectedRow() != -1) {
-                // Hay una fila seleccionada, habilita los botones "Modificar" y "Borrar"
-                BTNModify.setEnabled(true);
-                BTNDelete.setEnabled(true);
+            try {
+                // Verifica si hay una fila seleccionada
+                if (!e.getValueIsAdjusting() && jTable1.getSelectedRow() != -1) {
+                    // Hay una fila seleccionada, habilita los botones "Modificar" y "Borrar"
+                    BTNModify.setEnabled(true);
+                    BTNDelete.setEnabled(true);
 
-                //Obtengo los datos de la fila seleccionada 
-                int selectedRowIndex = jTable1.getSelectedRow();
-                DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-                selectedRowData = new Object[model.getColumnCount()];
-                for (int i = 0; i < model.getColumnCount(); i++) {
-                    selectedRowData[i] = model.getValueAt(selectedRowIndex, i);
+                    //Obtengo los datos de la fila seleccionada 
+                    int selectedRowIndex = jTable1.getSelectedRow();
+                    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+                    selectedRowData = new Object[model.getColumnCount()];
+                    for (int i = 0; i < model.getColumnCount(); i++) {
+                        selectedRowData[i] = model.getValueAt(selectedRowIndex, i);
+                    }
                 }
+            } catch (Exception error) {
+                JOptionPane.showMessageDialog(this, "Error al seleccionar la fila" + error.getMessage() + "Error" + JOptionPane.ERROR_MESSAGE);
             }
         });
     }
@@ -69,40 +78,98 @@ public class ModalityInterface extends javax.swing.JFrame {
         int length = 6; // Longitud del texto aleatorio
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         StringBuilder randomText = new StringBuilder();
-
-        for (int i = 0; i < length; i++) {
-            int index = (int) (Math.random() * characters.length());
-            randomText.append(characters.charAt(index));
+        try {
+            for (int i = 0; i < length; i++) {
+                int index = (int) (Math.random() * characters.length());
+                randomText.append(characters.charAt(index));
+            }
+        } catch (Exception error) {
+            JOptionPane.showMessageDialog(this, "Error al generar texto aleatorio" + error.getMessage() + JOptionPane.ERROR_MESSAGE);
         }
-
         return randomText.toString();
     }
     //Fin del metodo 
 
+    //Metodo para daber si el id se esta usando en otra tabla 
+    private boolean idUsed(int selectedID) {
+       // Define una lista de nombres de tablas en las que deseas verificar la existencia del ID
+    List<String> tablesToCheck = Arrays.asList("career"); // Reemplaza con los nombres de tus tablas
+
+    // Define el nombre del campo en esas tablas donde deseas buscar el ID
+    String idFieldName = "id_modality"; // Reemplaza con el nombre del campo correspondiente
+
+    for (String tableName : tablesToCheck) {
+        // Construye la consulta SQL para buscar el ID en la tabla actual
+        String query = "SELECT COUNT(*) FROM " + tableName + " WHERE " + idFieldName + " = " + selectedID;
+
+        // Ejecuta la consulta utilizando ResultSetIES9021
+        ResultSetIES9021 result = DDBBConnection.SendQuery(query); 
+
+        if (result.getState()) {
+            List<Integer> counts = result.getDatos();
+            if (!counts.isEmpty()) {
+                int count = counts.get(0); // Obtén el resultado del recuento de filas
+                if (count > 0) {
+                    // Si count es mayor que 0, significa que el ID existe en esta tabla
+                    return true;
+                }
+            }
+        } else {
+            // Manejo de errores si la consulta no fue exitosa
+            String clarification = result.getClarification();
+            System.out.println("Error al ejecutar la consulta en " + tableName + ": " + clarification);
+            // Puedes elegir cómo manejar este error, como lanzar una excepción
+        }
+    }
+
+    // Si llegas hasta aquí, significa que el ID no se encontró en ninguna de las tablas
+    return false;
+    }
+    //Fin del metodo 
+
+    //Metodo para eliminar una fila 
     private void deleteSelectedRow() {
         if (selectedRowData != null) {
             // Obtén el ID de la fila seleccionada 
             int selectedID = (int) selectedRowData[0];
-            // Construye y envía la consulta SQL para eliminar la fila
-            String query = "DELETE FROM modality WHERE id_modality = " + selectedID;
-            ResultSetIES9021 result = DDBBConnection.SendQuery(query);
+            //Verifico si el id esta siendo usado en otra tabla 
+            boolean idUsed = idUsed(selectedID);
 
-            if (result.getState()) {
-                // Eliminación exitosa, ahora elimina la fila de la tabla
-                DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            if (idUsed == true) {
+                // El ID está asociado a otras tablas, muestra un mensaje de error
+                JOptionPane.showMessageDialog(this, "No se puede eliminar esta fila porque el ID está asociado a otras tablas.", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                // El ID no está asociado a otras tablas, procede con la eliminación
+                // Construye y envía la consulta SQL para eliminar la fila
+                String query = "DELETE FROM modality WHERE id_modality = " + selectedID;
+                try {
+                    ResultSetIES9021 result = DDBBConnection.SendQuery(query);
 
-                // Encuentra el índice de la fila seleccionada en el modelo de la tabla
-                for (int i = 0; i < model.getRowCount(); i++) {
-                    int rowID = (int) model.getValueAt(i, 0); // 
-                    if (rowID == selectedID) {
-                        // Elimina la fila de la tabla
-                        model.removeRow(i);
-                        break;
+                    if (result.getState()) {
+                        // Eliminación exitosa, ahora elimina la fila de la tabla
+                        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+
+                        // Encuentra el índice de la fila seleccionada en el modelo de la tabla
+                        for (int i = 0; i < model.getRowCount(); i++) {
+                            int rowID = (int) model.getValueAt(i, 0); // 
+                            if (rowID == selectedID) {
+                                // Elimina la fila de la tabla
+                                model.removeRow(i);
+                                break;
+                            }
+                        }
+                    } else {
+                        // Manejo de excepción en caso de que la eliminación no sea exitosa
+                        JOptionPane.showMessageDialog(this, "Error al eliminar la fila: " + result.getClarification(), "Error", JOptionPane.ERROR_MESSAGE);
                     }
+                } catch (Exception error) {
+                    // Manejo de excepción en caso de error en la consulta SQL o manipulación de la tabla
+                    JOptionPane.showMessageDialog(this, "Error inesperado al eliminar la fila: " + error.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         }
     }
+    //Fin del metodo
 
     public ModalityInterface() {
         initComponents();
@@ -305,7 +372,7 @@ public class ModalityInterface extends javax.swing.JFrame {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
-            public void run() {
+public void run() {
                 new ModalityInterface().setVisible(true);
             }
         });
