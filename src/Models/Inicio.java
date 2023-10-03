@@ -1,6 +1,8 @@
 package Models;
 
 import Utils.DDBBConnection;
+import Utils.JsonDataFetcher;
+import Utils.ResultSetIES9021;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.util.ArrayList;
@@ -10,9 +12,7 @@ public class Inicio {
     public void Inicio(String Email) {
         System.out.println("Email: " + Email);
         try {
-            DDBBConnection Conect = new DDBBConnection();
-            Conect.Conectar();
-            ResultSet result = Conect.SendAndRecibe("select * from `ies9021_database`.users where email='" + Email.toLowerCase() + "';");
+            ResultSetIES9021<Object> result = new JsonDataFetcher<>().fetchTableData("users",Email.toLowerCase(),Object.class);//("select * from `ies9021_database`.users where email='" + Email.toLowerCase() + "';");
             ArrayList<String[]> Data= new ArrayList();
             
             while(result.next()){
@@ -23,11 +23,11 @@ public class Inicio {
                 if(fila[2] == null){fila[2] = "";}
                 Data.add(fila);
             }
-            ResultSetMetaData resultdata = result.getMetaData();
-            int cantidadDColumnas= resultdata.getColumnCount();
-            for(int i = 1; i <= cantidadDColumnas; i++){
-                System.out.println(resultdata.getColumnName(i)+" ");
-            }
+//            ResultSetMetaData resultdata = result.getMetaData();
+//            int cantidadDColumnas= resultdata.getColumnCount();
+//            for(int i = 1; i <= cantidadDColumnas; i++){
+//                System.out.println(resultdata.getColumnName(i)+" ");
+//            }
             int count=0;
             for(String[] fila:Data){
                 System.out.println(fila[2]+" ("+count);

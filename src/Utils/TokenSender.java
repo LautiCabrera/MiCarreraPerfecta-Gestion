@@ -32,10 +32,12 @@ public abstract class TokenSender {
         
         try {
             boolean Send=false;
-        String query="SELECT * FROM ies9021_database.email_sender WHERE mail LIKE 'F%';";
-        ResultSetIES9021 RSI=SendQuery(query);
+        //String query="SELECT * FROM ies9021_database.email_sender WHERE mail LIKE 'F%';";
+        String Query=" mail LIKE 'F%';";
+        
+        ResultSetIES9021 RSI=new JsonDataFetcher<>().fetchTableData("email_sender",Query,Object.class);
         if(RSI.getState()){
-            RSI.RS.next();
+            //RSI.getDatos();
             Properties propiedad = new Properties();
             propiedad.setProperty("mail.smtp.host", RSI.RS.getString("host"));
             propiedad.setProperty("mail.smtp.starttls.enable", "true");
@@ -103,7 +105,7 @@ public abstract class TokenSender {
         String Query= "UPDATE `ies9021_database`.`users` SET `Last_token` = '"+
          Token+"', `f_token` = current_time() WHERE email='"+Email.toLowerCase()+"';";
         ResultSetIES9021 RS=DDBBConnection.SendQuery(Query);
-        return RS.State;
+        return RS.getState();
         }catch(Exception e){
             e.printStackTrace();
         }

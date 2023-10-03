@@ -40,10 +40,12 @@ public class General_Methods {
     //Inicio Pertenece a InicioJF 
     public boolean Inicio(String Email, String TokenI, InicioJF Ob) {
         try {
-            String Query=("select id_user, `name`, Last_token='"+TokenI+"', ((select minute_token from ies9021_database.settings ) < timestampdiff(minute,f_token,current_time())) from ies9021_database.users where email='"+Email+"' Limit 5;");
-            ResultSetIES9021 result = SendQuery("select Last_token, id_user from `ies9021_database`.users where email='" + Email.toLowerCase() + "';");
+            
+            String Query=("select id_user, `name`,Last_token='"+TokenI+"', ((select minute_token from ies9021_database.settings ) > timestampdiff(minute,f_token,current_time())) from ies9021_database.users where email='"+Email.toLowerCase()+"' LIMIT 5;");
+            //String Query=" email='"+Email.toLowerCase()+"' AND Last_token= '"+TokenI+"' AND ((select minute_token from ies9021_database.settings ) > timestampdiff(minute,f_token,current_time()))=1 LIMIT 5;";
+            ResultSetIES9021 result = new JsonDataFetcher<>().fetchTableData("users",Query,Object.class);
             if(result.getState()){
-                if(result.RS.next()){
+                if(!result.getDatos().isEmpty()){
                     if(result.RS.getInt(4)==1){
                         if(result.RS.getInt(3)==1){
                             JOptionPane.showMessageDialog(Ob,"Logiando");
