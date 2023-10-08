@@ -128,11 +128,8 @@ public class General_Interface_JF extends javax.swing.JFrame {
     
     private void Refresh(){
         jTable1.clearSelection();
-        int Paginador=Integer.getInteger(String.valueOf(JCBPaginador.getSelectedItem()));
         ObtenerDatos();
-        JCBPagina.setModel(new DefaultComboBoxModel<>(Paginas(Paginador,RSI.getDatos().size())));
-        int Pag=JCBPagina.getSelectedIndex();
-        Pagina(Pag,Paginador);
+        PageReset();
         ResetButtons();
     }
     
@@ -145,7 +142,7 @@ public class General_Interface_JF extends javax.swing.JFrame {
         ResetButtons();
     }
     
-    public String[] Paginas(int Paginador, int CantidadDatos){
+    public String[] SetPaginas(int Paginador, int CantidadDatos){
         String[] Pags;
                 if(CantidadDatos%Paginador==0&&CantidadDatos!=0){
                     Pags= new String[CantidadDatos/Paginador];
@@ -162,10 +159,24 @@ public class General_Interface_JF extends javax.swing.JFrame {
                 }
     }
     
+    private void PageReset(){
+        int Paginador=Integer.getInteger(String.valueOf(JCBPaginador.getSelectedItem()));
+        JCBPagina.setModel(new DefaultComboBoxModel<>(SetPaginas(Paginador,RSI.getDatos().size())));
+        int Pag=JCBPagina.getSelectedIndex();
+        Pagina(Pag,Paginador);
+    }
+    
     private <T> void ObtenerDatos(){
         String ClassName=ClaseEnUso.getClass().getName();
         Class<T> Clazz= (Class<T>)ClaseEnUso.getClass();
         RSI= new JsonDataFetcher<T>().fetchTableData(ClassName,Clazz);
+        //Paginador
+    }
+    
+    private <T> void ObtenerDatos(String Where){
+        String ClassName=ClaseEnUso.getClass().getName();
+        Class<T> Clazz= (Class<T>)ClaseEnUso.getClass();
+        RSI= new JsonDataFetcher<T>().fetchTableData(ClassName,Where,Clazz);
         //Paginador
     }
     
@@ -364,6 +375,7 @@ public class General_Interface_JF extends javax.swing.JFrame {
     private void BTNRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNRefreshActionPerformed
         // TODO add your handling code here:
         Refresh();
+        PageReset();
     }//GEN-LAST:event_BTNRefreshActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
@@ -423,9 +435,10 @@ public class General_Interface_JF extends javax.swing.JFrame {
 
     private void BTNSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNSearchActionPerformed
         // TODO add your handling code here:
-        System.out.println("select * from `ies9021_database`."+LABTittle.getText().toLowerCase()+" WHERE "+CBSelector.getItemAt(CBSelector.getSelectedIndex())+"= '"+TXTSearch.getText()+"'");
-        ResultSetIES9021 RSI=SendQuery("select * from `ies9021_database`."+LABTittle.getText().toLowerCase()+" WHERE "+CBSelector.getItemAt(CBSelector.getSelectedIndex())+"= '"+TXTSearch.getText()+"'");
-        PintarTablaRows(0);
+        String Where=CBSelector.getItemAt(CBSelector.getSelectedIndex())+"= '"+TXTSearch.getText()+"'";
+        ObtenerDatos(Where);
+        PageReset();
+        //PintarTablaRows(0);
         ResetButtons();
     }//GEN-LAST:event_BTNSearchActionPerformed
 
@@ -454,7 +467,7 @@ public class General_Interface_JF extends javax.swing.JFrame {
 
     private void JCBPaginadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JCBPaginadorActionPerformed
         // TODO add your handling code here:
-        Refresh();
+        PageReset();
     }//GEN-LAST:event_JCBPaginadorActionPerformed
 
     private void TXTSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TXTSearchKeyTyped

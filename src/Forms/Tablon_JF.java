@@ -154,7 +154,7 @@ public class Tablon_JF extends javax.swing.JFrame {
 
     private void BTNEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNEntrarActionPerformed
         // TODO add your handling code here:
-        Object ClaseAUsar;
+        Object ClaseAUsar=null;
         switch (JCBClass.getSelectedItem().toString()) {
         case "branch":
 //            ClaseAUsar = Branch.class;
@@ -220,9 +220,11 @@ public class Tablon_JF extends javax.swing.JFrame {
             // Código por defecto si no se encuentra ninguna coincidencia
             break;
     }
-        General_Interface_JF GIJF= new General_Interface_JF(JCBClass.getSelectedItem().toString(),GEM,ClaseAUsar);
-        GIJF.setVisible(true);
-        this.dispose();
+        if(ClaseAUsar!=null){
+            General_Interface_JF GIJF= new General_Interface_JF(JCBClass.getSelectedItem().toString(),GEM,ClaseAUsar);
+            GIJF.setVisible(true);
+            this.dispose();
+        }
     }//GEN-LAST:event_BTNEntrarActionPerformed
 
     /**
