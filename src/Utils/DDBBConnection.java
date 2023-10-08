@@ -4,18 +4,20 @@ import java.sql.*;
 import java.time.LocalDate;
 
 public abstract class DDBBConnection {
-    
+
     private static String DB = "ies9021_database";
-    private static String URL = "jdbc:mysql://ies9021.edu.ar:3306/" + DB + "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+    private static String URL = "jdbc:mysql://ies9021.edu.ar:3306/" + DB
+            + "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     private static String User = "ies9021_userdb";
     private static String Password = "Xsw23edc.127";
-    private static String Driver = "com.mysql.cj.jdbc.Driver"; 
+    private static String Driver = "com.mysql.cj.jdbc.Driver";
 
     private static Connection Conection;
 
-    private DDBBConnection() {}
+    private DDBBConnection() {
+    }
 
-    protected static Connection Conectar(){
+    protected static Connection Conectar() {
         try {
             Class.forName(Driver);
             Conection = DriverManager.getConnection(URL, User, Password);
@@ -27,51 +29,48 @@ public abstract class DDBBConnection {
         return null;
     }
 
-    protected static void Disconect(){
+    protected static void Disconect() {
         try {
             Conection.close();
         } catch (SQLException ex) {
             System.out.println("Conexion terminada");
         }
     }
-    
-    public static ResultSetIES9021 SendQuery(String Query){
-        
+
+    public static ResultSetIES9021 SendQuery(String query) {
+
         ResultSetIES9021 RSIES9021 = new ResultSetIES9021();
-        if(QueryVerification(Query)){
-        Conection = Conectar();
-        PreparedStatement statement = null;
-        
+        if (QueryVerification(query)) {
+            Conection = Conectar();
+            PreparedStatement statement = null;
+            boolean result = false;
+
             try {
-                statement = Conection.prepareStatement(Query);
-                RSIES9021.RS = statement.executeQuery();
-                RSIES9021.State = true;
-            } catch (Exception e) {
-            e.printStackTrace();
-            RSIES9021.RS = null;
-            RSIES9021.State = false;
-            RSIES9021.Clarification = e.getMessage();
-        } finally{
-            try {
-                if(statement!= null){
-                    statement.close();
-                }
-                if(Conection!= null){
-                    Conection.close();
-                }
-            } catch (Exception e) {
+                Conection = Conectar();
+                statement = Conection.prepareStatement(query);
+                result = statement.execute();
+                RSIES9021.setState(true);
+                RSIES9021.setClarification("Consulta ejecutada satisfactoriamente");
+                logConnection("Conexión exitosa", query);
+                Disconect();
+
+                
+            } catch (SQLException e) {
+                logConnection("Conexión fallida", query);
                 e.printStackTrace();
+                RSIES9021.setState(false);
+                RSIES9021.setClarification(e.getMessage());
             }
+
         }
-    }
         return RSIES9021;
     }
-    
+
     private static void logConnection(String title, String description) {
         String insertQuery = "INSERT INTO logs (title, description, id_user, date) VALUES (?, ?, ?, ?)";
 
         try (Connection connection = Conectar();
-            PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+                PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
 
             preparedStatement.setString(1, title);
             preparedStatement.setString(2, description);
@@ -83,8 +82,8 @@ public abstract class DDBBConnection {
             e.printStackTrace();
         }
     }
-    /* 
-    public ResultSet executeQuery(String query) {
+
+    public static ResultSet fetchData(String query) {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet result = null;
@@ -94,42 +93,42 @@ public abstract class DDBBConnection {
             statement = connection.prepareStatement(query);
             result = statement.executeQuery();
             logConnection("Conexión exitosa", query);
+            Disconect();
 
             return result;
         } catch (SQLException e) {
             logConnection("Conexión fallida", query);
             e.printStackTrace();
-        }finally{
-            closeResources(connection, statement, result);
         }
 
         return null;
-    } */
-    
-    private static boolean QueryVerification(String Query){
+    }
+
+    public static boolean QueryVerification(String Query) {
         String testQuery = Query.toLowerCase().substring(0, 6);
         boolean verification = false;
-        if(testQuery.equals("insert")||testQuery.equals("select")||
-        testQuery.equals("update")||testQuery.equals("delete")){
-            switch(Query.toLowerCase().charAt(0)){
+        if (testQuery.equals("insert") || testQuery.equals("select") ||
+                testQuery.equals("update") || testQuery.equals("delete")) {
+            switch (Query.toLowerCase().charAt(0)) {
                 case 's':
-                verification = true;
+                    verification = Query.matches("SELECT (\\w+|\\W) FROM [A-Za-z0-9]+(_[A-Za-z0-9]+)* WHERE ( ?[A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))+((,| AND| OR)( [A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))?)*");
                     break;
                 case 'i':
+                verification = Query.matches("INSERT INTO [A-Za-z0-9]+ \\([^)]*\\) VALUES \\([^)]*\\)(,\\s\\([^)]*\\))*");
                     break;
                 case 'u':
-                    verification = testQuery.matches("UPDATE\\s+\\w+\\s+SET\\s+\\w+\\s*=\\s*[^;]+WHERE\\s+[^;]+;\r\n");
+                    verification = Query.matches("UPDATE \\w+ SET ( ?[A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))+(,?( [A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))?)* WHERE ( ?[A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))+((,| AND| OR)( [A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))?)*");
                     break;
                 case 'd':
-                    verification = testQuery.matches("DELETE\\s+FROM\\s'+\\w+\\s+WHERE\\s+[^;]+;");
+                    verification = Query.matches("DELETE FROM \\w+ WHERE ( ?[A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))+((,| AND| OR)( [A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))?)*");
                     break;
             }
         }
-        
-        if(verification){
-            logConnection("Valid Connection attempt", testQuery);
+
+        if (verification) {
+            logConnection("Valid Connection attempt", Query);
         } else {
-            logConnection("Invalid Connection attempt", testQuery);
+            logConnection("Invalid Connection attempt", Query);
         }
 
         return verification;
@@ -150,5 +149,5 @@ public abstract class DDBBConnection {
             e.printStackTrace();
         }
     }
-    
+
 }
