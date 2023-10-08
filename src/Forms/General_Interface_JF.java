@@ -15,7 +15,10 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import Utils.General_Methods;
 import static Utils.DDBBConnection.SendQuery;
+import Utils.JsonDataFetcher;
 import Utils.ResultSetIES9021;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  *
@@ -32,16 +35,19 @@ public class General_Interface_JF extends javax.swing.JFrame {
     String Columns[];
     DefaultTableModel Tabla;
     int SelectedRow=-1;
+    Object ClaseEnUso;
+    ResultSetIES9021 RSI;
     
     public General_Interface_JF() {
         initComponents();
         ConfigurationStart();
     }
     
-    public General_Interface_JF(String Modo,General_Methods GEM) {
+    public General_Interface_JF(String Modo,General_Methods GEM,Object Clase) {
         initComponents();
         this.GEM=GEM;
         ConfigurationStart(Modo);
+        ClaseEnUso=Clase;
     }
     
     private void ConfigurationStart(){
@@ -57,6 +63,7 @@ public class General_Interface_JF extends javax.swing.JFrame {
         PintarComboBox();
         LABTittle.setText(Modo.toUpperCase());
         jTable1.setSelectionMode(0);//2 Varios rangos; 1 Un rango; 0 Una fila
+        Refresh();
     }
     
     private void ResetButtons(){
@@ -87,28 +94,43 @@ public class General_Interface_JF extends javax.swing.JFrame {
         CBSelector.setModel(new DefaultComboBoxModel<>(Columns));
     }
     
-    private void PintarTablaRows(ResultSet RSult){
+    private void PintarTablaRows(int Desde){
         try{
         Tabla.setRowCount(0);
         Object O[]= new Object[Columns.length];
-        if(RSult!=null){
-            while(RSult.next()){
-                for(int i=0;i<Columns.length;i++){
-                        O[i]=RSult.getObject(Columns[i]);
+        Method[] Metodos=ClaseEnUso.getClass().getMethods();
+        if(!RSI.getDatos().isEmpty()){
+                for(int j=0;j<Integer.parseInt(JCBPaginador.getSelectedItem().toString());j++){
+                    int i=0;
+                    for(Method Metodo: Metodos){
+                        if(isGetter(Metodo)){
+                            try{
+                                O[i]=Metodo.invoke(RSI.getDatos().get(j+Desde));i++;
+                            }catch(IllegalAccessException | InvocationTargetException e){
+                                e.printStackTrace();
+                            }
+                        }
+                        if(i==Columns.length){break;}
+                    }
+                    Tabla.addRow(O);
                 }
-                Tabla.addRow(O);
-            }
             //O=null;
         }
-        }catch(SQLException e){
+        }catch(NumberFormatException | SecurityException e){
             e.printStackTrace();
         }
+    }
+    
+    private boolean isGetter(Method Metodo) {
+        String MName= Metodo.getName();
+        return MName.startsWith("get") && MName.length()>3 && Metodo.getParameterCount()==0;
     }
     
     private void Refresh(){
         jTable1.clearSelection();
         int Paginador=Integer.getInteger(String.valueOf(JCBPaginador.getSelectedItem()));
-        JCBPagina.setModel(new DefaultComboBoxModel<>(GEM.Paginas(Paginador,LABTittle.getText().toLowerCase())));
+        ObtenerDatos();
+        JCBPagina.setModel(new DefaultComboBoxModel<>(Paginas(Paginador,RSI.getDatos().size())));
         int Pag=JCBPagina.getSelectedIndex();
         Pagina(Pag,Paginador);
         ResetButtons();
@@ -116,12 +138,37 @@ public class General_Interface_JF extends javax.swing.JFrame {
     
     private void Pagina(int Pag, int Paginador){
         jTable1.clearSelection();
-        ResultSetIES9021 RS=SendQuery("select * from `ies9021_database`."+
-                LABTittle.getText().toLowerCase()+" LIMIT "+Paginador+
-                " OFFSET "+(Pag*Paginador));
-        PintarTablaRows(RS.RS);
+//        ResultSetIES9021 RS=SendQuery("select * from `ies9021_database`."+
+//                LABTittle.getText().toLowerCase()+" LIMIT "+Paginador+
+//                " OFFSET "+(Pag*Paginador));
+        PintarTablaRows(Pag*Paginador);
         ResetButtons();
     }
+    
+    public String[] Paginas(int Paginador, int CantidadDatos){
+        String[] Pags;
+                if(CantidadDatos%Paginador==0&&CantidadDatos!=0){
+                    Pags= new String[CantidadDatos/Paginador];
+                    for(int i=0;i<Pags.length;i++){
+                        Pags[i]=(i+1)+"";
+                    }
+                    return Pags;
+                }else{
+                    Pags= new String[(CantidadDatos/Paginador)+1];
+                    for(int i=0;i<Pags.length;i++){
+                        Pags[i]=(i+1)+"";
+                    }
+                    return Pags;
+                }
+    }
+    
+    private <T> void ObtenerDatos(){
+        String ClassName=ClaseEnUso.getClass().getName();
+        Class<T> Clazz= (Class<T>)ClaseEnUso.getClass();
+        RSI= new JsonDataFetcher<T>().fetchTableData(ClassName,Clazz);
+        //Paginador
+    }
+    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -378,7 +425,7 @@ public class General_Interface_JF extends javax.swing.JFrame {
         // TODO add your handling code here:
         System.out.println("select * from `ies9021_database`."+LABTittle.getText().toLowerCase()+" WHERE "+CBSelector.getItemAt(CBSelector.getSelectedIndex())+"= '"+TXTSearch.getText()+"'");
         ResultSetIES9021 RSI=SendQuery("select * from `ies9021_database`."+LABTittle.getText().toLowerCase()+" WHERE "+CBSelector.getItemAt(CBSelector.getSelectedIndex())+"= '"+TXTSearch.getText()+"'");
-        PintarTablaRows(RSI.RS);
+        PintarTablaRows(0);
         ResetButtons();
     }//GEN-LAST:event_BTNSearchActionPerformed
 
@@ -470,4 +517,6 @@ public class General_Interface_JF extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
+
+    
 }

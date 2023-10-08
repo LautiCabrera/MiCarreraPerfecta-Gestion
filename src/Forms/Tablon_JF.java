@@ -4,6 +4,8 @@
  */
 package Forms;
 
+import Models.Career_Word_Key;
+import Models.University;
 import javax.swing.DefaultComboBoxModel;
 import Utils.General_Methods;
 
@@ -152,7 +154,73 @@ public class Tablon_JF extends javax.swing.JFrame {
 
     private void BTNEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNEntrarActionPerformed
         // TODO add your handling code here:
-        General_Interface_JF GIJF= new General_Interface_JF(JCBClass.getSelectedItem().toString(),GEM);
+        Object ClaseAUsar;
+        switch (JCBClass.getSelectedItem().toString()) {
+        case "branch":
+//            ClaseAUsar = Branch.class;
+            break;
+        case "branch_intelligence":
+//            ClaseAUsar = Branch_Intelligence.class;
+            break;
+        case "branch_words_key":
+//            ClaseAUsar = Branch_Words_Key.class;
+            break;
+        case "campus":
+//            ClaseAUsar = Campus.class;
+            break;
+        case "campus_career":
+//            ClaseAUsar = Campus_Career.class;
+            break;
+        case "career":
+//            ClaseAUsar = Career.class;
+            break;
+        case "career_branch_word_key":
+//            ClaseAUsar = Career_Branch_Word_Key.class;
+            break;
+        case "career_word_key":
+            ClaseAUsar = Career_Word_Key.class;
+            break;
+        case "email_sender":
+//            ClaseAUsar = Email_Sender.class;
+            break;
+        case "intelligences":
+//            ClaseAUsar = Intelligences.class;
+            break;
+        case "management":
+//            ClaseAUsar = Management.class;
+            break;
+        case "modality":
+//            ClaseAUsar = Modality.class;
+            break;
+        case "preference":
+//            ClaseAUsar = Preference.class;
+            break;
+        case "preference_words_key":
+//            ClaseAUsar = Preference_Words_Key.class;
+            break;
+        case "range":
+//            ClaseAUsar = Range.class;
+            break;
+        case "requeriment":
+//            ClaseAUsar = Requeriment.class;
+            break;
+        case "typecareer":
+//            ClaseAUsar = TypeCareer.class;
+            break;
+        case "university":
+            ClaseAUsar = University.class;
+            break;
+        case "users":
+//            ClaseAUsar = Users.class;
+            break;
+        case "words_key":
+//            ClaseAUsar = Words_Key.class;
+            break;
+        default:
+            // Código por defecto si no se encuentra ninguna coincidencia
+            break;
+    }
+        General_Interface_JF GIJF= new General_Interface_JF(JCBClass.getSelectedItem().toString(),GEM,ClaseAUsar);
         GIJF.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_BTNEntrarActionPerformed

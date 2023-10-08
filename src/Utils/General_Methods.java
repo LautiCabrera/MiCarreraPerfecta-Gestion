@@ -132,13 +132,14 @@ public class General_Methods {
         return false;
     }
     
-    public String[] Paginas(int Paginador,String Tabla){
-        String query="SELECT COUNT(*) FROM "+Tabla+";"; //Se utiliza para consultar cuantos registros hay para poder paginarlo
-        ResultSetIES9021 RSI=SendQuery(query);
-        if(RSI.State){
+    public <T> String[] Paginas(int Paginador,Object Clase){
+        //String query="SELECT COUNT(*) FROM "+Tabla+";"; //Se utiliza para consultar cuantos registros hay para poder paginarlo
+        String ClassName=Clase.getClass().getName();
+        Class<T> Clazz= (Class<T>)Clase.getClass();
+        ResultSetIES9021 RSI=new JsonDataFetcher<T>().fetchTableData(ClassName,Clazz);
+        if(RSI.getState()){
             try {
-                RSI.RS.next();
-                int regs=RSI.RS.getInt(1);
+                int regs=RSI.getDatos().size();
                 String[] Pags;
                 if(regs%Paginador==0&&regs!=0){
                     Pags= new String[regs/Paginador];
@@ -153,7 +154,7 @@ public class General_Methods {
                     }
                     return Pags;
                 }
-            } catch (SQLException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
