@@ -7,7 +7,7 @@ public abstract class DDBBConnection {
 
     private static String DB = "ies9021_database";
     private static String URL = "jdbc:mysql://ies9021.edu.ar:3306/" + DB
-            + "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&zeroDateTimeBehavior=round";
+            + "?zeroDateTimeBehavior=round&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     private static String User = "ies9021_userdb";
     private static String Password = "Xsw23edc.127";
     private static String Driver = "com.mysql.cj.jdbc.Driver";
@@ -40,7 +40,7 @@ public abstract class DDBBConnection {
     public static ResultSetIES9021 SendQuery(String query) {
 
         ResultSetIES9021 RSIES9021 = new ResultSetIES9021();
-        if (/* QueryVerification(query) */ true) {
+        if (QueryVerification(query)) {
             Conection = Conectar();
             PreparedStatement statement = null;
             boolean result = false;
@@ -104,30 +104,31 @@ public abstract class DDBBConnection {
         return null;
     }
 
-    private static boolean QueryVerification(String Query) {
+    public static boolean QueryVerification(String Query) {
         String testQuery = Query.toLowerCase().substring(0, 6);
         boolean verification = false;
         if (testQuery.equals("insert") || testQuery.equals("select") ||
                 testQuery.equals("update") || testQuery.equals("delete")) {
             switch (Query.toLowerCase().charAt(0)) {
                 case 's':
-                    verification = true;
+                    verification = Query.matches("SELECT (\\w+|\\W) FROM [A-Za-z0-9]+(_[A-Za-z0-9]+)* WHERE ( ?[A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))+((,| AND| OR)( [A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))?)*");
                     break;
                 case 'i':
+                verification = Query.matches("INSERT INTO [A-Za-z0-9]+ \\([^)]*\\) VALUES \\([^)]*\\)(,\\s\\([^)]*\\))*");
                     break;
                 case 'u':
-                    verification = testQuery.matches("UPDATE\\s+\\w+\\s+SET\\s+\\w+\\s*=\\s*[^;]+WHERE\\s+[^;]+;\r\n");
+                    verification = Query.matches("UPDATE \\w+ SET ( ?[A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))+(,?( [A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))?)* WHERE ( ?[A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))+((,| AND| OR)( [A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))?)*");
                     break;
                 case 'd':
-                    verification = testQuery.matches("DELETE\\s+FROM\\s'+\\w+\\s+WHERE\\s+[^;]+;");
+                    verification = Query.matches("DELETE FROM \\w+ WHERE ( ?[A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))+((,| AND| OR)( [A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))?)*");
                     break;
             }
         }
 
         if (verification) {
-            logConnection("Valid Connection attempt", testQuery);
+            logConnection("Valid Connection attempt", Query);
         } else {
-            logConnection("Invalid Connection attempt", testQuery);
+            logConnection("Invalid Connection attempt", Query);
         }
 
         return verification;
