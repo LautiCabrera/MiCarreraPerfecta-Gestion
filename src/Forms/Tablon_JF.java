@@ -28,6 +28,9 @@ public class Tablon_JF extends javax.swing.JFrame {
     public Tablon_JF() {
         initComponents();
         JCBClass.setModel(new DefaultComboBoxModel<>(ClassType));
+        this.GEM = new General_Methods();
+        GEM.setNombre("Bruno");
+        GEM.setUser(21);
     }
     
     public Tablon_JF(General_Methods GEM) {
@@ -178,7 +181,7 @@ public class Tablon_JF extends javax.swing.JFrame {
 //            ClaseAUsar = Career_Branch_Word_Key.class;
             break;
         case "career_word_key":
-            ClaseAUsar = Career_Word_Key.class;
+            ClaseAUsar = new Career_Word_Key();
             break;
         case "email_sender":
 //            ClaseAUsar = Email_Sender.class;

@@ -41,7 +41,7 @@ public class General_Methods {
     public boolean Inicio(String Email, String TokenI, InicioJF Ob) {
         try {
             
-            String Query=("select id_user, `name`,Last_token='"+TokenI+"', ((select minute_token from ies9021_database.settings ) > timestampdiff(minute,f_token,current_time())) from ies9021_database.users where email='"+Email.toLowerCase()+"' LIMIT 5;");
+            String Query=("select id_user, `name`,Last_token='"+TokenI+"' AS 'correcttoken', ((select minute_token from ies9021_database.settings ) > timestampdiff(minute,f_token,current_time())) AS 'tokenvalid' from ies9021_database.users where email='"+Email.toLowerCase()+"' LIMIT 5;");
             //String Query=" email='"+Email.toLowerCase()+"' AND Last_token= '"+TokenI+"' AND ((select minute_token from ies9021_database.settings ) > timestampdiff(minute,f_token,current_time()))=1 LIMIT 5;";
             ResultSetIES9021 result = new JsonDataFetcher<>().fetchTableData("users",Query,Object.class);
             if(result.getState()){
@@ -282,6 +282,22 @@ public class General_Methods {
         }catch(Exception e){
             e.printStackTrace();
         }
+    }
+    
+    public int getUser() {
+        return User;
+    }
+
+    public void setUser(int User) {
+        this.User = User;
+    }
+
+    public String getNombre() {
+        return Nombre;
+    }
+
+    public void setNombre(String Nombre) {
+        this.Nombre = Nombre;
     }
 }
 

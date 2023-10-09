@@ -37,8 +37,8 @@ public class Career_Word_Key_JF extends javax.swing.JFrame {
             this.setTitle("Añadir Career Word Key");
             CWK=new Career_Word_Key();
             CHKContinue.setEnabled(OP);
-            CWK.setId_User_Create(User);
-            CWK.setF_Create("current_time()");
+            CWK.setId_user_create(User);
+            CWK.setF_create("current_time()");
         }else{
             CWK=new Career_Word_Key(Datos);
             this.setTitle("Modificar Career Word Key");
@@ -46,8 +46,8 @@ public class Career_Word_Key_JF extends javax.swing.JFrame {
             TXTCareer.setText(Datos[1].toString());
             TXTWord_Key.setText(Datos[2].toString());
         }
-        CWK.setId_User_Update(User);
-        CWK.setF_Update("current_time()");
+        CWK.setId_user_update(User);
+        CWK.setF_update("current_time()");
     }
 
     /**

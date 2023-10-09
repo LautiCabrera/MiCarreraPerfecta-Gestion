@@ -7,7 +7,7 @@ public abstract class DDBBConnection {
 
     private static String DB = "ies9021_database";
     private static String URL = "jdbc:mysql://ies9021.edu.ar:3306/" + DB
-            + "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+            + "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&zeroDateTimeBehavior=round";
     private static String User = "ies9021_userdb";
     private static String Password = "Xsw23edc.127";
     private static String Driver = "com.mysql.cj.jdbc.Driver";

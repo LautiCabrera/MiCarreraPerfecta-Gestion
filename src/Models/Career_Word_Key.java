@@ -4,96 +4,96 @@ import static Utils.DDBBConnection.SendQuery;
 
 public class Career_Word_Key {
 
-    private int id_Career_word_key;
-    private int id_Career;
-    private int id_Word_key;
-    private int id_User_Update;
-    private int id_User_Create;
-    private String f_Create;
-    private String f_Update;
+    private int id_career_word_key;
+    private int id_career;
+    private int id_word_key;
+    private int id_user_update;
+    private int id_user_create;
+    private String f_create;
+    private String f_update;
 
     //Constructores
 
     public Career_Word_Key() {}
     
     public Career_Word_Key(Object[] Datos) {
-        this.id_Career_word_key = Integer.parseInt(Datos[0].toString());
-        this.id_Career = Integer.parseInt(Datos[1].toString());
-        this.id_Word_key = Integer.parseInt(Datos[2].toString());
-        this.id_User_Update = Integer.parseInt(Datos[3].toString());
-        this.id_User_Create = Integer.parseInt(Datos[4].toString());
-        this.f_Create = Datos[5].toString();
-        this.f_Update = Datos[6].toString();
+        this.id_career_word_key = Integer.parseInt(Datos[0].toString());
+        this.id_career = Integer.parseInt(Datos[1].toString());
+        this.id_word_key = Integer.parseInt(Datos[2].toString());
+        this.id_user_update = Integer.parseInt(Datos[3].toString());
+        this.id_user_create = Integer.parseInt(Datos[4].toString());
+        this.f_create = Datos[5].toString();
+        this.f_update = Datos[6].toString();
     }
 
     public Career_Word_Key(int id_Career, int id_Word_key, int idUser) {
-        this.id_Career = id_Career;
-        this.id_Word_key = id_Word_key;
-        this.id_User_Create =idUser;
-        this.id_User_Update=idUser;
-        f_Create="current_time()";
-        f_Update="current_time()";
+        this.id_career = id_Career;
+        this.id_word_key = id_Word_key;
+        this.id_user_create =idUser;
+        this.id_user_update=idUser;
+        f_create="current_time()";
+        f_update="current_time()";
     }
     
     public void Modify_Career_Word_key(int id_Career, int id_Word_key, int idUser) {
-        this.id_Career = id_Career;
-        this.id_Word_key = id_Word_key;
-        this.id_User_Update=idUser;
-        f_Update="current_time()";
+        this.id_career = id_Career;
+        this.id_word_key = id_Word_key;
+        this.id_user_update=idUser;
+        f_update="current_time()";
     }
 
     //Get and Set
 
-    public int getId_Career_word_key() {
-        return id_Career_word_key;
+    public int getId_career_word_key() {
+        return id_career_word_key;
     }
 
-    public int getId_Career() {
-        return id_Career;
+    public int getId_career() {
+        return id_career;
     }
 
-    public void setId_Career(int id_Career) {
-        this.id_Career = id_Career;
+    public void setId_career(int id_career) {
+        this.id_career = id_career;
     }
 
-    public int getId_Word_key() {
-        return id_Word_key;
+    public int getId_word_key() {
+        return id_word_key;
     }
 
-    public void setId_Word_key(int id_Word_key) {
-        this.id_Word_key = id_Word_key;
+    public void setId_word_key(int id_word_key) {
+        this.id_word_key = id_word_key;
     }
 
-    public int getId_User_Update() {
-        return id_User_Update;
+    public int getId_user_update() {
+        return id_user_update;
     }
 
-    public void setId_User_Update(int id_User_Update) {
-        this.id_User_Update = id_User_Update;
+    public void setId_user_update(int id_user_update) {
+        this.id_user_update = id_user_update;
     }
 
-    public int getId_User_Create() {
-        return id_User_Create;
+    public int getId_user_create() {
+        return id_user_create;
     }
 
-    public void setId_User_Create(int id_User_Create) {
-        this.id_User_Create = id_User_Create;
+    public void setId_user_create(int id_user_create) {
+        this.id_user_create = id_user_create;
     }
 
-    public String getF_Create() {
-        return f_Create;
+    public String getF_create() {
+        return f_create;
     }
 
-    public void setF_Create(String f_Create) {
-        this.f_Create = f_Create;
+    public void setF_create(String f_create) {
+        this.f_create = f_create;
     }
 
-    public String getF_Update() {
-        return f_Update;
+    public String getF_update() {
+        return f_update;
     }
 
-    public void setF_Update(String f_Update) {
-        this.f_Update = f_Update;
+    public void setF_update(String f_update) {
+        this.f_update = f_update;
     }
 
     //Metodos
@@ -101,13 +101,13 @@ public class Career_Word_Key {
     public void create(){
         String query="INSERT INTO `ies9021_database`.`career_word_key` "
                 + "(`id_career`, `id_word_key`, `id_user_create`, `id_user_update`, `f_create`, `f_update`) VALUES"
-                + " ('"+id_Career+"', '"+id_Word_key+"', '"+id_User_Create+"', '"+id_User_Update+"', "+f_Create+", "+f_Update+");";
+                + " ('"+id_career+"', '"+id_word_key+"', '"+id_user_create+"', '"+id_user_update+"', "+f_create+", "+f_update+");";
         SendQuery(query);
     }
     
      public void update(){
-         String query="UPDATE `ies9021_database`.`career_word_key` SET `id_career` = '"+id_Career+"',"
-                 + " `id_word_key` = '"+id_Word_key+"', `id_user_update` = '"+id_User_Update+"',  `f_update` = '"+f_Update+"' WHERE (`id_career_word_key` = '"+id_Career_word_key+"');";
+         String query="UPDATE `ies9021_database`.`career_word_key` SET `id_career` = '"+id_career+"',"
+                 + " `id_word_key` = '"+id_word_key+"', `id_user_update` = '"+id_user_update+"',  `f_update` = '"+f_update+"' WHERE (`id_career_word_key` = '"+id_career_word_key+"');";
          SendQuery(query);
      }
 
