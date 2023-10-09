@@ -3,28 +3,18 @@ package Forms.wordskey;
 // @author Enzo Rico
 
 import Models.WordsKey;
-import Utils.DDBBConnection;
-import Utils.JsonDataFetcher;
-import Utils.ResultSetIES9021;
-import Models.Users;
+import java.util.ArrayList;
 import java.util.List;
-import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.Map;
-import javax.swing.JOptionPane;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.table.DefaultTableModel;
 
 public class words_key_create extends javax.swing.JFrame {
 
-    JsonDataFetcher dataFetcher = new JsonDataFetcher(); 
+    WordsKey wordskey = new WordsKey();
     private words_key_interface parentForm;
     private int selectedUserID;
     
     public words_key_create() {
         initComponents();
-        loadUsers();
-        handleUserSelection();
+        wordskey.loadUsers(comboBoxUsers, null);
     }
 
     @SuppressWarnings("unchecked")
@@ -149,73 +139,21 @@ public class words_key_create extends javax.swing.JFrame {
         this.parentForm = parent;
     }
     
-    private void loadUsers() {
-        String tableName = "users";
-        String whereClause = null;
-        Class<Users> returnType = Users.class;
-        ResultSetIES9021<Users> result = dataFetcher.fetchTableData(tableName, whereClause, returnType);
-
-        if (result.getState()) {
-
-            // Crear un mapa para asociar nombres con objetos WordsKey
-            Map<String, Users> userMap = new HashMap<>();
-
-            // Agregar cada usuario al comboBox y al mapa
-            for (Users user : result.getDatos()) {
-                comboBoxUsers.addItem(user.getName()); // Agregar el nombre al comboBox
-                userMap.put(user.getName(), user); // Asociar el nombre con el objeto WordsKey
-            }
-
-            // Asignar el mapa al comboBox para acceder a los objetos WordsKey más adelante
-            comboBoxUsers.putClientProperty("userMap", userMap);
-        } else {
-            System.out.println("error");
-        }
-    }
-    
-        private void handleUserSelection() {
-        int selectedIndex = comboBoxUsers.getSelectedIndex();
-        if (selectedIndex != -1) {
-            String selectedUserName = comboBoxUsers.getItemAt(selectedIndex);
-            Map<String, Users> userMap = (Map<String, Users>) comboBoxUsers.getClientProperty("userMap");
-
-            if (userMap != null && userMap.containsKey(selectedUserName)) {
-                Users selectedUser = userMap.get(selectedUserName);
-                selectedUserID = selectedUser.getId_user();
-            }
-        }
-    }
-    
+    // Crear una wordkey en la BDD
     private void btn_createActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_createActionPerformed
-        String word = txtfield_create.getText();
-        int idUserCreate = selectedUserID;
-        // Obtener la fecha actual
-        java.util.Date currentDate = new java.util.Date();
-        // Convertir la fecha actual a un formato de fecha adecuado
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String f_create = dateFormat.format(currentDate);
-        
-        // Crear la consulta SQL para la inserción en la tabla "words_key"
-        String insertQuery = "INSERT INTO words_key (word, id_user_create, id_user_update, f_create, f_update) VALUES " +
-                            "('" + word + "', " + idUserCreate + ", " + idUserCreate + ", '" + f_create + "', '" + f_create + "');";
-
-        // Ejecutar la consulta utilizando el método SendQuery
-        ResultSetIES9021 result = DDBBConnection.SendQuery(insertQuery);
-
-        // Verificar el estado del resultado
-        if (result.getState()) {
-            JOptionPane.showMessageDialog(this, "Palabra clave creada con éxito.", "Actualización Exitosa", JOptionPane.INFORMATION_MESSAGE);
-            // Cierra la ventana de "words_key_create" después de la inserción
-            this.dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "No se pudo crear la palabra clave.", "Error de Creación", JOptionPane.ERROR_MESSAGE);
-        }
+        List<String> wordsList = new ArrayList<>();
+        wordsList.add(txtfield_create.getText());
+        System.out.println("Palabras clave ingresada: " + wordsList);
+        //String word = txtfield_create.getText();
+        selectedUserID = WordsKey.handleUserSelection(comboBoxUsers);
+        wordskey.createWord(wordsList, selectedUserID, this);
     }//GEN-LAST:event_btn_createActionPerformed
 
     private void comboBoxUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxUsersActionPerformed
-        handleUserSelection();
+        //TODO add your handling code here:
     }//GEN-LAST:event_comboBoxUsersActionPerformed
 
+    // Cancelar la creacion de la wordkey, entonces cerrar esta ventana
     private void btn_cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelActionPerformed
         this.dispose(); 
         if (parentForm != null) {

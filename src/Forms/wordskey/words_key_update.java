@@ -3,30 +3,18 @@ package Forms.wordskey;
 // @author Enzo Rico
 
 import Models.WordsKey;
-import Utils.DDBBConnection;
-import Utils.JsonDataFetcher;
-import Utils.ResultSetIES9021;
-import Models.Users;
-import java.util.List;
-import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.Map;
-import javax.swing.JOptionPane;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.table.DefaultTableModel;
 
 public class words_key_update extends javax.swing.JFrame {
 
-    JsonDataFetcher dataFetcher = new JsonDataFetcher(); 
+    WordsKey wordskey = new WordsKey();
     private words_key_interface parentForm;
     private String idWord;
     private String idUser;
-    private int selectedUserID;
+    private int idUserUpdate;
     
     public words_key_update() {
         initComponents();
-        loadUsers();
-        handleUserSelection();
+        wordskey.loadUsers(comboBoxUsers, idUser);
     }
 
     @SuppressWarnings("unchecked")
@@ -150,49 +138,14 @@ public class words_key_update extends javax.swing.JFrame {
         this.parentForm = parent;
     }
     
+    // Cargar los datos del wordkey seleccionado en la interfaz principal
     public void setWordData(String idWord, String word, String idUser){
         this.idWord = idWord;
         txtfield_modify.setText(word);
         this.idUser = idUser;
     }
     
-    private void loadUsers() {
-        String tableName = "users";
-        String whereClause = null;
-        Class<Users> returnType = Users.class;
-        ResultSetIES9021<Users> result = dataFetcher.fetchTableData(tableName, whereClause, returnType);
-
-        if (result.getState()) {
-
-            // Crear un mapa para asociar nombres con objetos WordsKey
-            Map<String, Users> userMap = new HashMap<>();
-
-            // Agregar cada usuario al comboBox y al mapa
-            for (Users user : result.getDatos()) {
-                comboBoxUsers.addItem(user.getName()); // Agregar el nombre al comboBox
-                userMap.put(user.getName(), user); // Asociar el nombre con el objeto WordsKey
-            }
-
-            // Asignar el mapa al comboBox para acceder a los objetos WordsKey más adelante
-            comboBoxUsers.putClientProperty("userMap", userMap);
-        } else {
-            System.out.println("error");
-        }
-    }
-    
-        private void handleUserSelection() {
-        int selectedIndex = comboBoxUsers.getSelectedIndex();
-        if (selectedIndex != -1) {
-            String selectedUserName = comboBoxUsers.getItemAt(selectedIndex);
-            Map<String, Users> userMap = (Map<String, Users>) comboBoxUsers.getClientProperty("userMap");
-
-            if (userMap != null && userMap.containsKey(selectedUserName)) {
-                Users selectedUser = userMap.get(selectedUserName);
-                selectedUserID = selectedUser.getId_user();
-            }
-        }
-    }
-    
+    // Cancelar la modificación del wordkey seleccionado, entonces cerrar esta ventana
     private void btn_cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelActionPerformed
         this.dispose();
         if (parentForm != null) {
@@ -200,38 +153,18 @@ public class words_key_update extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btn_cancelActionPerformed
 
+    // Aplicar cambios en el wordkey seleccionado
     private void btn_modifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_modifyActionPerformed
         // Obtener los nuevos valores de los campos de edición
         String word = txtfield_modify.getText();
-        int idUserUpdate = selectedUserID;
-        
+        idUserUpdate = WordsKey.handleUserSelection(comboBoxUsers);
         System.out.println("El ID que actualiza es; "+idUserUpdate);
 
-        // Obtener la fecha actual
-        java.util.Date currentDate = new java.util.Date();
-
-        // Convertir la fecha actual a un formato de fecha adecuado
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String f_update = dateFormat.format(currentDate);
-
-        // Crear la consulta SQL para la actualización en la tabla "words_key"
-        String updateQuery = "UPDATE words_key SET word = '" + word + "', id_user_update = " + idUserUpdate + ", f_update = '" + f_update + "' WHERE id_word_key = " + idWord + ";";
-
-        // Ejecutar la consulta utilizando el método SendQuery
-        ResultSetIES9021 result = DDBBConnection.SendQuery(updateQuery);
-
-        // Verificar el estado del resultado
-        if (result.getState()) {
-            JOptionPane.showMessageDialog(this, "La palabra clave se actualizó con éxito.", "Actualización Exitosa", JOptionPane.INFORMATION_MESSAGE);
-            // Cierra la ventana de "words_key_update" después de la actualización
-            this.dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "No se pudo actualizar la palabra clave.", "Error de Actualización", JOptionPane.ERROR_MESSAGE);
-        }
+        wordskey.updateWord(word, idWord, comboBoxUsers, this);
     }//GEN-LAST:event_btn_modifyActionPerformed
 
     private void comboBoxUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxUsersActionPerformed
-        handleUserSelection();
+        //TODO add your handling code here:
     }//GEN-LAST:event_comboBoxUsersActionPerformed
 
     /**

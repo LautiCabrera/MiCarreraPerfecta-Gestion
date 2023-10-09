@@ -2,12 +2,8 @@ package Forms.wordskey;
 
 import Models.WordsKey;
 import Utils.JsonDataFetcher;
-import Utils.DDBBConnection;
-import Utils.ResultSetIES9021;
-import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -15,10 +11,10 @@ import javax.swing.table.DefaultTableModel;
  */
 public class words_key_interface extends javax.swing.JFrame {
 
-    JsonDataFetcher dataFetcher = new JsonDataFetcher(); // Crea una instancia
+    JsonDataFetcher dataFetcher = new JsonDataFetcher();
+    WordsKey wordskey = new WordsKey();
     private int currentPage = 1;
-    private final int pageSize = 10;
-    private List<WordsKey> wordsList;
+    private final int wordsLimit = 10;
     
     public words_key_interface() {
         initComponents();
@@ -33,34 +29,7 @@ public class words_key_interface extends javax.swing.JFrame {
     }
     
     private void loadTableData() {
-        DefaultTableModel model = (DefaultTableModel) table_wordskey.getModel();
-        model.setRowCount(0);
-        model.setColumnIdentifiers(new String[]{"id_word_key", "word", "id_user_create", "id_user_update", "f_create", "f_update"});
-        String tableName = "words_key";//Nombre de la tabla
-        Class<WordsKey> returnType = WordsKey.class;  //Clase que se utiliza para mapear los resultados 
-        
-        // Calcula el límite inferior y superior de la página
-        int lowerLimit = (currentPage - 1) * pageSize + 1;
-        int upperLimit = currentPage * pageSize;
-        
-        // Consulta SQL con la cláusula WHERE que filtra por los rangos anteriormente establecidos
-        String whereClause = "id_word_key BETWEEN " + lowerLimit + " AND " + upperLimit;
-        // Llama al método para obtener los datos
-        ResultSetIES9021<WordsKey> result = dataFetcher.fetchTableData(tableName, whereClause, returnType); 
-
-        if (result.getState()) {
-            //Carga los nuevos datos 
-            wordsList = result.getDatos();
-            //Recorre la lista de objetos de "words_key" y los agrega a la tabla 
-            for (WordsKey wordskey : wordsList) {
-                Object[] rowData = {wordskey.getId_word_key(), wordskey.getWord(), wordskey.getId_user_create(), wordskey.getId_user_update(), wordskey.getF_create(), wordskey.getF_update()};
-                model.addRow(rowData);   
-            }
-        } else {
-            //Si no se puede muestra el mensaje de error 
-            String clarification = result.getClarification();
-            JOptionPane.showMessageDialog(this, "Error al cargar los datos: " + clarification, "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        wordskey.loadAllWordsKey(table_wordskey, currentPage, wordsLimit, this);
     }
     
     private void configSelectionListener() {
@@ -338,34 +307,7 @@ public class words_key_interface extends javax.swing.JFrame {
         btn_pagprev.setEnabled(false);
         btn_pagnext.setEnabled(false);
         String searchText = txtfield_search.getText();
-
-        // Utiliza JsonDataFetcher para buscar palabras clave
-        String whereClause = "word LIKE '%" + searchText + "%'";
-        Class<WordsKey> returnType = WordsKey.class;
-        ResultSetIES9021<WordsKey> result = dataFetcher.fetchTableData("words_key", whereClause, returnType);
-
-        DefaultTableModel model = (DefaultTableModel) table_wordskey.getModel();
-        model.setRowCount(0);
-        model.setColumnIdentifiers(new String[]{"id_word_key", "word", "id_user_create", "id_user_update", "f_create", "f_update"});
-
-        if (result.getState()) {
-            //carga los nuevos datos
-            List<WordsKey> wordsList = result.getDatos();
-            //Recorre la lista de objetos de "words_key" y los agrega a la tabla
-            for (WordsKey wordskey : wordsList) {
-                Object[] rowData = {wordskey.getId_word_key(), wordskey.getWord(), wordskey.getId_user_create(), wordskey.getId_user_update(), wordskey.getF_create(), wordskey.getF_update()};
-                model.addRow(rowData);
-            }
-            if (wordsList.isEmpty()) {
-                // No se encontraron resultados, muestra un mensaje
-                JOptionPane.showMessageDialog(this, "No se encontraron resultados para la búsqueda: " + searchText,
-                    "Búsqueda sin resultados", JOptionPane.INFORMATION_MESSAGE);
-            }
-        } else {
-            // Si no se puede muestra el mensaje de error
-            String clarification = result.getClarification();
-            JOptionPane.showMessageDialog(this, "Error al cargar los datos: " + clarification, "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        wordskey.findWord(searchText, table_wordskey, this);
     }//GEN-LAST:event_btn_searchActionPerformed
 
     private void btn_pagprevActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_pagprevActionPerformed
@@ -388,31 +330,12 @@ public class words_key_interface extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_refreshActionPerformed
 
     private void btn_deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_deleteActionPerformed
-        if (btn_delete.getText().equals("Eliminar")) {
-            int selectedRow = table_wordskey.getSelectedRow();
-            if (selectedRow >= 0) {
-                int response = JOptionPane.showConfirmDialog(null,
-                    "¿Estás seguro de que deseas eliminar esta fila?",
-                    "Confirmar eliminación",
-                    JOptionPane.YES_NO_OPTION);
-                if (response == JOptionPane.YES_OPTION) {
-                    String idToDelete = table_wordskey.getValueAt(selectedRow, 0).toString();
-                    String deleteQuery = "DELETE FROM words_key WHERE id_word_key = " + idToDelete;
-
-                    // Ejecuta la eliminación en la base de datos y obtiene el resultado
-                    ResultSetIES9021 queryResult = DDBBConnection.SendQuery(deleteQuery);
-
-                    // Verifica el resultado de la eliminación
-                    if (queryResult.getState()) {
-                        DefaultTableModel model = (DefaultTableModel) table_wordskey.getModel();
-                        model.removeRow(selectedRow); // Elimina la fila de la tabla si la eliminación en la BD fue exitosa
-                        JOptionPane.showMessageDialog(null, "Registro eliminado con éxito.");
-                    } else {
-                        JOptionPane.showMessageDialog(null, "No se pudo eliminar el registro: " + queryResult.getClarification());
-                    }
-                }
+  
+        wordskey.deleteWord(table_wordskey, this);
+                
     }//GEN-LAST:event_btn_deleteActionPerformed
-        }}        
+           
+    
     private void btn_createActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_createActionPerformed
         words_key_create addWord = new words_key_create();
         addWord.setParent(this);
