@@ -104,6 +104,38 @@ public abstract class DDBBConnection {
         return null;
     }
 
+/**
+ * La función getCount recupera el recuento de filas de una tabla especificada en una base de datos,
+ * opcionalmente filtrada por una cláusula WHERE.
+ * 
+ * @param tableName El parámetro tableName es una cadena que representa el nombre de la tabla en la
+ * base de datos desde la cual desea contar el número de filas.
+ * @param whereClause El parámetro `whereClause` es una cadena que representa la condición que se
+ * aplicará en la consulta SQL. Se utiliza para filtrar las filas devueltas por la consulta según
+ * criterios específicos. Por ejemplo, si `whereClause` es `"edad > 18"`, la consulta solo contará el
+ * @return El método devuelve un valor entero, que representa el recuento de filas en la tabla
+ * especificada que coinciden con la cláusula donde dada.
+ */
+    public static int getCount(String tableName, String whereClause){
+        String query = "SELECT COUNT(*) FROM " + tableName;
+        if (whereClause != null && !whereClause.isEmpty()) {
+            query += " WHERE " + whereClause;
+        }
+        int conteo = 0;
+        
+        ResultSet resultSet = null;
+        try{
+
+            resultSet = fetchData(query);
+            if (resultSet.next()) {
+                conteo = resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            logConnection("Conexión fallida", query);
+        }
+        return conteo;
+    }
+
     public static boolean QueryVerification(String Query) {
         String testQuery = Query.toLowerCase().substring(0, 6);
         boolean verification = false;
