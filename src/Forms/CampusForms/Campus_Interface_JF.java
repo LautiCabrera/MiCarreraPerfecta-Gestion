@@ -1,20 +1,14 @@
 package Forms.CampusForms;
 
-import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
 import Models.Campus;
-import Utils.DDBBConnection;
-import Utils.JsonDataFetcher;
-import Utils.ResultSetIES9021;
-import java.util.List;
 import javax.swing.event.ListSelectionEvent;
 
 public class Campus_Interface_JF extends javax.swing.JFrame {
 
-    JsonDataFetcher dataFetcher = new JsonDataFetcher();
+    private Campus campus = new Campus();
     private int currentPage = 1; // Página actual, comienza en 1
     private final int pageSize = 10; // Tamaño de la página
-    private List<Campus> campusList;
 
     public Campus_Interface_JF() {
         initComponents();
@@ -23,41 +17,10 @@ public class Campus_Interface_JF extends javax.swing.JFrame {
     }
 
     private void ConfigurationStart() {
-        loadTableData();
+        campus.loadTableData(jTable1, currentPage, pageSize, this);
         currentPage = 1;
         configSelectionListener();
         ResetButtons();
-    }
-
-    private void loadTableData() {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0);
-        model.setColumnIdentifiers(new String[]{"id_campus", "id_university", "name", "location", "latitude", "longitude", "main", "www", "email", "id_user_create", "id_user_update", "f_create", "f_update"});
-        String tableName = "campus"; // Nombre de la tabla
-        Class<Campus> returnType = Campus.class; // Clase que se utiliza para mapear los resultados
-
-        // Calcula el límite inferior y superior de la página actual
-        int lowerLimit = (currentPage - 1) * pageSize + 1;
-        int upperLimit = currentPage * pageSize;
-
-        // Construye una consulta SQL con la cláusula WHERE que filtra por rango
-        String whereClause = "id_campus BETWEEN " + lowerLimit + " AND " + upperLimit;
-
-        ResultSetIES9021<Campus> result = dataFetcher.fetchTableData(tableName, whereClause, returnType);
-
-        if (result.getState()) {
-            // Carga los nuevos datos
-            campusList = result.getDatos();
-            // Recorre la lista de objetos de campus y los agrega a la tabla
-            for (Campus campus : campusList) {
-                Object[] rowData = {campus.getId_campus(), campus.getId_university(), campus.getName(), campus.getLocation(), campus.getLatitude(), campus.getLongitude(), campus.getMain(), campus.getWww(), campus.getEmail(), campus.getId_user_create(), campus.getId_user_update(), campus.getFcreate(), campus.getFupdate()};
-                model.addRow(rowData);
-            }
-        } else {
-            // Si no se puede muestra el mensaje de error
-            String clarification = result.getClarification();
-            JOptionPane.showMessageDialog(this, "Error al cargar los datos: " + clarification, "Error", JOptionPane.ERROR_MESSAGE);
-        }
     }
     
     private void configSelectionListener() {
@@ -175,14 +138,14 @@ public class Campus_Interface_JF extends javax.swing.JFrame {
 
         TXTSearch.setText("Buscar");
 
-        btnNextPage.setText("Siguiente");
+        btnNextPage.setText(">");
         btnNextPage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNextPageActionPerformed(evt);
             }
         });
 
-        btnPreviousPage.setText("Anterior");
+        btnPreviousPage.setText("<");
         btnPreviousPage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPreviousPageActionPerformed(evt);
@@ -235,12 +198,12 @@ public class Campus_Interface_JF extends javax.swing.JFrame {
                     .addComponent(BTNModify, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(BTNAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnNextPage)
                     .addComponent(btnPreviousPage))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -250,41 +213,9 @@ public class Campus_Interface_JF extends javax.swing.JFrame {
         jTable1.clearSelection();
         ConfigurationStart();
     }//GEN-LAST:event_BTNRefreshActionPerformed
-    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-        
-    }//GEN-LAST:event_jTable1MouseClicked
 
     private void BTNDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNDeleteActionPerformed
-        if (BTNDelete.getText().equals("Borrar")) {
-        int selectedRow = jTable1.getSelectedRow();
-        if (selectedRow >= 0) {
-            int response = JOptionPane.showConfirmDialog(null,
-                "¿Estás seguro de que deseas eliminar esta fila?",
-                "Confirmar eliminación",
-                JOptionPane.YES_NO_OPTION);
-            if (response == JOptionPane.YES_OPTION) {
-                String idToDelete = jTable1.getValueAt(selectedRow, 0).toString(); 
-                String deleteQuery = "DELETE FROM campus WHERE id_campus = " + idToDelete;
-
-                // Ejecuta la eliminación en la base de datos y obtiene el resultado
-                ResultSetIES9021 queryResult = DDBBConnection.SendQuery(deleteQuery);
-
-                // Verifica el resultado de la eliminación
-                if (queryResult.getState()) {
-                    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-                    model.removeRow(selectedRow); // Elimina la fila de la tabla si la eliminación en la BD fue exitosa
-                    JOptionPane.showMessageDialog(null, "Registro eliminado con éxito.");
-                } else {
-                    JOptionPane.showMessageDialog(null, "No se pudo eliminar el registro: " + queryResult.getClarification());
-                }
-            }
-        }
-        ResetButtons();
-        ConfigurationStart();
-        } else {
-            jTable1.clearSelection();
-            ResetButtons();
-        }
+        campus.deleteCampus(jTable1, this);
     }//GEN-LAST:event_BTNDeleteActionPerformed
 
     private void BTNModifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNModifyActionPerformed
@@ -321,40 +252,13 @@ public class Campus_Interface_JF extends javax.swing.JFrame {
         btnPreviousPage.setEnabled(false);
         btnNextPage.setEnabled(false);
         String searchText = TXTSearch.getText();
-    
-        // Utiliza JsonDataFetcher para buscar campus por nombre
-        String whereClause = "name LIKE '%" + searchText + "%'";
-        Class<Campus> returnType = Campus.class;
-        ResultSetIES9021<Campus> result = dataFetcher.fetchTableData("campus", whereClause, returnType);
-        
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0);
-        model.setColumnIdentifiers(new String[]{"id_campus", "id_university", "name", "location", "latitude", "longitude", "main", "www", "email", "id_user_create", "id_user_update", "f_create", "f_update"});
-
-        if (result.getState()) {
-            //carga los nuevos datos
-            List<Campus> campusList = result.getDatos();
-            //Recorre la lista de objetos de campus y los agrega a la tabla
-            for (Campus campus : campusList) {
-                Object[] rowData = {campus.getId_campus(), campus.getId_university(), campus.getName(), campus.getLocation(), campus.getLatitude(), campus.getLongitude(), campus.getMain(), campus.getWww(), campus.getEmail(), campus.getId_user_create(), campus.getId_user_update(), campus.getFcreate(), campus.getFupdate()};
-                model.addRow(rowData);
-            }
-            if (campusList.isEmpty()) {
-            // No se encontraron resultados, muestra un mensaje
-            JOptionPane.showMessageDialog(this, "No se encontraron resultados para la búsqueda: " + searchText,
-                "Búsqueda sin resultados", JOptionPane.INFORMATION_MESSAGE);
-        }
-        } else {
-            // Si no se puede muestra el mensaje de error
-            String clarification = result.getClarification();
-            JOptionPane.showMessageDialog(this, "Error al cargar los datos: " + clarification, "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        campus.searchCampus(searchText, jTable1, this);
     }//GEN-LAST:event_BTNSearchActionPerformed
 
     private void btnPreviousPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousPageActionPerformed
         if (currentPage > 1) {
             currentPage--;
-            loadTableData();
+            campus.loadTableData(jTable1, currentPage, pageSize, this);
         } else {
             JOptionPane.showMessageDialog(this, "No hay más páginas hacia atrás.", "Información", JOptionPane.INFORMATION_MESSAGE);
         }
@@ -362,8 +266,12 @@ public class Campus_Interface_JF extends javax.swing.JFrame {
 
     private void btnNextPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextPageActionPerformed
         currentPage++;
-        loadTableData();
+        campus.loadTableData(jTable1, currentPage, pageSize, this);
     }//GEN-LAST:event_btnNextPageActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+
+    }//GEN-LAST:event_jTable1MouseClicked
     
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {

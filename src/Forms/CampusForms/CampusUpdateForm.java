@@ -1,20 +1,10 @@
 package Forms.CampusForms;
 
-import Models.University;
-import Models.Users;
-import Utils.DDBBConnection;
-import Utils.FormsUtils;
-import Utils.JsonDataFetcher;
-import Utils.ResultSetIES9021;
-import java.text.SimpleDateFormat;
-import javax.swing.JOptionPane;
-import java.util.HashMap;
-import java.util.Map;
+import Models.*;
 
 public class CampusUpdateForm extends javax.swing.JFrame {
 
-    JsonDataFetcher dataFetcher = new JsonDataFetcher();
-    FormsUtils formsUtils = new FormsUtils();
+    Campus campus = new Campus();
     private Campus_Interface_JF parentForm;
     private String idCampus;
     private String idUniversity;
@@ -25,8 +15,6 @@ public class CampusUpdateForm extends javax.swing.JFrame {
 
     public CampusUpdateForm() {
         initComponents();
-        comboBoxMain.addItem("Si");
-        comboBoxMain.addItem("No");
         setLocationRelativeTo(null);
     }
 
@@ -46,9 +34,9 @@ public class CampusUpdateForm extends javax.swing.JFrame {
         txtWww.setText(www);
         txtEmail.setText(email);
         this.idUser = idUser;
-        // Carga y maneja selecciones de universidades y usuarios
-        formsUtils.loadUniversities(dataFetcher, comboBoxUniversity, idUniversity);
-        formsUtils.loadUsers(dataFetcher, comboBoxUsers, idUser);
+        // Carga de universidades y usuarios en combobox
+        campus.loadComboBoxData(comboBoxUniversity, "university", "id_university", "name", null, University.class, idUniversity);
+        campus.loadComboBoxData(comboBoxUsers, "users", "id_user", "name", null, Users.class, idUser);
     }
            
     @SuppressWarnings("unchecked")
@@ -128,6 +116,8 @@ public class CampusUpdateForm extends javax.swing.JFrame {
             }
         });
 
+        comboBoxMain.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Si", "No" }));
+        comboBoxMain.setToolTipText("");
         comboBoxMain.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboBoxMainActionPerformed(evt);
@@ -249,35 +239,11 @@ public class CampusUpdateForm extends javax.swing.JFrame {
         String longitude = txtLongitude.getText();
         String www = txtWww.getText();
         String email = txtEmail.getText();
-        selectedMainValue = FormsUtils.handleComboBoxSelection(comboBoxMain);
-        selectedUserId = FormsUtils.handleUserSelection(comboBoxUsers);
-        selectedUniversityId = FormsUtils.handleUniversitySelection(comboBoxUniversity);
-
-        // Obtener la fecha actual
-        java.util.Date currentDate = new java.util.Date();
-
-        // Convertir la fecha actual a un formato de fecha adecuado
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String f_update = dateFormat.format(currentDate);
-
-        // Crear la consulta SQL para la actualización en la tabla "campus"
-        String updateQuery = "UPDATE campus SET id_university = " + selectedUniversityId + ", name = '" + name + "', location = '" + location +
-                     "', latitude = " + Float.parseFloat(latitude) + ", longitude = " + Float.parseFloat(longitude) +
-                     ", main = " + selectedMainValue + ", www = '" + www + "', email = '" + email +
-                     "', id_user_update = " + selectedUserId + ", f_update = '" + f_update + "' WHERE id_campus = " + idCampus + ";";
-
-
-        // Ejecutar la consulta utilizando el método SendQuery
-        ResultSetIES9021 result = DDBBConnection.SendQuery(updateQuery);
-
-        // Verificar el estado del resultado
-        if (result.getState()) {
-            JOptionPane.showMessageDialog(this, "Los datos del campus se actualizaron con éxito.", "Actualización Exitosa", JOptionPane.INFORMATION_MESSAGE);
-            // Cierra la ventana de CampusUpdateForm después de la actualización
-            this.dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "No se pudo actualizar el campus.", "Error de Actualización", JOptionPane.ERROR_MESSAGE);
-        }
+        selectedUniversityId = comboBoxUniversity.getSelectedIndex() +1;
+        System.out.println("selectUni: " + selectedUniversityId);
+        selectedUserId = comboBoxUsers.getSelectedIndex();
+        selectedMainValue = campus.handleSedeSelection(comboBoxMain);
+        campus.updateCampus(name,location,latitude,longitude,www,email,selectedUniversityId,selectedUserId,selectedMainValue,idCampus,this);
     }//GEN-LAST:event_SaveActionPerformed
 
     private void CancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelActionPerformed

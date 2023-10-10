@@ -1,4 +1,3 @@
-
 package Models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -143,7 +142,5 @@ public class Users {
     public void setF_update(Date fupdate) {
         this.fupdate = fupdate;
     }
-    
-    
     
 }

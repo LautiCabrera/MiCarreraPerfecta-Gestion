@@ -1,20 +1,10 @@
 package Forms.CampusForms;
 
-import Models.University;
-import Models.Users;
-import Utils.DDBBConnection;
-import Utils.FormsUtils;
-import Utils.JsonDataFetcher;
-import Utils.ResultSetIES9021;
-import javax.swing.JOptionPane;
-import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.Map;
+import Models.*;
 
 public class CampusAddForm extends javax.swing.JFrame {
 
-    JsonDataFetcher dataFetcher = new JsonDataFetcher();
-    FormsUtils formsUtils = new FormsUtils();
+    Campus campus = new Campus();
     private Campus_Interface_JF parentForm;
     private int selectedUniversityId;
     private int selectedUserId;
@@ -22,8 +12,8 @@ public class CampusAddForm extends javax.swing.JFrame {
 
     public CampusAddForm() {
         initComponents();
-        formsUtils.loadUniversities(dataFetcher, comboBoxUniversity,null);
-        formsUtils.loadUsers(dataFetcher, comboBoxUsers, null);
+        campus.loadComboBoxData(comboBoxUniversity, "university", "id_university", "name", null, University.class, null);
+        campus.loadComboBoxData(comboBoxUsers, "users", "id_user", "name", null, Users.class, null);
         setLocationRelativeTo(null);
     }
 
@@ -255,31 +245,10 @@ public class CampusAddForm extends javax.swing.JFrame {
         String longitude = txtLongitude.getText();
         String www = txtWww.getText();
         String email = txtEmail.getText();
-        selectedUniversityId = FormsUtils.handleUniversitySelection(comboBoxUniversity);
-        selectedUserId = FormsUtils.handleUserSelection(comboBoxUsers);
-        selectedMainValue = FormsUtils.handleComboBoxSelection(comboBoxMain);
-        // Obtener la fecha actual
-        java.util.Date currentDate = new java.util.Date();
-        // Convertir la fecha actual a un formato de fecha adecuado
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String f_create = dateFormat.format(currentDate);
-        
-        // Crear la consulta SQL para la inserción en la tabla "campus"
-        String insertQuery = "INSERT INTO campus (id_university, name, location, latitude, longitude, main, www, email, id_user_create, id_user_update, f_create, f_update) VALUES " +
-                            "(" + selectedUniversityId + ", '" + name + "', '" + location + "', " + Float.parseFloat(latitude) + ", " + Float.parseFloat(longitude) + ", " + 
-                            selectedMainValue + ", '" + www + "', '" + email + "', " + selectedUserId + ", " + selectedUserId + ", '" + f_create + "', '" + f_create + "');";
-
-        // Ejecutar la consulta utilizando el método SendQuery
-        ResultSetIES9021 result = DDBBConnection.SendQuery(insertQuery);
-
-        // Verificar el estado del resultado
-        if (result.getState()) {
-            JOptionPane.showMessageDialog(this, "Campus creado con éxito.", "Actualización Exitosa", JOptionPane.INFORMATION_MESSAGE);
-            // Cierra la ventana de CampusAddForm después de la inserción
-            this.dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "No se pudo crear el campus.", "Error de Creación", JOptionPane.ERROR_MESSAGE);
-        }
+        selectedUniversityId = comboBoxUniversity.getSelectedIndex();
+        selectedUserId = comboBoxUsers.getSelectedIndex();
+        selectedMainValue = comboBoxMain.getSelectedIndex();
+        campus.saveCampus(name,location,latitude,longitude,www,email,selectedUniversityId,selectedUserId,selectedMainValue,this);
     }//GEN-LAST:event_SaveActionPerformed
 
     private void CancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelActionPerformed

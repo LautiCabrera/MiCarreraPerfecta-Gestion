@@ -5,16 +5,16 @@
             <url>src/Forms/CampusForms/CampusUpdateForm.java</url>
             <bookmark id="1">
                 <name/>
-                <line>17</line>
+                <line>10</line>
                 <key/>
             </bookmark>
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/prueba/Documentos/GitHub/MiCarreraPerfecta-Gestion/src/Utils/FormsUtils.java</file>
             <file>file:/home/prueba/Documentos/GitHub/MiCarreraPerfecta-Gestion/src/Forms/CampusForms/CampusUpdateForm.java</file>
             <file>file:/home/prueba/Documentos/GitHub/MiCarreraPerfecta-Gestion/src/Forms/CampusForms/Campus_Interface_JF.java</file>
+            <file>file:/home/prueba/Documentos/GitHub/MiCarreraPerfecta-Gestion/src/Models/Campus.java</file>
             <file>file:/home/prueba/Documentos/GitHub/MiCarreraPerfecta-Gestion/src/Forms/CampusForms/CampusAddForm.java</file>
         </group>
     </open-files>
