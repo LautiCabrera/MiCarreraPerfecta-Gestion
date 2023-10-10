@@ -3,6 +3,7 @@ package Forms;
 import Models.University;
 import Utils.JsonDataFetcher;
 import Utils.ResultSetIES9021;
+import static Utils.DDBBConnection.SendQuery;
 import javax.swing.DefaultComboBoxModel;
 
 /**
@@ -12,6 +13,7 @@ import javax.swing.DefaultComboBoxModel;
 public class Career_Word_Key_JF1 extends javax.swing.JFrame {
 
     ResultSetIES9021 RSI;
+    String UNI[][];
     public Career_Word_Key_JF1() {
         initComponents();
     }
@@ -21,13 +23,27 @@ public class Career_Word_Key_JF1 extends javax.swing.JFrame {
     }
     
     private void SetComboBox(){
-        ObtenerDatos(University.class);
-        
+        String Query="SELECT id_universiry, name FROM ies9021_database.university";
+        ObtenerDatos(Query);
+        for (Object dato : RSI.getDatos()) {
+            UNI=RSI.getDatos().;
+        }
         JCBUniversity.setModel(new DefaultComboBoxModel<>());
     }
     
     private <T> void ObtenerDatos(Class Clazz){
         RSI= new JsonDataFetcher<T>().fetchTableData(Clazz.getSimpleName(),Clazz);
+    }
+    /*
+     String Query="SELECT distinct c.* FROM ies9021_database.career c "
+                +"INNER JOIN ies9021_database.campus_career cc ON c.id_career = cc.id_career"
+                +"INNER JOIN ies9021_database.campus ca ON cc.id_campus = ca.id_campus WHERE ca.id_university = "+2+";";
+        
+    */
+    
+    private void ObtenerDatos(String Query){
+        
+        RSI=SendQuery(Query);
     }
 
     /**
