@@ -77,6 +77,7 @@ public class General_Interface_JF extends javax.swing.JFrame {
         BTNModify.setEnabled(false);
         BTNDelete.setText("Borrar");
         BTNDelete.setEnabled(false);
+        BTNEspecial.setVisible(false);
         SelectedRow=-1;
     }
     
@@ -229,6 +230,7 @@ public class General_Interface_JF extends javax.swing.JFrame {
         CBSelector = new javax.swing.JComboBox<>();
         JCBPaginador = new javax.swing.JComboBox<>();
         JCBPagina = new javax.swing.JComboBox<>();
+        BTNEspecial = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("BNLarge");
@@ -341,6 +343,13 @@ public class General_Interface_JF extends javax.swing.JFrame {
             }
         });
 
+        BTNEspecial.setText("Especial");
+        BTNEspecial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BTNEspecialActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -366,6 +375,8 @@ public class General_Interface_JF extends javax.swing.JFrame {
                                 .addComponent(JCBPagina, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(JCBPaginador, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(BTNEspecial)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(BTNAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -390,7 +401,8 @@ public class General_Interface_JF extends javax.swing.JFrame {
                     .addComponent(BTNModify, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(BTNAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(JCBPaginador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(JCBPagina, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(JCBPagina, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BTNEspecial))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(14, Short.MAX_VALUE))
@@ -411,6 +423,7 @@ public class General_Interface_JF extends javax.swing.JFrame {
             ResetButtons();
             BTNModify.setEnabled(true);
             BTNDelete.setEnabled(true);
+            BTNEspecial.setVisible(true);
             SelectedRow=jTable1.getSelectedRow();
         }
     }//GEN-LAST:event_jTable1MouseClicked
@@ -510,6 +523,11 @@ public class General_Interface_JF extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_TXTSearchKeyTyped
 
+    private void BTNEspecialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNEspecialActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_BTNEspecialActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -546,6 +564,7 @@ public class General_Interface_JF extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BTNAdd;
     private javax.swing.JButton BTNDelete;
+    private javax.swing.JButton BTNEspecial;
     private javax.swing.JButton BTNModify;
     private javax.swing.JButton BTNRefresh;
     private javax.swing.JButton BTNSearch;

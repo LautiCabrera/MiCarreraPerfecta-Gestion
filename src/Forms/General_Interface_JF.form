@@ -49,6 +49,8 @@
                               <Component id="JCBPagina" min="-2" pref="55" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="JCBPaginador" min="-2" pref="55" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="BTNEspecial" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
                               <Component id="BTNAdd" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
@@ -81,6 +83,7 @@
                   <Component id="BTNAdd" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="JCBPaginador" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="JCBPagina" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="BTNEspecial" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="jScrollPane1" min="-2" pref="297" max="-2" attributes="0"/>
@@ -244,6 +247,14 @@
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>
+    </Component>
+    <Component class="javax.swing.JButton" name="BTNEspecial">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Especial"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BTNEspecialActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

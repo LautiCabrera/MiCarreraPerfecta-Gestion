@@ -4,6 +4,7 @@
  */
 package Forms;
 
+import Models.Branch;
 import Models.Career_Word_Key;
 import Models.University;
 import javax.swing.DefaultComboBoxModel;
@@ -160,7 +161,7 @@ public class Tablon_JF extends javax.swing.JFrame {
         Object ClaseAUsar=null;
         switch (JCBClass.getSelectedItem().toString()) {
         case "branch":
-//            ClaseAUsar = Branch.class;
+            ClaseAUsar = new Branch();
             break;
         case "branch_intelligence":
 //            ClaseAUsar = Branch_Intelligence.class;
@@ -211,7 +212,7 @@ public class Tablon_JF extends javax.swing.JFrame {
 //            ClaseAUsar = TypeCareer.class;
             break;
         case "university":
-            ClaseAUsar = University.class;
+            ClaseAUsar = new University();
             break;
         case "users":
 //            ClaseAUsar = Users.class;
