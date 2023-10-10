@@ -146,7 +146,7 @@ public abstract class DDBBConnection {
                     verification = Query.matches("SELECT (\\w+|\\W) FROM [A-Za-z0-9]+(_[A-Za-z0-9]+)* WHERE ( ?[A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))+((,| AND| OR)( [A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))?)*");
                     break;
                 case 'i':
-                verification = Query.matches("INSERT INTO [A-Za-z0-9]+ \\([^)]*\\) VALUES \\([^)]*\\)(,\\s\\([^)]*\\))*");
+                verification = Query.matches("INSERT INTO \\w+ \\([^)]*\\) VALUES \\([^)]*\\)(,\\s\\([^)]*\\))*");
                     break;
                 case 'u':
                     verification = Query.matches("UPDATE \\w+ SET ( ?[A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))+(,?( [A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))?)* WHERE ( ?[A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))+((,| AND| OR)( [A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))?)*");
