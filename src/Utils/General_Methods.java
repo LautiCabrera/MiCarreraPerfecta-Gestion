@@ -15,6 +15,8 @@ import javax.swing.JTable;
 import Forms.InicioJF;
 import Forms.Career_Word_Key_JF;
 import static Utils.DDBBConnection.SendQuery;
+import static Utils.JsonDataFetcher.selectQuery;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,17 +42,18 @@ public class General_Methods {
     //Inicio Pertenece a InicioJF 
     public boolean Inicio(String Email, String TokenI, InicioJF Ob) {
         try {
-            
-            String Query=("select id_user, `name`,Last_token='"+TokenI+"' AS 'correcttoken', ((select minute_token from ies9021_database.settings ) > timestampdiff(minute,f_token,current_time())) AS 'tokenvalid' from ies9021_database.users where email='"+Email.toLowerCase()+"' LIMIT 5;");
+            String Select="id_user, `name`,Last_token='"+TokenI+"' AS 'correcttoken', ((select minute_token from ies9021_database.settings ) > timestampdiff(minute,f_token,current_time())) AS 'tokenvalid'",
+                    Tabla="ies9021_database.users",
+                    Where=("email='"+Email.toLowerCase()+"' LIMIT 5;");
             //String Query=" email='"+Email.toLowerCase()+"' AND Last_token= '"+TokenI+"' AND ((select minute_token from ies9021_database.settings ) > timestampdiff(minute,f_token,current_time()))=1 LIMIT 5;";
-            ResultSetIES9021 result = new JsonDataFetcher<>().fetchTableData("users",Query,Object.class);
-            if(result.getState()){
-                if(!result.getDatos().isEmpty()){
-                    if(result.RS.getInt(4)==1){
-                        if(result.RS.getInt(3)==1){
+            List<String> RLT = selectQuery(Select,Tabla,Where);
+            
+                if(!RLT.isEmpty()){
+                    if(RLT.==1){
+                        if(RLT.RS.getInt(3)==1){
                             JOptionPane.showMessageDialog(Ob,"Logiando");
-                            User=result.RS.getInt(1);
-                            Nombre=result.RS.getNString(2);
+                            User=RLT.RS.getInt(1);
+                            Nombre=RLT.RS.getNString(2);
                             return true;
                         }else{
                             JOptionPane.showMessageDialog(Ob, "Token Incorrecto");
@@ -61,7 +64,6 @@ public class General_Methods {
                 }else{
                     JOptionPane.showMessageDialog(Ob, "Email Incorrecto");
                 }
-            }
             return false;
             
 
