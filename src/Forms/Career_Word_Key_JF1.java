@@ -22,12 +22,15 @@ public class Career_Word_Key_JF1 extends javax.swing.JFrame {
     ArrayList<String[]> RSS;
     ResultSetIES9021 RSI;
     int UNII[],CAMPI[];
+    DefaultTableModel Tabla1,Tabla2;
+    
     public Career_Word_Key_JF1() {
         initComponents();
     }
     
     private void ConfigurationStart(){
         SetUniCB();
+        PintarTablaColumns();
     }
     
     private DefaultComboBoxModel SetComboBox(String SS,String TT,String WW,String MS){
@@ -83,19 +86,60 @@ public class Career_Word_Key_JF1 extends javax.swing.JFrame {
         RSS=SEND(SS,TT,WW);
     }
     
-    private void PintarTablaColumns(JTable Table,String[] Columns){
-        DefaultTableModel Tabla;
-        Tabla= (DefaultTableModel) Table.getModel();
-        Tabla.setColumnCount(Columns.length);
+    private void PintarTablaColumns(){
+        String[] Carreras={"ID","Nombre","Descripcion"},
+                 Palabras={"ID","Palabra Clave"};
+        Tabla1= (DefaultTableModel) JTCareer.getModel();
+        Tabla1.setColumnCount(Carreras.length);
+        Tabla2= (DefaultTableModel) JTWordKey.getModel();
+        Tabla2.setColumnCount(Palabras.length);
         int count=0;
-        for (String CN : Columns) {
-                JTableHeader tableHeader = Table.getTableHeader();
+        for (String CR : Carreras) {
+                JTableHeader tableHeader = JTCareer.getTableHeader();
                 TableColumnModel tableColumnModel = tableHeader.getColumnModel();
                 TableColumn tableColumn = tableColumnModel.getColumn(count);
-                tableColumn.setHeaderValue(CN);
+                tableColumn.setHeaderValue(CR);
                 tableHeader.repaint();
                 count++;
         }
+        for (String PAL : Palabras) {
+                JTableHeader tableHeader = JTWordKey.getTableHeader();
+                TableColumnModel tableColumnModel = tableHeader.getColumnModel();
+                TableColumn tableColumn = tableColumnModel.getColumn(count);
+                tableColumn.setHeaderValue(PAL);
+                tableHeader.repaint();
+                count++;
+        }
+    }
+    
+    private void PintarTablasRows(DefaultTableModel Tabla,int ID){
+        try{
+            Tabla.setRowCount(0);
+            Object O[]= new Object[Tabla.getColumnCount()];
+            ArrayList<String[]> Filler;
+            String SS,TT,WW;
+            if(O.length>2){
+                SS="c.id_career, c.`name`, c.`description` ";
+                TT="ies9021_database.career c " +
+                   "inner join ies9021_database.campus_career cc ON c.id_career = cc.id_career";
+                WW="cc.id_campus="+ID+";";
+                Filler=SEND(SS, TT, WW);
+            }else{
+                SS="wk.id_word_key, word from ies9021_database.words_key wk";
+                TT="inner join ies9021_database.career_word_key cwk ON wk.id_word_key = cwk.id_word_key";
+                WW="where cwk.id_career="+ID+";";
+                Filler=SEND(SS, TT, WW);
+            }
+            if(!Filler.isEmpty()){
+                for (int i=0; i<Filler.size();i++ ) {
+                    System.arraycopy(Filler.get(i), 0, O, 0, Tabla.getColumnCount());
+                }
+            }
+            
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        
     }
     
 
