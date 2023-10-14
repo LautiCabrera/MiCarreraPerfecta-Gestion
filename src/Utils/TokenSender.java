@@ -5,8 +5,10 @@
 package Utils;
 
 import static Utils.DDBBConnection.SendQuery;
+import static Utils.JsonDataFetcher.SEND;
 import java.awt.HeadlessException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,7 +28,7 @@ import javax.swing.JOptionPane;
 public abstract class TokenSender {
     
     //SendMessage Pertenece a InicioJF
-    public static void SendMessage(String Destinatario){
+    public static void SendMessage(String Destinatario,String User){
         
         //final String username = "FreeByPass163@gmail.com";
         //final String password = "gvyh kuab cqjp tnyd"; 
@@ -34,14 +36,14 @@ public abstract class TokenSender {
         try {
             boolean Send=false;
         //String query="SELECT * FROM ies9021_database.email_sender WHERE mail LIKE 'F%';";
-        String Query=" mail LIKE 'F%';";
-        ResultSetIES9021 RSI=new JsonDataFetcher<>().fetchTableData("email_sender",Query,Object.class);
-        if(RSI.getState()){
+        String TT="ies9021_database.email_sender", WW=" mail LIKE 'F%';";
+        ArrayList<String[]> RSI=SEND("*",TT,WW);
+        if(!RSI.isEmpty()){
             //RSI.getDatos();
             Properties propiedad = new Properties();
-            propiedad.setProperty("mail.smtp.host", String.valueOf(RSI.getDatos().get(5)));//"host"
+            propiedad.setProperty("mail.smtp.host", RSI.get(0)[4]);//"host"
             propiedad.setProperty("mail.smtp.starttls.enable", "true");
-            propiedad.setProperty("mail.smtp.port", String.valueOf(RSI.getDatos().get(4)));//"port"
+            propiedad.setProperty("mail.smtp.port", RSI.get(0)[3]);//"port"
             propiedad.setProperty("mail.smtp.auth", "true");
         
         Session sesion = Session.getDefaultInstance(propiedad);
@@ -50,16 +52,16 @@ public abstract class TokenSender {
         //ResultSet RS=SendQuery(query);
         //
         //
-        String correoEnvia = String.valueOf(RSI.getDatos().get(2));//username;
+        String correoEnvia = String.valueOf(RSI.get(0)[1]);//username;
         //String PSW="gvyh kuab cqjp tnyd";
-        String contrasena = PPassword(String.valueOf(RSI.getDatos().get(3)));//password;
+        String contrasena = PPassword(RSI.get(0)[2]);//password;
         String destinatario = Destinatario;
         String asunto = "TOKEN Programacion 2";
         String Token=TokenGen();
         String mensaje = "Su token es: "+Token;
             System.out.println(contrasena+" CON");
-            System.out.println(Token+"tok");
-            if(SendTokenDB(Token,Destinatario)){
+            System.out.println(Token+" tok");
+            if(SendTokenDB(Token,User)){
                 MimeMessage mail = new MimeMessage(sesion);
              
                 mail.setFrom(new InternetAddress (correoEnvia));
@@ -92,18 +94,19 @@ public abstract class TokenSender {
     private static String TokenGen(){
         String Token="";
         for(int i=0;i<6;i++){
-            if(i%2==0){Token=Token+String.valueOf(Math.random()*9);
-            }else{Token=Token+String.valueOf((char)((Math.random()*5)+97));
+            if(i%2==0){Token=Token+String.valueOf((int)(Math.random()*9));
+            }else{Token=Token+String.valueOf((char)((int)(Math.random()*5)+97));
             }
         }
         
         return Token;
     }
     
-    private static boolean SendTokenDB(String Token,String Email){
+    private static boolean SendTokenDB(String Token,String User){
         try{
-        String Query= "UPDATE `ies9021_database`.`users` SET `Last_token` = '"+
-         Token+"', `f_token` = current_time() WHERE email='"+Email.toLowerCase()+"';";
+        String Query= "UPDATE ies9021_database.users SET Last_token = '"+
+         Token+"', f_token = current_time() WHERE id_user = '"+User+"';";
+            System.out.println(Query);
         ResultSetIES9021 RS=DDBBConnection.SendQuery(Query);
         return RS.getState();
         }catch(Exception e){
@@ -114,9 +117,9 @@ public abstract class TokenSender {
     
     private static String PPassword(String PASS){
         String newPass="";
-            for(int i=PASS.length();i>=0;i++){
+            for(int i=PASS.length()-1;i>=0;i--){
                 newPass=newPass+PASS.charAt(i);
             }
-        return null;
+        return newPass;
     }
 }

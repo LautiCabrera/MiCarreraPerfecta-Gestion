@@ -40,6 +40,7 @@ public abstract class DDBBConnection {
     public static ResultSetIES9021 SendQuery(String query) {
 
         ResultSetIES9021 RSIES9021 = new ResultSetIES9021();
+        System.out.println(QueryVerification(query)+" QV");
         if (QueryVerification(query)) {
             Conection = Conectar();
             PreparedStatement statement = null;

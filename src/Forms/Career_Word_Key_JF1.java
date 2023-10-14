@@ -4,7 +4,14 @@ import Models.University;
 import Utils.JsonDataFetcher;
 import Utils.ResultSetIES9021;
 import static Utils.DDBBConnection.SendQuery;
+import static Utils.JsonDataFetcher.SEND;
+import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -12,8 +19,10 @@ import javax.swing.DefaultComboBoxModel;
  */
 public class Career_Word_Key_JF1 extends javax.swing.JFrame {
 
+    ArrayList<String[]> RSS;
     ResultSetIES9021 RSI;
-    String UNI[][];
+    int UNII[];
+    String UNIN[];
     public Career_Word_Key_JF1() {
         initComponents();
     }
@@ -23,12 +32,19 @@ public class Career_Word_Key_JF1 extends javax.swing.JFrame {
     }
     
     private void SetComboBox(){
+        String SS="id_universiry, name",TT="ies9021_database.university",WW=null;
         String Query="SELECT id_universiry, name FROM ies9021_database.university";
-        ObtenerDatos(Query);
-        for (Object dato : RSI.getDatos()) {
-            UNI=RSI.getDatos().;
+        ObtenerDatos(SS,TT,WW);
+        UNII=new int[RSS.size()];
+        UNIN=new String[RSS.size()];
+        UNII[0]=-1;
+        UNIN[0]="Seleccione la Universidad";
+        for(int i=1;i<RSS.size()+1;i++){
+            UNII[i]=Integer.parseInt(RSS.get(i)[0]);//ID Universidad
+            UNIN[i]=RSS.get(i)[1];//Nombre Universidad
         }
-        JCBUniversity.setModel(new DefaultComboBoxModel<>());
+        
+        JCBUniversity.setModel(new DefaultComboBoxModel<>(UNIN));
     }
     
     private <T> void ObtenerDatos(Class Clazz){
@@ -41,10 +57,25 @@ public class Career_Word_Key_JF1 extends javax.swing.JFrame {
         
     */
     
-    private void ObtenerDatos(String Query){
-        
-        RSI=SendQuery(Query);
+    private void ObtenerDatos(String SS,String TT,String WW){
+        RSS=SEND(SS,TT,WW);
     }
+    
+    private void PintarTablaColumns(JTable Table,String[] Columns){
+        DefaultTableModel Tabla;
+        Tabla= (DefaultTableModel) Table.getModel();
+        Tabla.setColumnCount(Columns.length);
+        int count=0;
+        for (String CN : Columns) {
+                JTableHeader tableHeader = Table.getTableHeader();
+                TableColumnModel tableColumnModel = tableHeader.getColumnModel();
+                TableColumn tableColumn = tableColumnModel.getColumn(count);
+                tableColumn.setHeaderValue(CN);
+                tableHeader.repaint();
+                count++;
+        }
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -69,6 +100,11 @@ public class Career_Word_Key_JF1 extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         JCBUniversity.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        JCBUniversity.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JCBUniversityActionPerformed(evt);
+            }
+        });
 
         JTCareer.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -162,6 +198,11 @@ public class Career_Word_Key_JF1 extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void JCBUniversityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JCBUniversityActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_JCBUniversityActionPerformed
 
     /**
      * @param args the command line arguments

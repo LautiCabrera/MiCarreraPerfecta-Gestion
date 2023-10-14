@@ -15,6 +15,7 @@ import javax.swing.JTable;
 import Forms.InicioJF;
 import Forms.Career_Word_Key_JF;
 import static Utils.DDBBConnection.SendQuery;
+import static Utils.JsonDataFetcher.SEND;
 import static Utils.JsonDataFetcher.selectQuery;
 import java.util.List;
 import java.util.Properties;
@@ -46,14 +47,14 @@ public class General_Methods {
                     Tabla="ies9021_database.users",
                     Where=("email='"+Email.toLowerCase()+"' LIMIT 5;");
             //String Query=" email='"+Email.toLowerCase()+"' AND Last_token= '"+TokenI+"' AND ((select minute_token from ies9021_database.settings ) > timestampdiff(minute,f_token,current_time()))=1 LIMIT 5;";
-            List<String> RLT = selectQuery(Select,Tabla,Where);
+            ArrayList<String[]> RLT = SEND(Select,Tabla,Where);
             
                 if(!RLT.isEmpty()){
-                    if(RLT.==1){
-                        if(RLT.RS.getInt(3)==1){
+                    if(RLT.get(0)[2].equals("1")){
+                        if(RLT.get(0)[3].equals("1")){
                             JOptionPane.showMessageDialog(Ob,"Logiando");
-                            User=RLT.RS.getInt(1);
-                            Nombre=RLT.RS.getNString(2);
+                            User=Integer.parseInt(RLT.get(0)[0]);
+                            Nombre=RLT.get(0)[1];
                             return true;
                         }else{
                             JOptionPane.showMessageDialog(Ob, "Token Incorrecto");
@@ -74,22 +75,20 @@ public class General_Methods {
         return false;
     }
     //Existe Pertenece a InicioJF
-    public int Existe(String Email){
+    public String Existe(String Email){
         try{
-        String Query= "email='"+Email.toLowerCase()+"';";
-        ResultSetIES9021 RS21= new JsonDataFetcher<>().fetchTableData("users",Query,Object.class);
-        int ret=-1;
-        if(RS21.getState()){
-            if(!RS21.getDatos().isEmpty()){
-                ret=Integer.getInteger(String.valueOf(RS21.getDatos().get(8)));
-            }
+            String SS="enabled_state, id_user",TT="ies9021_database.users",WW= "email='"+Email.toLowerCase()+"';";
+        ArrayList<String[]> RS21= SEND(SS,TT,WW);
+        String ret="2";
+        if(!RS21.isEmpty()){
+            ret=RS21.get(0)[0]+RS21.get(0)[1];
         }
             return ret;
         } catch (Exception e) {
             System.out.println("Error en: GEM.Existe\nError:"+e.getMessage());
         }
         
-        return -1;
+        return "3";
     }
     
     /*PintarTabla se conecta a la base de Datos para obtener el nombre de las columnas

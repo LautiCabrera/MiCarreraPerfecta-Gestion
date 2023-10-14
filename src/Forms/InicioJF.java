@@ -175,13 +175,14 @@ public class InicioJF extends javax.swing.JFrame {
         // TODO add your handling code here:
         try{
         if(TXTEmail.getForeground().equals(Color.BLACK)){
-            switch(GEM.Existe(TXTEmail.getText())){//GEM.Existe(TXTEmail.getText()) cambiarlo de Booean a Int
-                case -1: JOptionPane.showMessageDialog(this, "No se encuentra registrado su Email");
+            String X=GEM.Existe(TXTEmail.getText());
+            switch(X.charAt(0)){//GEM.Existe(TXTEmail.getText()) cambiarlo de Booean a Int
+                case '2': JOptionPane.showMessageDialog(this, "No se encuentra registrado su Email");
                     break;
-                case 0: JOptionPane.showMessageDialog(this,
+                case '0': JOptionPane.showMessageDialog(this,
                   "Su Email ha sido deshabilitado\nPor favor, contacte a Soporte");
                     break;
-                case 1: SendMessage(TXTEmail.getText());
+                case '1': SendMessage(TXTEmail.getText(),X.substring(1));
                     break;
                 default:
                     JOptionPane.showMessageDialog(this,
