@@ -21,30 +21,52 @@ public class Career_Word_Key_JF1 extends javax.swing.JFrame {
 
     ArrayList<String[]> RSS;
     ResultSetIES9021 RSI;
-    int UNII[];
-    String UNIN[];
+    int UNII[],CAMPI[];
     public Career_Word_Key_JF1() {
         initComponents();
     }
     
     private void ConfigurationStart(){
-        SetComboBox();
+        SetUniCB();
     }
     
-    private void SetComboBox(){
-        String SS="id_universiry, name",TT="ies9021_database.university",WW=null;
-        String Query="SELECT id_universiry, name FROM ies9021_database.university";
+    private DefaultComboBoxModel SetComboBox(String SS,String TT,String WW,String MS){
+        try{
         ObtenerDatos(SS,TT,WW);
-        UNII=new int[RSS.size()];
-        UNIN=new String[RSS.size()];
-        UNII[0]=-1;
-        UNIN[0]="Seleccione la Universidad";
+        int DI[]=new int[RSS.size()];
+        String JCBData[]=new String[RSS.size()];
+        DI[0]=-1;
+        JCBData[0]=MS;
         for(int i=1;i<RSS.size()+1;i++){
-            UNII[i]=Integer.parseInt(RSS.get(i)[0]);//ID Universidad
-            UNIN[i]=RSS.get(i)[1];//Nombre Universidad
+            DI[i]=Integer.parseInt(RSS.get(i)[0]);//ID's
+            JCBData[i]=RSS.get(i)[1];//Nombres
         }
-        
-        JCBUniversity.setModel(new DefaultComboBoxModel<>(UNIN));
+        if(TT.endsWith("campus")){
+            CAMPI=DI;
+        }else{
+            UNII=DI;
+        }
+        return (new DefaultComboBoxModel<>(JCBData));
+        }catch(NumberFormatException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    private void SetUniCB(){
+        String SS="id_universiry, name",
+               TT="ies9021_database.university",
+               WW=null,
+               MS="Seleccione la Universidad";
+        JCBUniversity.setModel(SetComboBox(SS, TT, WW, MS));
+    }
+    
+    private void SetCamCB(int id_Uni){
+        String SS="id_universiry, name",
+               TT="ies9021_database.campus",
+               WW="id_university = "+id_Uni,
+               MS="Todos los Campus";
+        JCBCampus.setModel(SetComboBox(SS, TT, WW, MS));
     }
     
     private <T> void ObtenerDatos(Class Clazz){
@@ -201,6 +223,12 @@ public class Career_Word_Key_JF1 extends javax.swing.JFrame {
 
     private void JCBUniversityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JCBUniversityActionPerformed
         // TODO add your handling code here:
+        if(JCBUniversity.getSelectedIndex()>0){
+            SetCamCB(JCBUniversity.getSelectedIndex());
+        }
+        else{
+            JCBCampus.setModel(null);
+        }
         
     }//GEN-LAST:event_JCBUniversityActionPerformed
 
