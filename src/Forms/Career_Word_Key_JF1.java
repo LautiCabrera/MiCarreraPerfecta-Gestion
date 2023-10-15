@@ -136,8 +136,9 @@ public class Career_Word_Key_JF1 extends javax.swing.JFrame {
                     Filler=SEND(SS, TT, WW);
                 }
             }else{
-                    SS="wk.id_word_key, word from ies9021_database.words_key wk";
-                    TT="inner join ies9021_database.career_word_key cwk ON wk.id_word_key = cwk.id_word_key";
+                    SS="wk.id_word_key, word ";
+                    TT="ies9021_database.words_key wk"
+                     + "inner join ies9021_database.career_word_key cwk ON wk.id_word_key = cwk.id_word_key";
                     WW="where cwk.id_career="+ID+";";
                     Filler=SEND(SS, TT, WW);
             }
