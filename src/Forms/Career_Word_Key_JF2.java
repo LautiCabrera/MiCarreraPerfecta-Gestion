@@ -5,6 +5,7 @@
 package Forms;
 
 import static Utils.JsonDataFetcher.SEND;
+import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -91,7 +92,7 @@ public class Career_Word_Key_JF2 extends javax.swing.JFrame {
     
     
     
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -119,6 +120,19 @@ public class Career_Word_Key_JF2 extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         TXTSearch.setText("Palabra Clave");
+        TXTSearch.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                TXTSearchFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                TXTSearchFocusLost(evt);
+            }
+        });
+        TXTSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TXTSearchKeyTyped(evt);
+            }
+        });
 
         BTNSearch.setText("Buscar");
 
@@ -170,7 +184,7 @@ public class Career_Word_Key_JF2 extends javax.swing.JFrame {
             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Empieza con", "Entre", "Termina con" }));
 
         jButton1.setText("jButton1");
         jButton1.setEnabled(false);
@@ -234,6 +248,35 @@ public class Career_Word_Key_JF2 extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void TXTSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TXTSearchFocusGained
+        // TODO add your handling code here:
+        if (TXTSearch.getForeground().equals(Color.lightGray)) {
+            TXTSearch.setForeground(Color.black);
+            TXTSearch.setText("");
+        }
+    }//GEN-LAST:event_TXTSearchFocusGained
+
+    private void TXTSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TXTSearchFocusLost
+        // TODO add your handling code here:
+        if (TXTSearch.getText().isBlank() || TXTSearch.getText().isEmpty()) {
+            TXTSearch.setForeground(Color.lightGray);
+            TXTSearch.setText("Palabra Clave");
+        }
+    }//GEN-LAST:event_TXTSearchFocusLost
+
+    private void TXTSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TXTSearchKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        if (TXTSearch.getText().length() >= 20) {
+            evt.consume();
+        } else {
+            if (!(Character.isLetterOrDigit(c) || c == 8 || c == 32 || c == 127
+                    || c == '\n' || c == '\t' || c == 44 || c == 46)) {
+                evt.consume();
+            }
+        }
+    }//GEN-LAST:event_TXTSearchKeyTyped
 
     /**
      * @param args the command line arguments

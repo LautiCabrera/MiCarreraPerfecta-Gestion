@@ -32,11 +32,9 @@
                       <Component id="JLWord" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="TXTWordsearch" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="JCBSearchType" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="BTNWordSe" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="21" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Component id="BTNADD" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="BTNDEL" min="-2" max="-2" attributes="0"/>
@@ -84,7 +82,6 @@
                   <Component id="BTNWordSe" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="BTNDEL" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="BTNADD" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="JCBSearchType" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
@@ -154,7 +151,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="jScrollPane2" alignment="0" max="32767" attributes="0"/>
+              <Component id="jScrollPane2" alignment="0" pref="522" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -231,6 +228,7 @@
       <Events>
         <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="TXTWordsearchFocusGained"/>
         <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="TXTWordsearchFocusLost"/>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="TXTWordsearchKeyTyped"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="BTNWordSe">
@@ -238,6 +236,9 @@
         <Property name="text" type="java.lang.String" value="Buscar"/>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BTNWordSeActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="BTNDEL">
       <Properties>
@@ -250,20 +251,6 @@
         <Property name="text" type="java.lang.String" value="A&#xf1;adir"/>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JComboBox" name="JCBSearchType">
-      <Properties>
-        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="3">
-            <StringItem index="0" value="Empieza con"/>
-            <StringItem index="1" value="Entre"/>
-            <StringItem index="2" value="Termina con"/>
-          </StringArray>
-        </Property>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-      </AuxValues>
     </Component>
     <Component class="javax.swing.JButton" name="BTNMan">
       <Properties>

@@ -86,6 +86,11 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Palabra Clave"/>
       </Properties>
+      <Events>
+        <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="TXTSearchFocusGained"/>
+        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="TXTSearchFocusLost"/>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="TXTSearchKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="BTNSearch">
       <Properties>
@@ -183,11 +188,10 @@
     <Component class="javax.swing.JComboBox" name="jComboBox1">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="4">
-            <StringItem index="0" value="Item 1"/>
-            <StringItem index="1" value="Item 2"/>
-            <StringItem index="2" value="Item 3"/>
-            <StringItem index="3" value="Item 4"/>
+          <StringArray count="3">
+            <StringItem index="0" value="Empieza con"/>
+            <StringItem index="1" value="Entre"/>
+            <StringItem index="2" value="Termina con"/>
           </StringArray>
         </Property>
       </Properties>
