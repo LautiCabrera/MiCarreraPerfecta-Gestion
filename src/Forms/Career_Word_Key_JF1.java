@@ -459,6 +459,7 @@ public class Career_Word_Key_JF1 extends javax.swing.JFrame {
         if (JTWordKey.getSelectedRow() != SWKR) {
             BTNADD.setEnabled(true);
             BTNDEL.setEnabled(true);
+            SWKR=JTWordKey.getSelectedRow();
         }
     }//GEN-LAST:event_JTWordKeyMouseClicked
 

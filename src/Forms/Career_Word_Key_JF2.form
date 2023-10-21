@@ -30,21 +30,21 @@
                   <Group type="102" attributes="0">
                       <Component id="TXTSearch" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="jComboBox1" min="-2" max="-2" attributes="0"/>
+                      <Component id="JCBSearchType" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="BTNSearch" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
-                      <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                      <Component id="BTNWKSelect" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
-                      <Component id="jButton3" min="-2" max="-2" attributes="0"/>
+                      <Component id="BTNADD" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jButton2" min="-2" max="-2" attributes="0"/>
+                      <Component id="BTNDEL" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Component id="jPanel2" alignment="0" max="32767" attributes="0"/>
               </Group>
@@ -59,20 +59,20 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="TXTSearch" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="BTNSearch" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jComboBox1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="JCBSearchType" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="BTNWKSelect" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jButton3" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="BTNDEL" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="BTNADD" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
@@ -96,6 +96,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Buscar"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BTNSearchActionPerformed"/>
+      </Events>
     </Component>
     <Container class="javax.swing.JPanel" name="jPanel1">
 
@@ -131,6 +134,9 @@
                   <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="JTWordKeyMouseClicked"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -180,17 +186,20 @@
                   <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="JTCareerMouseClicked"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JComboBox" name="jComboBox1">
+    <Component class="javax.swing.JComboBox" name="JCBSearchType">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="3">
             <StringItem index="0" value="Empieza con"/>
-            <StringItem index="1" value="Entre"/>
+            <StringItem index="1" value="Contiene"/>
             <StringItem index="2" value="Termina con"/>
           </StringArray>
         </Property>
@@ -199,23 +208,29 @@
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton1">
+    <Component class="javax.swing.JButton" name="BTNWKSelect">
       <Properties>
-        <Property name="text" type="java.lang.String" value="jButton1"/>
+        <Property name="text" type="java.lang.String" value="Selecionar"/>
+        <Property name="enabled" type="boolean" value="false"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BTNWKSelectActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="BTNDEL">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Borrar"/>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton2">
+    <Component class="javax.swing.JButton" name="BTNADD">
       <Properties>
-        <Property name="text" type="java.lang.String" value="jButton2"/>
+        <Property name="text" type="java.lang.String" value="A&#xf1;adir"/>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="jButton3">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jButton3"/>
-        <Property name="enabled" type="boolean" value="false"/>
-      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BTNADDActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

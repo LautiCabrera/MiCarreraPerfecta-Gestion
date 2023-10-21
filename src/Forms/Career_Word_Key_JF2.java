@@ -7,6 +7,7 @@ package Forms;
 import static Utils.JsonDataFetcher.SEND;
 import java.awt.Color;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
@@ -19,8 +20,9 @@ import javax.swing.table.TableColumnModel;
 public class Career_Word_Key_JF2 extends javax.swing.JFrame {
     
     ArrayList<String[]> RSS;
-    DefaultTableModel TablaCareer,TablaWordK;
-    
+    DefaultTableModel TablaCareer, TablaWordK;
+    int SCR = -1, SWKR = -1;
+
     /**
      * Creates new form Career_Word_Key_JF2
      */
@@ -28,71 +30,76 @@ public class Career_Word_Key_JF2 extends javax.swing.JFrame {
         initComponents();
     }
     
-    private void ObtenerDatos(String SS,String TT,String WW){
-        RSS=SEND(SS,TT,WW);
+    private void ObtenerDatos(String SS, String TT, String WW) {
+        RSS = SEND(SS, TT, WW);
     }
     
-    private void PintarTablaColumns(){
-        String[] Carreras={"ID","Nombre","Descripcion"},
-                 Palabras={"ID","Palabra Clave"};
-        TablaCareer= (DefaultTableModel) JTCareer.getModel();
+    private void PintarTablaColumns() {
+        String[] Carreras = {"ID", "Nombre", "Campus", "Descripcion"},
+                Palabras = {"ID", "Palabra Clave"};
+        TablaCareer = (DefaultTableModel) JTCareer.getModel();
         TablaCareer.setColumnCount(Carreras.length);
-        TablaWordK= (DefaultTableModel) JTWordKey.getModel();
+        TablaWordK = (DefaultTableModel) JTWordKey.getModel();
         TablaWordK.setColumnCount(Palabras.length);
-        int count=0;
+        int count = 0;
         for (String CR : Carreras) {
-                JTableHeader tableHeader = JTCareer.getTableHeader();
-                TableColumnModel tableColumnModel = tableHeader.getColumnModel();
-                TableColumn tableColumn = tableColumnModel.getColumn(count);
-                tableColumn.setHeaderValue(CR);
-                tableHeader.repaint();
-                count++;
+            JTableHeader tableHeader = JTCareer.getTableHeader();
+            TableColumnModel tableColumnModel = tableHeader.getColumnModel();
+            TableColumn tableColumn = tableColumnModel.getColumn(count);
+            tableColumn.setHeaderValue(CR);
+            tableHeader.repaint();
+            count++;
         }
-        count=0;
+        count = 0;
         for (String PAL : Palabras) {
-                JTableHeader tableHeader = JTWordKey.getTableHeader();
-                TableColumnModel tableColumnModel = tableHeader.getColumnModel();
-                TableColumn tableColumn = tableColumnModel.getColumn(count);
-                tableColumn.setHeaderValue(PAL);
-                tableHeader.repaint();
-                count++;
+            JTableHeader tableHeader = JTWordKey.getTableHeader();
+            TableColumnModel tableColumnModel = tableHeader.getColumnModel();
+            TableColumn tableColumn = tableColumnModel.getColumn(count);
+            tableColumn.setHeaderValue(PAL);
+            tableHeader.repaint();
+            count++;
         }
     }
     
-    private void PintarTablasRows(DefaultTableModel Tabla,String ID){
-        try{
+    private void PintarTablasRows(DefaultTableModel Tabla, Object id) {
+        try {
+            String ID=String.valueOf(id);
             Tabla.setRowCount(0);
-            Object O[]= new Object[Tabla.getColumnCount()];
+            Object O[] = new Object[Tabla.getColumnCount()];
             ArrayList<String[]> Filler;
-            String SS,TT,WW;
-            if(O.length>2){
-                SS="c.id_career, c.`name`, c.`description` ";
-                TT="ies9021_database.career c " +
-                   "inner join ies9021_database.career_word_key cwk ON c.id_career = cwk.id_career";
-                WW="cwk.id_word_key="+ID+";";
-                Filler=SEND(SS, TT, WW);
-            }else{
-                SS="wk.id_word_key, word";
-                TT="ies9021_database.words_key ";
-                WW="where word Like "+ID+";";
-                Filler=SEND(SS, TT, WW);
+            String SS, TT, WW;
+            if (O.length > 2) {
+                SS = "c.id_career, c.`name`, cws.`name`, c.`description` ";
+                TT = "ies9021_database.career c "
+                        + "INNER JOIN ies9021_database.career_word_key cwk ON c.id_career = cwk.id_career "
+                        + "INNER JOIN ies9021_database.campus_career AS ccc ON c.id_career = ccc.id_career "
+                        + "INNER JOIN ies9021_database.campus AS cws ON ccc.id_campus = cws.id_campus ";
+                WW = " cwk.id_word_key=" + ID + ";";
+                Filler = SEND(SS, TT, WW);
+            } else {
+                SS = "wk.id_word_key, word";
+                TT = "ies9021_database.words_key ";
+                WW = "where word Like " + ID + ";";
+                Filler = SEND(SS, TT, WW);
             }
-            if(!Filler.isEmpty()){
-                for (int i=0; i<Filler.size();i++ ) {
+            if (!Filler.isEmpty()) {
+                for (int i = 0; i < Filler.size(); i++) {
                     System.arraycopy(Filler.get(i), 0, O, 0, Tabla.getColumnCount());
                 }
             }
             
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         
     }
     
-    
-    
-    
-    
+    private void LimpiarTablas(DefaultTableModel Tabla) {
+        for (int i = Tabla.getRowCount() - 1; i >= 0; i--) {
+            Tabla.removeRow(i);
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -112,10 +119,10 @@ public class Career_Word_Key_JF2 extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         JTCareer = new javax.swing.JTable();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        JCBSearchType = new javax.swing.JComboBox<>();
+        BTNWKSelect = new javax.swing.JButton();
+        BTNDEL = new javax.swing.JButton();
+        BTNADD = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -135,6 +142,11 @@ public class Career_Word_Key_JF2 extends javax.swing.JFrame {
         });
 
         BTNSearch.setText("Buscar");
+        BTNSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BTNSearchActionPerformed(evt);
+            }
+        });
 
         JTWordKey.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -145,6 +157,11 @@ public class Career_Word_Key_JF2 extends javax.swing.JFrame {
             }
         ));
         JTWordKey.getTableHeader().setReorderingAllowed(false);
+        JTWordKey.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JTWordKeyMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(JTWordKey);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -171,6 +188,11 @@ public class Career_Word_Key_JF2 extends javax.swing.JFrame {
             }
         ));
         JTCareer.getTableHeader().setReorderingAllowed(false);
+        JTCareer.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JTCareerMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(JTCareer);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -184,16 +206,26 @@ public class Career_Word_Key_JF2 extends javax.swing.JFrame {
             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Empieza con", "Entre", "Termina con" }));
+        JCBSearchType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Empieza con", "Contiene", "Termina con" }));
 
-        jButton1.setText("jButton1");
-        jButton1.setEnabled(false);
+        BTNWKSelect.setText("Selecionar");
+        BTNWKSelect.setEnabled(false);
+        BTNWKSelect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BTNWKSelectActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("jButton2");
-        jButton2.setEnabled(false);
+        BTNDEL.setText("Borrar");
+        BTNDEL.setEnabled(false);
 
-        jButton3.setText("jButton3");
-        jButton3.setEnabled(false);
+        BTNADD.setText("Añadir");
+        BTNADD.setEnabled(false);
+        BTNADD.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BTNADDActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -206,19 +238,19 @@ public class Career_Word_Key_JF2 extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(TXTSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(JCBSearchType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(BTNSearch))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1))
+                        .addComponent(BTNWKSelect))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton3)
+                        .addComponent(BTNADD)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2))
+                        .addComponent(BTNDEL))
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -229,18 +261,18 @@ public class Career_Word_Key_JF2 extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(TXTSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(BTNSearch)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(JCBSearchType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jButton1))
+                    .addComponent(BTNWKSelect))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(BTNDEL)
+                    .addComponent(BTNADD))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -254,6 +286,7 @@ public class Career_Word_Key_JF2 extends javax.swing.JFrame {
         if (TXTSearch.getForeground().equals(Color.lightGray)) {
             TXTSearch.setForeground(Color.black);
             TXTSearch.setText("");
+            BTNSearch.setEnabled(true);
         }
     }//GEN-LAST:event_TXTSearchFocusGained
 
@@ -262,6 +295,7 @@ public class Career_Word_Key_JF2 extends javax.swing.JFrame {
         if (TXTSearch.getText().isBlank() || TXTSearch.getText().isEmpty()) {
             TXTSearch.setForeground(Color.lightGray);
             TXTSearch.setText("Palabra Clave");
+            BTNSearch.setEnabled(false);
         }
     }//GEN-LAST:event_TXTSearchFocusLost
 
@@ -277,6 +311,58 @@ public class Career_Word_Key_JF2 extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_TXTSearchKeyTyped
+
+    private void BTNSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNSearchActionPerformed
+        // TODO add your handling code here:
+        if (!(TXTSearch.getText().isBlank() || TXTSearch.getText().isEmpty() || TXTSearch.getForeground().equals(Color.lightGray))) {
+            String Search = TXTSearch.getText().toLowerCase();
+            switch (JCBSearchType.getSelectedIndex()) {
+                case 0:
+                    Search = Search + "%";
+                    break;
+                case 1:
+                    Search = "%" + Search + "%";
+                    break;
+                case 2:
+                    Search = "%" + Search;
+                    break;
+                default:
+                    break;
+            }
+            PintarTablasRows(TablaWordK, Search);
+        }else{
+            JOptionPane.showMessageDialog(this, "No se puede buscar la nada, escribe algo");
+        }
+    }//GEN-LAST:event_BTNSearchActionPerformed
+
+    private void JTWordKeyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTWordKeyMouseClicked
+        // TODO add your handling code here:
+        if(JTWordKey.getSelectedRow()!=SWKR){
+            BTNWKSelect.setEnabled(true);
+            SWKR=JTWordKey.getSelectedRow();
+        }
+    }//GEN-LAST:event_JTWordKeyMouseClicked
+
+    private void BTNWKSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNWKSelectActionPerformed
+        // TODO add your handling code here:
+        BTNWKSelect.setEnabled(false);
+        PintarTablasRows(TablaCareer, TablaWordK.getValueAt(JTWordKey.getSelectedRow(), 0));
+        
+    }//GEN-LAST:event_BTNWKSelectActionPerformed
+
+    private void JTCareerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTCareerMouseClicked
+        // TODO add your handling code here:
+        if(JTCareer.getSelectedRow()!=SCR){
+            SCR=JTCareer.getSelectedRow();
+            BTNADD.setEnabled(true);
+            BTNDEL.setEnabled(true);
+        }
+    }//GEN-LAST:event_JTCareerMouseClicked
+
+    private void BTNADDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNADDActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_BTNADDActionPerformed
 
     /**
      * @param args the command line arguments
@@ -314,14 +400,14 @@ public class Career_Word_Key_JF2 extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BTNADD;
+    private javax.swing.JButton BTNDEL;
     private javax.swing.JButton BTNSearch;
+    private javax.swing.JButton BTNWKSelect;
+    private javax.swing.JComboBox<String> JCBSearchType;
     private javax.swing.JTable JTCareer;
     private javax.swing.JTable JTWordKey;
     private javax.swing.JTextField TXTSearch;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
