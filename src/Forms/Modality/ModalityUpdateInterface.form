@@ -33,18 +33,14 @@
               <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="cancelBTN" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="103" alignment="1" groupAlignment="1" max="-2" attributes="0">
-                      <Component id="saveBTN" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="modalityUpdateTxt" alignment="0" pref="84" max="32767" attributes="0"/>
-                      <Component id="idUserUpdateTxt" max="32767" attributes="0"/>
-                  </Group>
-                  <Component id="comboBoxVirtualUpdate" alignment="1" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                  <Component id="saveBTN" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="modalityUpdateTxt" alignment="0" pref="84" max="32767" attributes="0"/>
+                  <Component id="idUserUpdateTxt" max="32767" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
           </Group>
@@ -60,17 +56,12 @@
                   <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="modalityUpdateTxt" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="comboBoxVirtualUpdate" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="idUserUpdateTxt" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="41" max="32767" attributes="0"/>
+              <EmptySpace pref="40" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="cancelBTN" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="saveBTN" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -92,11 +83,6 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="modalityUpdateTxt">
-    </Component>
-    <Component class="javax.swing.JLabel" name="jLabel3">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="virtual"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="cancelBTN">
       <Properties>
@@ -120,19 +106,6 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="idUserUpdateTxt">
-    </Component>
-    <Component class="javax.swing.JComboBox" name="comboBoxVirtualUpdate">
-      <Properties>
-        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="2">
-            <StringItem index="0" value="NO"/>
-            <StringItem index="1" value="SI"/>
-          </StringArray>
-        </Property>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-      </AuxValues>
     </Component>
   </SubComponents>
 </Form>

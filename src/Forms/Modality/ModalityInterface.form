@@ -37,9 +37,9 @@
                           </Group>
                       </Group>
                       <EmptySpace pref="366" max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Group type="102" attributes="0">
-                              <Component id="TXTSearch" min="-2" pref="187" max="-2" attributes="0"/>
+                              <Component id="TxtSearch" max="32767" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="BTNSearch" min="-2" max="-2" attributes="0"/>
                           </Group>
@@ -63,8 +63,8 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="BTNSearch" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="TXTSearch" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="LABTittle" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="TxtSearch" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -153,10 +153,8 @@
           <Dimension value="[82, 24]"/>
         </Property>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="TXTSearch">
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="TXTSearchActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BTNSearchActionPerformed"/>
       </Events>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
@@ -187,5 +185,7 @@
         </Component>
       </SubComponents>
     </Container>
+    <Component class="javax.swing.JTextField" name="TxtSearch">
+    </Component>
   </SubComponents>
 </Form>
