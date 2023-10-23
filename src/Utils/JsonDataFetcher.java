@@ -155,11 +155,10 @@ public class JsonDataFetcher<T> {
 
         try {
             resultSet = DDBBConnection.fetchData(query);
-            
+
             ObjectMapper mapper = new ObjectMapper();
             ResultSetMetaData metaData = resultSet.getMetaData();
             int columnCount = metaData.getColumnCount();
-            Object Datos[]= new Object[columnCount];
             ObjectNode rowNode = mapper.createObjectNode();
             String jsonResult = null;
 
@@ -170,13 +169,9 @@ public class JsonDataFetcher<T> {
                     Object columnValue = resultSet.getObject(i);
                     rowNode.put(columnName, columnValue.toString());
                 }
-                for (int i = 0; i < Datos.length; i++) {
-                    Datos[i]=resultSet.getObject(i);
-                }
 
                 jsonResult = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(rowNode);
                 result.addObject(mapper.readValue(jsonResult, returnType));
-                result.addDatos(Datos);
 
             }
             result.setState(true);
@@ -192,10 +187,11 @@ public class JsonDataFetcher<T> {
         return result;
     }
 
+    
     /**
-     * La función `selectQuery` toma parámetros de selección, nombre de tabla y una cláusula WHERE como
-     * entrada, ejecuta una consulta de selección en una base de datos y devuelve el resultado como una
-     * lista de cadenas JSON.
+     * La función `selectQuery` toma los parámetros de selección, el nombre de la tabla y una cláusula
+     * WHERE, y devuelve una lista de matrices de cadenas que representan los datos seleccionados de la
+     * base de datos.
      * 
      * @param selectParams Una cadena que representa las columnas que se seleccionarán en la consulta.
      * Por ejemplo, "columna1, columna2, columna3".
@@ -203,72 +199,39 @@ public class JsonDataFetcher<T> {
      * datos.
      * @param whereClause El parámetro `whereClause` es una cadena que representa la condición que se
      * aplicará en la cláusula WHERE de la consulta SQL. Se utiliza para filtrar las filas devueltas
-     * por la consulta según ciertos criterios. Por ejemplo, si desea recuperar sólo las filas donde la
-     * columna "estado" es igual a
-     * @return El método `selectQuery` devuelve una `List<String>` que contiene representaciones JSON
-     * de las filas obtenidas de la base de datos según los parámetros proporcionados.
+     * por la consulta según criterios específicos. Por ejemplo, si desea seleccionar sólo las filas
+     * donde la columna "nombre" es igual a "John
+     * @return El método devuelve una lista de matrices de cadenas. Cada matriz de cadenas representa
+     * una fila de datos recuperados de la base de datos.
      */
-    public static List<String> selectQuery(String selectParams, String tableName, String whereClause) {
+    public static List<String[]> selectQuery(String selectParams, String tableName, String whereClause) {
         String query = "SELECT " + selectParams + " FROM " + tableName;
         if (whereClause != null && !whereClause.isEmpty()) {
             query += " WHERE " + whereClause;
         }
-
-        List<String> jsonList = new ArrayList<>();
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        ResultSet resultSet = DDBBConnection.fetchData(query);
-        
-        try {
-            ResultSetMetaData metaData = resultSet.getMetaData();
-
-            while (resultSet.next()) {
-                Map<String, Object> rowData = new HashMap<>();
-
-                for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                    String columnName = metaData.getColumnName(i);
-                    Object columnValue = resultSet.getObject(i);
-                    rowData.put(columnName, columnValue);
-                }
-
-                String jsonData = objectMapper.writeValueAsString(rowData);
-                jsonList.add(jsonData);
-            }
-        } catch (JsonProcessingException | SQLException e) {
-            e.printStackTrace();
-        }
-
-        return jsonList;
-    }
     
-    public static ArrayList<String[]> SEND(String selectParams, String tableName, String whereClause) {
-        String query = "SELECT " + selectParams + " FROM " + tableName;
-        if (whereClause != null && !whereClause.isEmpty()) {
-            query += " WHERE " + whereClause;
-        }
-
-        ArrayList<String[]> AList = new ArrayList<>();
+        List<String[]> dataList = new ArrayList<>();
         ResultSet resultSet = DDBBConnection.fetchData(query);
-        
+    
         try {
             ResultSetMetaData metaData = resultSet.getMetaData();
-            int columnCount = metaData.getColumnCount();
-            
+    
             while (resultSet.next()) {
-                String Datos[]= new String[columnCount];
-            
-                for (int i = 0; i < Datos.length; i++) {
-                    Datos[i]=resultSet.getString(i+1);
-                    if(Datos[i].isEmpty()){Datos[i]="";}
+                String[] rowData = new String[metaData.getColumnCount()];
+    
+                for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                    String columnValue = resultSet.getString(i);
+                    rowData[i - 1] = columnValue;
                 }
-                
-                AList.add(Datos);
-                
+    
+                dataList.add(rowData);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return AList;
+    
+        return dataList;
     }
+    
+    
 }
