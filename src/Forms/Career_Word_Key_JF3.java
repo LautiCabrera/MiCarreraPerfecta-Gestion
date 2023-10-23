@@ -4,17 +4,80 @@
  */
 package Forms;
 
+import static Utils.JsonDataFetcher.SEND;
+import java.awt.Color;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+
 /**
  *
  * @author BTF
  */
 public class Career_Word_Key_JF3 extends javax.swing.JFrame {
 
+    
+    int SWKR = -1, SWAR= -1;
+    DefaultTableModel TablaWordK, TablaWordAdd;
+    ArrayList<String[]> RSS;
+    
     /**
      * Creates new form Career_Word_Key_JF3
      */
     public Career_Word_Key_JF3() {
         initComponents();
+    }
+    
+    private void ObtenerDatos(String SS, String TT, String WW) {
+        RSS = SEND(SS, TT, WW);
+    }
+    
+    private void PintarTablaColumns() {
+        String[] Palabras = {"ID", "Palabra Clave"};
+        TablaWordK = (DefaultTableModel) JTWordKey.getModel();
+        TablaWordK.setColumnCount(Palabras.length);
+        TablaWordAdd = (DefaultTableModel) JTWordADD.getModel();
+        TablaWordAdd.setColumnCount(Palabras.length);
+        int count = 0;
+        for (String PAL : Palabras) {
+            JTableHeader tableHeader = JTWordKey.getTableHeader();
+            TableColumnModel tableColumnModel = tableHeader.getColumnModel();
+            TableColumn tableColumn = tableColumnModel.getColumn(count);
+            tableColumn.setHeaderValue(PAL);
+            tableHeader.repaint();
+            count++;
+        }
+    }
+    
+    private void PintarTablasRows(DefaultTableModel Tabla, String ID) {
+        try {
+            Tabla.setRowCount(0);
+            ArrayList<String[]> Filler;
+            String SS, TT, WW;
+                SS = "id_word_key, word";
+                TT = "ies9021_database.words_key ";
+                WW = "where word Like " + ID + ";";
+                Filler = SEND(SS, TT, WW);
+            if (!Filler.isEmpty()) {
+                Object O[][] = new Object[Filler.size()][];
+                for (int i = 0; i < Filler.size(); i++) {
+                    O[i]=Filler.get(i);
+                }
+                Tabla.setDataVector(O, null);
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private void LimpiarTablas(DefaultTableModel Tabla) {
+        for (int i = Tabla.getRowCount() - 1; i >= 0; i--) {
+            Tabla.removeRow(i);
+        }
     }
 
     /**
@@ -26,27 +89,49 @@ public class Career_Word_Key_JF3 extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        TXTWordK = new javax.swing.JTextField();
+        BTNSearch = new javax.swing.JButton();
+        BTNAccept = new javax.swing.JButton();
+        BTNCancel = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        JTWordKey = new javax.swing.JTable();
+        JCBSearchType = new javax.swing.JComboBox<>();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        JTWordADD = new javax.swing.JTable();
+        BTNADDEL = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTextField1.setText("jTextField1");
+        TXTWordK.setForeground(Color.lightGray);
+        TXTWordK.setText("Palabra Clave");
+        TXTWordK.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                TXTWordKFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                TXTWordKFocusLost(evt);
+            }
+        });
+        TXTWordK.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TXTWordKKeyTyped(evt);
+            }
+        });
 
-        jButton1.setText("jButton1");
+        BTNSearch.setText("Buscar");
+        BTNSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BTNSearchActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("jButton2");
-        jButton2.setEnabled(false);
+        BTNAccept.setText("Aceptar");
+        BTNAccept.setEnabled(false);
 
-        jButton3.setText("jButton3");
-        jButton3.setEnabled(false);
+        BTNCancel.setText("Cancelar");
+        BTNCancel.setEnabled(false);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        JTWordKey.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -54,10 +139,39 @@ public class Career_Word_Key_JF3 extends javax.swing.JFrame {
 
             }
         ));
-        jTable1.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(jTable1);
+        JTWordKey.getTableHeader().setReorderingAllowed(false);
+        JTWordKey.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JTWordKeyMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(JTWordKey);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        JCBSearchType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Empieza con", "Contiene", "Termina con" }));
+
+        JTWordADD.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        JTWordADD.getTableHeader().setReorderingAllowed(false);
+        JTWordADD.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JTWordADDMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(JTWordADD);
+
+        BTNADDEL.setText("Disable");
+        BTNADDEL.setEnabled(false);
+        BTNADDEL.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BTNADDELActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -66,17 +180,22 @@ public class Career_Word_Key_JF3 extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(TXTWordK, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(JCBSearchType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton1)
+                        .addComponent(BTNSearch)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2)
+                        .addComponent(BTNADDEL)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton3)))
+                        .addComponent(BTNAccept)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(BTNCancel))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -84,18 +203,110 @@ public class Career_Word_Key_JF3 extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(TXTWordK, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BTNSearch)
+                    .addComponent(BTNAccept)
+                    .addComponent(BTNCancel)
+                    .addComponent(JCBSearchType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BTNADDEL))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void BTNSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNSearchActionPerformed
+        // TODO add your handling code here:
+        if (!(TXTWordK.getText().isBlank() || TXTWordK.getText().isEmpty() ||
+              TXTWordK.getForeground().equals(Color.lightGray))) {
+            String Search = TXTWordK.getText().toLowerCase();
+            switch (JCBSearchType.getSelectedIndex()) {
+                case 0:
+                    Search = Search + "%";
+                    break;
+                case 1:
+                    Search = "%" + Search + "%";
+                    break;
+                case 2:
+                    Search = "%" + Search;
+                    break;
+                default:
+                    break;
+            }
+            PintarTablasRows(TablaWordK, Search);
+        }else{
+            JOptionPane.showMessageDialog(this, "No se puede buscar la nada, escribe algo");
+        }
+    }//GEN-LAST:event_BTNSearchActionPerformed
+
+    private void TXTWordKFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TXTWordKFocusGained
+        // TODO add your handling code here:
+        if(TXTWordK.getForeground().equals(Color.lightGray)){
+            TXTWordK.setText("");
+            TXTWordK.setForeground(Color.black);
+            BTNSearch.setEnabled(true);
+            BTNADDEL.setEnabled(false);
+            BTNADDEL.setText("Disabled");
+            SWKR=-1;
+        }
+    }//GEN-LAST:event_TXTWordKFocusGained
+
+    private void TXTWordKFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TXTWordKFocusLost
+        // TODO add your handling code here:
+        if(TXTWordK.getText().isBlank()||TXTWordK.getText().isEmpty()){
+            TXTWordK.setText("Palabra Clave");
+            TXTWordK.setForeground(Color.lightGray);
+            BTNSearch.setEnabled(false);
+        }
+    }//GEN-LAST:event_TXTWordKFocusLost
+
+    private void TXTWordKKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TXTWordKKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        if (TXTWordK.getText().length() >= 20) {
+            evt.consume();
+        } else {
+            if (!(Character.isLetterOrDigit(c) || c == 8 || c == 32 || c == 127
+                    || c == '\n' || c == '\t' || c == 44 || c == 46)) {
+                evt.consume();
+            }
+        }
+    }//GEN-LAST:event_TXTWordKKeyTyped
+
+    private void JTWordKeyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTWordKeyMouseClicked
+        // TODO add your handling code here:
+        if(JTWordKey.getSelectedRow()!=SWKR){
+            BTNADDEL.setEnabled(true);
+            BTNADDEL.setText("Añadir");
+            SWKR=JTWordKey.getSelectedRow();
+        }
+    }//GEN-LAST:event_JTWordKeyMouseClicked
+
+    private void JTWordADDMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTWordADDMouseClicked
+        // TODO add your handling code here:
+        if(JTWordADD.getSelectedRow()!=SWAR){
+            BTNADDEL.setEnabled(true);
+            BTNADDEL.setText("Quitar");
+            SWAR=JTWordADD.getSelectedRow();
+        }
+    }//GEN-LAST:event_JTWordADDMouseClicked
+
+    private void BTNADDELActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNADDELActionPerformed
+        // TODO add your handling code here:
+        if(BTNADDEL.getText().equals("Añadir")){
+            Object[] fila = new Object[TablaWordK.getColumnCount()];
+            for (int i = 0; i < TablaWordK.getColumnCount(); i++) {
+                fila[i] = TablaWordK.getValueAt(SWKR, i);
+            }
+            TablaWordAdd.addRow(fila);
+        }else{
+            TablaWordAdd.removeRow(SWAR);
+        }
+    }//GEN-LAST:event_BTNADDELActionPerformed
 
     /**
      * @param args the command line arguments
@@ -133,12 +344,15 @@ public class Career_Word_Key_JF3 extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JButton BTNADDEL;
+    private javax.swing.JButton BTNAccept;
+    private javax.swing.JButton BTNCancel;
+    private javax.swing.JButton BTNSearch;
+    private javax.swing.JComboBox<String> JCBSearchType;
+    private javax.swing.JTable JTWordADD;
+    private javax.swing.JTable JTWordKey;
+    private javax.swing.JTextField TXTWordK;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
 }

@@ -65,27 +65,27 @@ public class Career_Word_Key_JF2 extends javax.swing.JFrame {
         try {
             String ID=String.valueOf(id);
             Tabla.setRowCount(0);
-            Object O[] = new Object[Tabla.getColumnCount()];
             ArrayList<String[]> Filler;
             String SS, TT, WW;
-            if (O.length > 2) {
+            if (Tabla.getColumnCount() > 2) {
                 SS = "c.id_career, c.`name`, cws.`name`, c.`description` ";
                 TT = "ies9021_database.career c "
                         + "INNER JOIN ies9021_database.career_word_key cwk ON c.id_career = cwk.id_career "
                         + "INNER JOIN ies9021_database.campus_career AS ccc ON c.id_career = ccc.id_career "
                         + "INNER JOIN ies9021_database.campus AS cws ON ccc.id_campus = cws.id_campus ";
                 WW = " cwk.id_word_key=" + ID + ";";
-                Filler = SEND(SS, TT, WW);
             } else {
                 SS = "wk.id_word_key, word";
                 TT = "ies9021_database.words_key ";
                 WW = "where word Like " + ID + ";";
-                Filler = SEND(SS, TT, WW);
             }
+            Filler = SEND(SS, TT, WW);
             if (!Filler.isEmpty()) {
+                Object O[][] = new Object[Filler.size()][];
                 for (int i = 0; i < Filler.size(); i++) {
-                    System.arraycopy(Filler.get(i), 0, O, 0, Tabla.getColumnCount());
+                    O[i]=Filler.get(i);
                 }
+                Tabla.setDataVector(O, null);
             }
             
         } catch (Exception e) {
@@ -121,8 +121,7 @@ public class Career_Word_Key_JF2 extends javax.swing.JFrame {
         JTCareer = new javax.swing.JTable();
         JCBSearchType = new javax.swing.JComboBox<>();
         BTNWKSelect = new javax.swing.JButton();
-        BTNDEL = new javax.swing.JButton();
-        BTNADD = new javax.swing.JButton();
+        BTNMOD = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -216,14 +215,11 @@ public class Career_Word_Key_JF2 extends javax.swing.JFrame {
             }
         });
 
-        BTNDEL.setText("Borrar");
-        BTNDEL.setEnabled(false);
-
-        BTNADD.setText("Añadir");
-        BTNADD.setEnabled(false);
-        BTNADD.addActionListener(new java.awt.event.ActionListener() {
+        BTNMOD.setText("Modificar");
+        BTNMOD.setEnabled(false);
+        BTNMOD.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BTNADDActionPerformed(evt);
+                BTNMODActionPerformed(evt);
             }
         });
 
@@ -248,9 +244,7 @@ public class Career_Word_Key_JF2 extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(BTNADD)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(BTNDEL))
+                        .addComponent(BTNMOD))
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -271,8 +265,7 @@ public class Career_Word_Key_JF2 extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(BTNDEL)
-                    .addComponent(BTNADD))
+                    .addComponent(BTNMOD))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -354,15 +347,14 @@ public class Career_Word_Key_JF2 extends javax.swing.JFrame {
         // TODO add your handling code here:
         if(JTCareer.getSelectedRow()!=SCR){
             SCR=JTCareer.getSelectedRow();
-            BTNADD.setEnabled(true);
-            BTNDEL.setEnabled(true);
+            BTNMOD.setEnabled(true);
         }
     }//GEN-LAST:event_JTCareerMouseClicked
 
-    private void BTNADDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNADDActionPerformed
+    private void BTNMODActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNMODActionPerformed
         // TODO add your handling code here:
         
-    }//GEN-LAST:event_BTNADDActionPerformed
+    }//GEN-LAST:event_BTNMODActionPerformed
 
     /**
      * @param args the command line arguments
@@ -400,8 +392,7 @@ public class Career_Word_Key_JF2 extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton BTNADD;
-    private javax.swing.JButton BTNDEL;
+    private javax.swing.JButton BTNMOD;
     private javax.swing.JButton BTNSearch;
     private javax.swing.JButton BTNWKSelect;
     private javax.swing.JComboBox<String> JCBSearchType;

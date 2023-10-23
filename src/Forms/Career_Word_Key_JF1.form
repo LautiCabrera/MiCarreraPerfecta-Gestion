@@ -35,15 +35,12 @@
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="BTNWordSe" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
-                      <Component id="BTNADD" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="BTNDEL" min="-2" max="-2" attributes="0"/>
+                      <Component id="BTNMOD" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
                       <Component id="JLCareer" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Component id="BTNCareerS" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="JCBUniversity" min="-2" pref="151" max="-2" attributes="0"/>
@@ -80,8 +77,7 @@
                   <Component id="JLWord" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="TXTWordsearch" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="BTNWordSe" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="BTNDEL" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="BTNADD" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="BTNMOD" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
@@ -240,15 +236,9 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BTNWordSeActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="BTNDEL">
+    <Component class="javax.swing.JButton" name="BTNMOD">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Borrar"/>
-        <Property name="enabled" type="boolean" value="false"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="BTNADD">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="A&#xf1;adir"/>
+        <Property name="text" type="java.lang.String" value="Modificar"/>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
     </Component>
