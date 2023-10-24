@@ -6,6 +6,7 @@ package Utils;
 
 import static Utils.DDBBConnection.SendQuery;
 import static Utils.JsonDataFetcher.SEND;
+import static Utils.JsonDataFetcher.selectQuery;
 import java.awt.HeadlessException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public abstract class TokenSender {
             boolean Send=false;
         //String query="SELECT * FROM ies9021_database.email_sender WHERE mail LIKE 'F%';";
         String TT="ies9021_database.email_sender", WW=" mail LIKE 'F%';";
-        ArrayList<String[]> RSI=SEND("*",TT,WW);
+        ArrayList<String[]> RSI=new ArrayList<>(selectQuery("*",TT,WW));
         if(!RSI.isEmpty()){
             //RSI.getDatos();
             Properties propiedad = new Properties();
@@ -107,8 +108,9 @@ public abstract class TokenSender {
         String Query= "UPDATE ies9021_database.users SET Last_token = '"+
          Token+"', f_token = current_time() WHERE id_user = '"+User+"';";
             System.out.println(Query);
-        ResultSetIES9021 RS=DDBBConnection.SendQuery(Query);
-        return RS.getState();
+        //ResultSetIES9021 RS=DDBBConnection.SendQuery(Query);
+        SendQuery(Query);
+        return true;
         }catch(Exception e){
             e.printStackTrace();
         }

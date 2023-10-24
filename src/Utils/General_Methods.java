@@ -14,8 +14,6 @@ import javax.swing.JTable;
 //import static Utils.DDBBConnection.*;
 import Forms.InicioJF;
 import Forms.Career_Word_Key_JF;
-import static Utils.DDBBConnection.SendQuery;
-import static Utils.JsonDataFetcher.SEND;
 import static Utils.JsonDataFetcher.selectQuery;
 import java.util.List;
 import java.util.Properties;
@@ -47,7 +45,7 @@ public class General_Methods {
                     Tabla="ies9021_database.users",
                     Where=("email='"+Email.toLowerCase()+"' LIMIT 5;");
             //String Query=" email='"+Email.toLowerCase()+"' AND Last_token= '"+TokenI+"' AND ((select minute_token from ies9021_database.settings ) > timestampdiff(minute,f_token,current_time()))=1 LIMIT 5;";
-            ArrayList<String[]> RLT = SEND(Select,Tabla,Where);
+            ArrayList<String[]> RLT = new ArrayList<>(selectQuery(Select,Tabla,Where));
             
                 if(!RLT.isEmpty()){
                     if(RLT.get(0)[2].equals("1")){
@@ -78,7 +76,7 @@ public class General_Methods {
     public String Existe(String Email){
         try{
             String SS="enabled_state, id_user",TT="ies9021_database.users",WW= "email='"+Email.toLowerCase()+"';";
-        ArrayList<String[]> RS21= SEND(SS,TT,WW);
+        ArrayList<String[]> RS21= new ArrayList<>(selectQuery(SS,TT,WW));
         String ret="2";
         if(!RS21.isEmpty()){
             ret=RS21.get(0)[0]+RS21.get(0)[1];
