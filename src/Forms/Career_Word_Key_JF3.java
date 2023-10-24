@@ -23,6 +23,7 @@ public class Career_Word_Key_JF3 extends javax.swing.JFrame {
     int SWKR = -1, SWAR= -1;
     DefaultTableModel TablaWordK, TablaWordAdd;
     ArrayList<String[]> RSS;
+    ArrayList<String> CareerActual;
     
     /**
      * Creates new form Career_Word_Key_JF3
@@ -52,19 +53,38 @@ public class Career_Word_Key_JF3 extends javax.swing.JFrame {
         }
     }
     
-    private void PintarTablasRows(DefaultTableModel Tabla, String ID) {
+    private void PintarTablasRows(DefaultTableModel Tabla, String ID, int Type) {
         try {
             Tabla.setRowCount(0);
             ArrayList<String[]> Filler;
             String SS, TT, WW;
+            if(Type==1){
                 SS = "id_word_key, word";
                 TT = "ies9021_database.words_key ";
                 WW = "where word Like " + ID + ";";
+            }else{
+                SS = "wk.id_word_key, word, cwk.id_career_word_key ";
+                TT = "ies9021_database.words_key wk"
+                        + "inner join ies9021_database.career_word_key cwk ON wk.id_word_key = cwk.id_word_key";
+                WW = "where cwk.id_career=" + ID + ";";
+            }
                 Filler = SEND(SS, TT, WW);
             if (!Filler.isEmpty()) {
-                Object O[][] = new Object[Filler.size()][];
-                for (int i = 0; i < Filler.size(); i++) {
-                    O[i]=Filler.get(i);
+                Object O[][] = new Object[2][];
+                if(Type==1){
+                    for (int i = 0; i < Filler.size(); i++) {
+                        O[i]=Filler.get(i);
+                    }
+                }else{
+                    RSS=Filler;
+                    CareerActual=new ArrayList<>();
+                    for (int i = 0; i < Filler.size(); i++) {
+                        String[] rowData = Filler.get(i);
+                        String[] rowDataSubset = new String[2];
+                        System.arraycopy(rowData, 0, rowDataSubset, 0, 2);
+                        O[i] = rowDataSubset;
+                        CareerActual.add(rowData[2]);
+                    }
                 }
                 Tabla.setDataVector(O, null);
             }
@@ -127,6 +147,11 @@ public class Career_Word_Key_JF3 extends javax.swing.JFrame {
 
         BTNAccept.setText("Aceptar");
         BTNAccept.setEnabled(false);
+        BTNAccept.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BTNAcceptActionPerformed(evt);
+            }
+        });
 
         BTNCancel.setText("Cancelar");
         BTNCancel.setEnabled(false);
@@ -237,7 +262,7 @@ public class Career_Word_Key_JF3 extends javax.swing.JFrame {
                 default:
                     break;
             }
-            PintarTablasRows(TablaWordK, Search);
+            PintarTablasRows(TablaWordK, Search,1);
         }else{
             JOptionPane.showMessageDialog(this, "No se puede buscar la nada, escribe algo");
         }
@@ -306,7 +331,12 @@ public class Career_Word_Key_JF3 extends javax.swing.JFrame {
         }else{
             TablaWordAdd.removeRow(SWAR);
         }
+        BTNAccept.setEnabled(true);
     }//GEN-LAST:event_BTNADDELActionPerformed
+
+    private void BTNAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNAcceptActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BTNAcceptActionPerformed
 
     /**
      * @param args the command line arguments

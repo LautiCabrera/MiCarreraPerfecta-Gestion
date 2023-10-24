@@ -215,7 +215,7 @@ public class Career_Word_Key_JF2 extends javax.swing.JFrame {
             }
         });
 
-        BTNMOD.setText("Modificar");
+        BTNMOD.setText("Modificar Carrera");
         BTNMOD.setEnabled(false);
         BTNMOD.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
