@@ -71,9 +71,9 @@ public class CodeTester extends javax.swing.JFrame {
                     Tabla="ies9021_database.users",
                     Where=("email='"+Email.toLowerCase()+"' LIMIT 5;");
         //List<String> RSL = selectQuery(SS, FF, WW);
-        List<String> RSL = selectQuery(Select,Tabla,Where);
-        for (String st : RSL) {
-            System.out.println(st);
+        List<String[]> RSL = selectQuery(Select,Tabla,Where);
+        for (String[] st : RSL) {
+            System.out.println(Arrays.toString(st));
         }
 //        ArrayList<String[]> RSO = JsonDataFetcher.SEND(Select, Tabla, Where);
 //        for (String[] OT : RSO) {

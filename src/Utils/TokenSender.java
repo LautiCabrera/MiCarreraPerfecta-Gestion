@@ -4,6 +4,7 @@
  */
 package Utils;
 
+import static Utils.DDBBConnection.QueryVerification;
 import static Utils.DDBBConnection.SendQuery;
 import static Utils.JsonDataFetcher.SEND;
 import static Utils.JsonDataFetcher.selectQuery;
@@ -109,8 +110,12 @@ public abstract class TokenSender {
          Token+"', f_token = current_time() WHERE id_user = '"+User+"';";
             System.out.println(Query);
         //ResultSetIES9021 RS=DDBBConnection.SendQuery(Query);
+        if(QueryVerification(Query)){
         SendQuery(Query);
         return true;
+        }else{
+            return false;
+        }
         }catch(Exception e){
             e.printStackTrace();
         }

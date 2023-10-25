@@ -41,7 +41,7 @@ public class General_Methods {
     //Inicio Pertenece a InicioJF 
     public boolean Inicio(String Email, String TokenI, InicioJF Ob) {
         try {
-            String Select="id_user, `name`,Last_token='"+TokenI+"' AS 'correcttoken', ((select minute_token from ies9021_database.settings ) > timestampdiff(minute,f_token,current_time())) AS 'tokenvalid'",
+            String Select="id_user, `name`,Last_token='"+TokenI+"' AS 'correcttoken', ((select minute_token from ies9021_database.settings ) < timestampdiff(minute,f_token,current_time())) AS 'tokenvalid'",
                     Tabla="ies9021_database.users",
                     Where=("email='"+Email.toLowerCase()+"' LIMIT 5;");
             //String Query=" email='"+Email.toLowerCase()+"' AND Last_token= '"+TokenI+"' AND ((select minute_token from ies9021_database.settings ) > timestampdiff(minute,f_token,current_time()))=1 LIMIT 5;";

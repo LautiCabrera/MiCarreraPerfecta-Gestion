@@ -118,7 +118,7 @@ public abstract class DDBBConnection {
                 verification = Query.matches("INSERT INTO [A-Za-z0-9]+ \\([^)]*\\) VALUES \\([^)]*\\)(,\\s\\([^)]*\\))*");
                     break;
                 case 'u':
-                    verification = Query.matches("UPDATE \\w+ SET ( ?[A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))+(,?( [A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))?)* WHERE ( ?[A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))+((,| AND| OR)( [A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))?)*");
+                    verification = Query.matches("UPDATE (\\w+|\\W+) SET ( ?[A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))+(,?( [A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))?)* WHERE ( ?[A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))+((,| AND| OR)( [A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))?)*");
                     break;
                 case 'd':
                     verification = Query.matches("DELETE FROM \\w+ WHERE ( ?[A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))+((,| AND| OR)( [A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))?)*");
