@@ -127,10 +127,11 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
             String SS, TT, WW;
             if (Tabla.getColumnCount() > 4) {
                 if (Integer.parseInt(ID) > 0) {
-                    SS = "c.id_career, c.`name`, c.`description` ";
-                    TT = "ies9021_database.career c "
-                            + "inner join ies9021_database.campus_career cc ON c.id_career = cc.id_career";
-                    WW = "cc.id_campus=" + ID + ";";
+                    SS = "c.id_career, c.`name`, c.f_update, count(cwk.*)";
+                    TT = "ies9021_database.career c " + 
+                         "inner join ies9021_database.campus_career cc ON c.id_career = cc.id_career" +
+                         "inner join ies9021_database.career_word_key cwk ON c.id_career = cwk.id_career";
+                    WW = "cc.id_campus=" + ID + " AND cwk.id_career = c.id_career;";
                 } else {
                     SS = "c.id_career, c.`name`, c.`description` ";
                     TT = "ies9021_database.career c"
