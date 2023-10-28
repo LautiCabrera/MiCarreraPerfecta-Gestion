@@ -40,7 +40,6 @@ public abstract class DDBBConnection {
     public static ResultSetIES9021 SendQuery(String query) {
 
         ResultSetIES9021 RSIES9021 = new ResultSetIES9021();
-        System.out.println(QueryVerification(query)+" QV");
         if (QueryVerification(query)) {
             Conection = Conectar();
             PreparedStatement statement = null;
@@ -55,7 +54,6 @@ public abstract class DDBBConnection {
                 logConnection("Conexión exitosa", query);
                 Disconect();
 
-                
             } catch (SQLException e) {
                 logConnection("Conexión fallida", query);
                 e.printStackTrace();
@@ -70,8 +68,7 @@ public abstract class DDBBConnection {
     private static void logConnection(String title, String description) {
         String insertQuery = "INSERT INTO logs (title, description, id_user, date) VALUES (?, ?, ?, ?)";
 
-        try (Connection connection = Conectar();
-                PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+        try (Connection connection = Conectar(); PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
 
             preparedStatement.setString(1, title);
             preparedStatement.setString(2, description);
@@ -105,31 +102,55 @@ public abstract class DDBBConnection {
         return null;
     }
 
-    public static boolean QueryVerification(String Query) {
-        String testQuery = Query.toLowerCase().substring(0, 6);
-        boolean verification = false;
-        if (testQuery.equals("insert") || testQuery.equals("select") ||
-                testQuery.equals("update") || testQuery.equals("delete")) {
-            switch (Query.toLowerCase().charAt(0)) {
-                case 's':
-                    verification = Query.matches("SELECT (\\w+|\\W) FROM [A-Za-z0-9]+(_[A-Za-z0-9]+)* WHERE ( ?[A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))+((,| AND| OR)( [A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))?)*");
-                    break;
-                case 'i':
-                verification = Query.matches("INSERT INTO [A-Za-z0-9]+ \\([^)]*\\) VALUES \\([^)]*\\)(,\\s\\([^)]*\\))*");
-                    break;
-                case 'u':
-                    verification = Query.matches("UPDATE (\\w+|\\W+) SET ( ?[A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))+(,?( [A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))?)* WHERE ( ?[A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))+((,| AND| OR)( [A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))?)*");
-                    break;
-                case 'd':
-                    verification = Query.matches("DELETE FROM \\w+ WHERE ( ?[A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))+((,| AND| OR)( [A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))?)*");
-                    break;
-            }
+    /**
+     * La función getCount recupera el recuento de filas de una tabla
+     * especificada en una base de datos, opcionalmente filtrada por una
+     * cláusula WHERE.
+     *
+     * @param tableName El parámetro tableName es una cadena que representa el
+     * nombre de la tabla en la base de datos desde la cual desea contar el
+     * número de filas.
+     * @param whereClause El parámetro `whereClause` es una cadena que
+     * representa la condición que se aplicará en la consulta SQL. Se utiliza
+     * para filtrar las filas devueltas por la consulta según criterios
+     * específicos. Por ejemplo, si `whereClause` es `"edad > 18"`, la consulta
+     * solo contará el
+     * @return El método devuelve un valor entero, que representa el recuento de
+     * filas en la tabla especificada que coinciden con la cláusula donde dada.
+     */
+    public static int getCount(String tableName, String whereClause) {
+        String query = "SELECT COUNT(*) FROM " + tableName;
+        if (whereClause != null && !whereClause.isEmpty()) {
+            query += " WHERE " + whereClause;
         }
+        int conteo = 0;
 
-        if (verification) {
-            logConnection("Valid Connection attempt", Query);
+        ResultSet resultSet = null;
+        try {
+
+            resultSet = fetchData(query);
+            if (resultSet.next()) {
+                conteo = resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            logConnection("Conexión fallida", query);
+        }
+        return conteo;
+    }
+
+    public static boolean QueryVerification(String query) {
+        
+        boolean verification = false;
+        String selectPattern = "SELECT .* FROM .*";
+            String insertPattern = "INSERT INTO .* VALUES .*";
+            String updatePattern = "UPDATE .* SET .* WHERE .*";
+            String deletePattern = "DELETE FROM .* WHERE .*";
+
+        if (query.matches(selectPattern) || query.matches(insertPattern) || query.matches(updatePattern) || query.matches(deletePattern)) {
+            logConnection("Valid Connection attempt", query);
+            verification = true;
         } else {
-            logConnection("Invalid Connection attempt", Query);
+            logConnection("Invalid Connection attempt", query);
         }
 
         return verification;
