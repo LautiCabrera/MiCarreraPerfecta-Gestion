@@ -38,16 +38,6 @@ public class Preference {
 		this.name = name;
 	}
 	
-	@JsonProperty("id_word_key")
-	private int id_word_key;
-	public int getIdWordKey() {
-		return id_word_key;
-	}
-	
-	public void setIdWordKey(int id_word_key) {
-		this.id_word_key = id_word_key;
-	}
-	
 	@JsonProperty("id_user_create")
 	private String id_user_create;
 	public String getIdUserCreate() {
