@@ -7,7 +7,9 @@ import static Utils.DDBBConnection.SendQuery;
 import static Utils.JsonDataFetcher.selectQuery;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -34,12 +36,13 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
 
     public Career_Word_Key_JF1_1() {
         initComponents();
+        TablaCareer=(DefaultTableModel)JTCareer.getModel();
         ConfigurationStart();
     }
 
     private void ConfigurationStart() {
         SetUniCB();
-        PintarTablaColumns(false);
+//        PintarTablaColumns(false);
     }
 
     private void FullReset() {
@@ -99,67 +102,67 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
         return new ArrayList<>(selectQuery(SS, TT, WW));
     }
 
-    private void PintarTablaColumns(boolean X) {
-        String[] Carreras;
+//    private void PintarTablaColumns(boolean X) {
+//        String[] Carreras;
+//        if (X) {
+//            Carreras = new String[]{"ID", "Nombre", "Palabras Claves", "Ultima Modificacion"};
+//        } else {
+//            Carreras = new String[]{"ID", "Nombre", "Campus", "Palabras Claves", "Ultima Modificacion"};
+//        }
+//        
+//        TablaCareer = (DefaultTableModel) JTCareer.getModel();
+//        TablaCareer.setColumnIdentifiers(Carreras);
+//        JOptionPane.showMessageDialog(this, "HALLO!");
+//    }
+
+    private void PintarTablas(boolean X, Object id) {
+        String ID = String.valueOf(id), Carreras[];
         if (X) {
             Carreras = new String[]{"ID", "Nombre", "Palabras Claves", "Ultima Modificacion"};
         } else {
             Carreras = new String[]{"ID", "Nombre", "Campus", "Palabras Claves", "Ultima Modificacion"};
         }
-
-        TablaCareer = (DefaultTableModel) JTCareer.getModel();
-        TablaCareer.setColumnCount(Carreras.length);
-        int count = 0;
-        for (String CR : Carreras) {
-            JTableHeader tableHeader = JTCareer.getTableHeader();
-            TableColumnModel tableColumnModel = tableHeader.getColumnModel();
-            TableColumn tableColumn = tableColumnModel.getColumn(count);
-            tableColumn.setHeaderValue(CR);
-            tableHeader.repaint();
-            count++;
-        }
-    }
-
-    private void PintarTablasRows(DefaultTableModel Tabla, Object id) {
-        String ID = String.valueOf(id);
-        System.out.println("PintarTablasRows ID = " + ID);
+        
+        TablaCareer.setColumnIdentifiers(Carreras);
+        
+        System.out.println("PintarTablasRows ID = " + ID
+                          +"\ncolumns = " + TablaCareer.getColumnCount());
         try {
-            Tabla.setRowCount(0);
+            TablaCareer.setRowCount(0);
             ArrayList<String[]> Filler;
             String SS, TT, WW;
-            if (Tabla.getColumnCount() > 4) {
+            if (TablaCareer.getColumnCount() > 4) {
                 if (Integer.parseInt(ID) > 0) {
-                    SS = "c.id_career, c.`name`, ca.`name`, COUNT(CWK.id_career_word_key), c.f_update";
-                    TT = "ies9021_database.career c"
+                    SS = "c.id_career, c.`name`, ca.`name`, COUNT(cwk.id_career_word_key), c.f_update";
+                    TT = "ies9021_database.career c "
                             + "INNER JOIN ies9021_database.campus_career cc ON c.id_career = cc.id_career "
                             + "INNER JOIN ies9021_database.campus ca ON cc.id_campus = ca.id_campus"
-                            + " LEFT JOIN ies9021_database.career_word_key CWK ON c.id_career = CWK.id_career";
+                            + " LEFT JOIN ies9021_database.career_word_key cwk ON c.id_career = cwk.id_career";
                     WW = "c.id_career = " + ID
-                            + " GROUP BY C.id_career, C.`name`, C.f_update, CA.`name`;";
+                            + " GROUP BY c.id_career, c.`name`, c.f_update, ca.`name`;";
 
                 } else {
-                    SS = "c.id_career, c.`name`, ca.`name`, COUNT(CWK.id_career_word_key), c.f_update";
-                    TT = "ies9021_database.career c"
+                    SS = "c.id_career, c.`name`, ca.`name`, COUNT(cwk.id_career_word_key), c.f_update";
+                    TT = "ies9021_database.career c "
                             + "INNER JOIN ies9021_database.campus_career cc ON c.id_career = cc.id_career "
                             + "INNER JOIN ies9021_database.campus ca ON cc.id_campus = ca.id_campus"
-                            + " LEFT JOIN ies9021_database.career_word_key CWK ON c.id_career = CWK.id_career";
+                            + " LEFT JOIN ies9021_database.career_word_key cwk ON c.id_career = cwk.id_career";
                     WW = "ca.id_university = " + UNII[JCBUniversity.getSelectedIndex()]
-                            + " GROUP BY C.id_career, C.`name`, C.f_update, CA.`name`;";
+                            + " GROUP BY c.id_career, c.`name`, c.f_update, ca.`name`;";
                 }
             } else {
-                SS = "C.id_career, C.`name`, COUNT(CWK.id_word_key), C.f_update";
-                TT = "ies9021_database.career C "
-                        + "inner join ies9021_database.campus_career CC ON C.id_career = CC.id_career "
-                        + "left join ies9021_database.career_word_key CWK ON C.id_career = CWK.id_career ";
-                WW = "cc.id_campus=" + ID + " GROUP BY C.id_career, C.name, C.f_update;";
+                SS = "c.id_career, c.`name`, COUNT(cwk.id_word_key), c.f_update";
+                TT = "ies9021_database.career c "
+                        + "inner join ies9021_database.campus_career cc ON c.id_career = cc.id_career "
+                        + "left join ies9021_database.career_word_key cwk ON c.id_career = cwk.id_career ";
+                WW = "cc.id_campus=" + ID + " GROUP BY c.id_career, c.name, c.f_update;";
             }
+            System.out.println("Query = Select "+SS+" FROM "+TT+" WHERE "+WW);
             Filler = ObtenerDatos(SS, TT, WW);
             if (!Filler.isEmpty()) {
-                Object O[][] = new Object[Filler.size()][];
-                for (int i = 0; i < Filler.size(); i++) {
-                    O[i] = Filler.get(i);
+                for (String[] rowData : Filler) {
+                   TablaCareer.addRow(rowData);
                 }
-                Tabla.setDataVector(O, null);
             }
 
         } catch (NumberFormatException e) {
@@ -168,14 +171,36 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
 
     }
 
+    private String Cargar(int Val){
+        String List="",
+                TT=" ies9021_database.words_key W "
+                + "inner join career_word_key CW ON W.id_word_key = CW.id_word_key "
+              ,WW="CW.id_career = "+Val;
+        ArrayList<String[]> Palabras= ObtenerDatos("word", TT, WW);
+        for (String[] Palabra : Palabras) {
+            List+=Arrays.toString(Palabra)+", ";
+        }
+        List=List.substring(0, List.length()-2).replace("]", "").replace("[", "");
+        return List;
+    }
+    
     private void LimpiarTablas(DefaultTableModel Tabla) {
         for (int i = Tabla.getRowCount() - 1; i >= 0; i--) {
             Tabla.removeRow(i);
         }
     }
 
-    private void Regen() {
+    private void Regen(int ID) {
         BTNRegen.setEnabled(false);
+        String SS =" id_career_word_key "
+              ,TT =" ies9021_database.career_word_key "
+              ,WW =" id_career = "+ID+"; "
+              ,List="";
+        ArrayList<String[]> S=ObtenerDatos(SS, TT, WW);
+        for (String[] strings : S) {
+            List+=Arrays.toString(strings)+" ";
+        }
+        System.out.println(List);
     }
 
     /**
@@ -264,6 +289,7 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
 
         JLWord.setText("Words Key");
 
+        JCBCampus.setEnabled(false);
         JCBCampus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JCBCampusActionPerformed(evt);
@@ -283,6 +309,7 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
 
         BTNMan.setText("?");
 
+        TXTSearchID.setForeground(Color.lightGray);
         TXTSearchID.setText("Buscar por ID");
         TXTSearchID.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -307,6 +334,11 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
 
         BTNLoad.setText("Cargar");
         BTNLoad.setEnabled(false);
+        BTNLoad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BTNLoadActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -375,24 +407,27 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
 
     private void JCBUniversityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JCBUniversityActionPerformed
         // TODO add your handling code here:
+        FullReset();
         if (JCBUniversity.getSelectedIndex() > 0) {
+            JCBCampus.setEnabled(true);
             SetCamCB(UNII[JCBUniversity.getSelectedIndex()]);
         } else {
-            JCBCampus.setModel(null);
+            DefaultComboBoxModel Mod = (DefaultComboBoxModel) JCBCampus.getModel();
+            Mod.removeAllElements();
+            JCBCampus.setEnabled(false);
         }
-        FullReset();
     }//GEN-LAST:event_JCBUniversityActionPerformed
 
     private void JCBCampusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JCBCampusActionPerformed
         // TODO add your handling code here:
-        if (JCBCampus.getSelectedIndex() > 1) {
-            PintarTablaColumns(true);
-            PintarTablasRows(TablaCareer, CAMPI[JCBCampus.getSelectedIndex()]);
-        } else if (JCBCampus.getSelectedIndex() == 0) {
-            PintarTablaColumns(false);
-            PintarTablasRows(TablaCareer, -1);
-        }
         FullReset();
+        if (JCBCampus.getSelectedIndex() > 1) {
+//            PintarTablaColumns(true);
+            PintarTablas(true, CAMPI[JCBCampus.getSelectedIndex()]);
+        } else if (JCBCampus.getSelectedIndex() == 1) {
+//            PintarTablaColumns(false);
+            PintarTablas(false, -1);
+        }
     }//GEN-LAST:event_JCBCampusActionPerformed
 
     private void JTCareerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTCareerMouseClicked
@@ -400,21 +435,31 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
         if (JTCareer.getSelectedRow() != SCR) {
             BTNRegen.setEnabled(true);
             SCR = JTCareer.getSelectedRow();
+            int Val;
+            if(TablaCareer.getColumnCount()>4){
+                Val=Integer.parseInt(TablaCareer.getValueAt(SCR, 3).toString());
+            }else{
+                Val=Integer.parseInt(TablaCareer.getValueAt(SCR, 2).toString());
+            }
+            if(Val>1){BTNLoad.setEnabled(true);BTNRegen.setEnabled(true);
+            }else{BTNLoad.setEnabled(false);BTNRegen.setEnabled(false);}
         } else {
             BTNRegen.setEnabled(true);
-            SCR = JTCareer.getSelectedRow();
         }
     }//GEN-LAST:event_JTCareerMouseClicked
 
     private void BTNRegenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNRegenActionPerformed
         // TODO add your handling code here:
+        int Val=Integer.parseInt(TablaCareer.getValueAt(SCR, 0).toString());
         if (NotShowAgain) {
-            Regen();
+            Regen(Val);
         } else {
             Career_Word_Key_JF1_2 CWKJF12 = new Career_Word_Key_JF1_2(this);
+            CWKJF12.setVisible(true);
             if (CWKJF12.Confirmacion) {
                 NotShowAgain = CWKJF12.CHKB;
-                Regen();
+                Regen(Val);
+                System.out.println("HAJIMARU!!");
             }
             CWKJF12.dispose();
         }
@@ -424,7 +469,7 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (!(TXTSearchID.getText().isBlank() || TXTSearchID.getText().isEmpty()
                 || TXTSearchID.getForeground().equals(Color.lightGray))) {
-            PintarTablasRows(TablaCareer, TXTSearchID.getText());
+            PintarTablas(false, TXTSearchID.getText());
         }
     }//GEN-LAST:event_BTNSearchIDActionPerformed
 
@@ -456,6 +501,12 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_TXTSearchIDKeyTyped
+
+    private void BTNLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNLoadActionPerformed
+        // TODO add your handling code here:
+        int Val=Integer.parseInt(TablaCareer.getValueAt(SCR, 0).toString());
+        jTextArea1.setText(Cargar(Val));
+    }//GEN-LAST:event_BTNLoadActionPerformed
 
     /**
      * @param args the command line arguments

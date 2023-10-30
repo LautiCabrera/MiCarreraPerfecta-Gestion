@@ -209,7 +209,7 @@ public class JsonDataFetcher<T> {
         if (whereClause != null && !whereClause.isEmpty()) {
             query += " WHERE " + whereClause;
         }
-    
+        System.out.println("Q: "+query);
         List<String[]> dataList = new ArrayList<>();
         ResultSet resultSet = DDBBConnection.fetchData(query);
     

@@ -36,6 +36,10 @@ public class Career_Word_Key_JF1_2 extends javax.swing.JDialog {
         JLABTexto = new javax.swing.JLabel();
         JCHKNotAgain = new javax.swing.JCheckBox();
         BTNAceptar = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+
+        setTitle("ATENCION!");
 
         BTNCancelar.setText("Cancelar");
         BTNCancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -44,7 +48,7 @@ public class Career_Word_Key_JF1_2 extends javax.swing.JDialog {
             }
         });
 
-        JLABTexto.setText("jLabel1");
+        JLABTexto.setText("Regenerar borrara toda relacion de dicha carrera con cualquie palabra clave");
 
         JCHKNotAgain.setText("No volver a mostrar");
 
@@ -55,6 +59,10 @@ public class Career_Word_Key_JF1_2 extends javax.swing.JDialog {
             }
         });
 
+        jLabel1.setText("Se recomienda cargar las palabras antes de regenerar");
+
+        jLabel2.setText("¿Esta seguro que desea continuar?");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -64,19 +72,25 @@ public class Career_Word_Key_JF1_2 extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(JCHKNotAgain)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(BTNAceptar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(BTNCancelar))
-                    .addComponent(JLABTexto))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(JLABTexto)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(JLABTexto)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(JCHKNotAgain)
                     .addComponent(BTNAceptar)
@@ -147,5 +161,7 @@ public class Career_Word_Key_JF1_2 extends javax.swing.JDialog {
     private javax.swing.JButton BTNCancelar;
     private javax.swing.JCheckBox JCHKNotAgain;
     private javax.swing.JLabel JLABTexto;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
 }
