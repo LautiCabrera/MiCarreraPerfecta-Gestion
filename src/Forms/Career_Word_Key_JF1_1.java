@@ -1,5 +1,6 @@
 package Forms;
 
+import Models.Career_Word_Key;
 import Models.University;
 import Utils.JsonDataFetcher;
 import Utils.ResultSetIES9021;
@@ -46,7 +47,13 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
     }
 
     private void ConfigurationStart() {
-        TablaCareer=(DefaultTableModel)JTCareer.getModel();
+        TablaCareer= new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int columns){
+                return false;
+            }
+        };
+        JTCareer.setModel(TablaCareer);
         SetUniCB();
 //        PintarTablaColumns(false);
     }
@@ -202,21 +209,23 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
         }
     }
 
-    private void Regen(int ID) {
+    private void Regen(String ID) {
         BTNRegen.setEnabled(false);
-        String SS =" id_career_word_key "
-              ,TT =" ies9021_database.career_word_key "
-              ,WW =" id_career = "+ID+"; "
-              ,List="";
-        ArrayList<String[]> S=ObtenerDatos(SS, TT, WW);
-        for (String[] strings : S) {
-            List+=Arrays.toString(strings)+" ";
-        }
-        System.out.println(List);
-        if(JCBCampus.isEnabled()){
-            JCBCampusActionPerformed(null);
+        try{
+        Career_Word_Key CWK = new Career_Word_Key();
+        ResultSetIES9021 RSI=CWK.Delete(ID);
+        if(RSI.getState()){
+            JOptionPane.showMessageDialog(this, "Operacion Realizada con Exito","COMPLETE",JOptionPane.PLAIN_MESSAGE);
+            if(JCBCampus.isEnabled()){
+                JCBCampusActionPerformed(null);
+            }else{
+                PintarTablas(false, ID);
+            }
         }else{
-            PintarTablas(false, ID);
+            System.out.println(RSI.getClarification());
+        }
+        }catch(Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -486,7 +495,6 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
     private void JTCareerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTCareerMouseClicked
         // TODO add your handling code here:
         if (JTCareer.getSelectedRow() != SCR) {
-            BTNRegen.setEnabled(true);
             SCR = JTCareer.getSelectedRow();
             int Val;
             if(TablaCareer.getColumnCount()>4){
@@ -496,14 +504,12 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
             }
             if(Val>1){BTNLoad.setEnabled(true);BTNRegen.setEnabled(true);
             }else{BTNLoad.setEnabled(false);BTNRegen.setEnabled(false);}
-        } else {
-            BTNRegen.setEnabled(true);
         }
     }//GEN-LAST:event_JTCareerMouseClicked
 
     private void BTNRegenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNRegenActionPerformed
         // TODO add your handling code here:
-        int Val=Integer.parseInt(TablaCareer.getValueAt(SCR, 0).toString());
+        String Val=String.valueOf(TablaCareer.getValueAt(SCR, 0).toString());
         if (NotShowAgain) {
             Regen(Val);
         } else {
