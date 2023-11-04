@@ -1,3 +1,6 @@
+
+
+/* comentado por mi
 package Models;
 
 import Utils.DDBBConnection;
@@ -9,6 +12,9 @@ public class CWK_Methods {
     public void amethod() {
 
     }
+*comentado por mi/
+
+
 /*
     public void erasebyCareer(int idcareer) {
         MySQLQuery MSQLQ = new MySQLQuery();
@@ -151,6 +157,10 @@ public class CWK_Methods {
     */
     //Metodos que si sirven
     //Sector de Querys
+
+/* ------comentado por mi---
+
+
     private String CreateQuery(String Action, int Ubication, String Values, int Where, int id_object, int id_object2) {
         return CreateQuery(Action, Ubication, Values, Where, id_object, id_object2, "");
     }
@@ -358,7 +368,11 @@ public class CWK_Methods {
         *
         *
         * */
+/*comentado por mi
         return result;
     }
 
 }
+
+
+*/ //comentado por mi
