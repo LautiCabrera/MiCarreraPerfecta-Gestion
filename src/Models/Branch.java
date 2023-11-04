@@ -18,7 +18,7 @@ public class Branch {
     public static String getTABLENAME() {
         return TABLENAME;
     }
-      
+     //revisar 
     @JsonProperty("id_branch")
     private int idbranch;
     private String name;
@@ -193,7 +193,7 @@ public class Branch {
                     result.setClarification("Deleted branch!");
                     return result;
                 }else{
-                    System.err.println("Could not execute query : " + deleteRegister.getClarification()); // Muestra el error en la terminal
+                    System.err.println("Could not execute query: " + deleteRegister.getClarification()); // Muestra el error en la terminal
                     result.setState(false);
                     result.setClarification("Could not delete branch");
                     return result; 
