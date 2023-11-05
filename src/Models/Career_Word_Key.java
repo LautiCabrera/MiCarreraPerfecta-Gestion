@@ -148,6 +148,10 @@ public class Career_Word_Key {
         List=List.substring(0, List.length()-1).replace("[", "").replace("]", ",");
         System.out.println("Revision_CWK "+List);
         revision_CBWK(List);
+        /*
+        Career_Branch_Word_Key CBWK = new Career_Branch_Word_Key();
+        CBWK.delete(CBWK)
+        */
         } catch (Exception e) {
             e.printStackTrace();
         }

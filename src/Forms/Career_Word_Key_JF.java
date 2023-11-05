@@ -245,7 +245,7 @@ public class Career_Word_Key_JF extends javax.swing.JFrame {
         if(this.getTitle().equals("Añadir Career Word Key")){
             CWK.create();
         }else{
-            CWK.update();
+            //CWK.update();
         }
         
         if(CHKContinue.isEnabled()&&CHKContinue.isSelected()){}

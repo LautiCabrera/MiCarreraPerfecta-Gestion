@@ -61,8 +61,11 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
     private void TableReset() {
         BTNRegen.setEnabled(false);
         BTNSave.setEnabled(false);
+        BTNLoad.setEnabled(false);
         LimpiarTablas(TablaCareer);
         SCR = -1;
+        TXAWordsK.setText("");
+        TXAWordsKFocusLost(null);
     }
     
     private void SearchReset(){
@@ -159,7 +162,6 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
                             + " LEFT JOIN ies9021_database.career_word_key cwk ON c.id_career = cwk.id_career";
                     WW = "c.id_career = " + ID
                             + " GROUP BY c.id_career, c.`name`, c.f_update, ca.`name`;";
-
                 } else {
                     SS = "c.id_career, c.`name`, ca.`name`, COUNT(cwk.id_career_word_key), c.f_update";
                     TT = "ies9021_database.career c "
@@ -183,11 +185,9 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
                    TablaCareer.addRow(rowData);
                 }
             }
-
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
-
     }
 
     private String Cargar(int Val){
@@ -293,6 +293,7 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
         TXAWordsK.setForeground(Color.lightGray);
         TXAWordsK.setRows(5);
         TXAWordsK.setText("Ingrese las palabras clave separadas por coma");
+        TXAWordsK.setEnabled(false);
         TXAWordsK.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 TXAWordsKFocusGained(evt);
@@ -494,7 +495,6 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
 
     private void JTCareerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTCareerMouseClicked
         // TODO add your handling code here:
-        if (JTCareer.getSelectedRow() != SCR) {
             SCR = JTCareer.getSelectedRow();
             int Val;
             if(TablaCareer.getColumnCount()>4){
@@ -504,7 +504,8 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
             }
             if(Val>1){BTNLoad.setEnabled(true);BTNRegen.setEnabled(true);
             }else{BTNLoad.setEnabled(false);BTNRegen.setEnabled(false);}
-        }
+            BTNSave.setEnabled(true);
+            TXAWordsK.setEnabled(true);
     }//GEN-LAST:event_JTCareerMouseClicked
 
     private void BTNRegenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNRegenActionPerformed
@@ -571,13 +572,17 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
 
     private void BTNSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNSaveActionPerformed
         // TODO add your handling code here:
+        if(!(TXAWordsK.getForeground().equals(Color.lightGray)||TXAWordsK.getText().isBlank()||TXAWordsK.getText().isEmpty())){
         Object[] Opcion ={"Si","No"};
         if(JOptionPane.showOptionDialog(this, "¿Está seguro de que desea guardar las siguientes palabras?"
                 , "Confirmación", JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE, null, Opcion, Opcion[0])==JOptionPane.YES_OPTION){
             TXAWordsK.setEnabled(false);
-            String TXA = TXAWordsK.getText();
-            System.out.println(TXA);
+            String TX=TXAWordsK.getText(), TXA[];
+            TX=TX.replace(",,", ",");
+            if(TX.charAt(0)==44){TX=TX.substring(1);}
+            TXA=TX.split(",");
+            System.out.println(Arrays.toString(TXA));
             JOptionPane.showMessageDialog(this, "Deez Nutz");
             //Enviar Datos al enzo
             //WordsKey WK = new WordsKey()
@@ -586,6 +591,7 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
             //Buscar los datos
         }
         TXAWordsK.setEnabled(true);
+        }
     }//GEN-LAST:event_BTNSaveActionPerformed
 
     private void TXAWordsKFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TXAWordsKFocusGained
@@ -609,10 +615,15 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
     private void TXAWordsKKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TXAWordsKKeyTyped
         // TODO add your handling code here:
         char c = evt.getKeyChar();
+        String TXA=TXAWordsK.getText();
         if (!(Character.isAlphabetic(c) || c == 8 || c == 127
-            || c == '\n' || c == '\t' || c == 32 || c == 44 || c == 9)) {
+            || c == 44 || c == '\t' || c == 9)) {
             evt.consume();
         }
+        else if(c==44&&TXA.contains(",,")){
+            TXAWordsK.setText(TXA.replace(",,", ",")+",");
+            evt.consume();}
+        if(TXA.contains(",,")){TXAWordsK.setText(TXA.replaceAll(",,", ","));}
     }//GEN-LAST:event_TXAWordsKKeyTyped
 
     /**

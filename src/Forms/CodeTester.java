@@ -33,6 +33,7 @@ public class CodeTester extends javax.swing.JFrame {
     private void initComponents() {
 
         BTN = new javax.swing.JButton();
+        TXAWordK = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -43,19 +44,29 @@ public class CodeTester extends javax.swing.JFrame {
             }
         });
 
+        TXAWordK.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TXAWordKKeyTyped(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(BTN)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(BTN, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(TXAWordK, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(TXAWordK, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(BTN)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -66,15 +77,15 @@ public class CodeTester extends javax.swing.JFrame {
     private void BTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNActionPerformed
         // TODO add your handling code here:
         //String SS="*",FF="ies9021_database.career",WW="id_career<300";
-        String TokenI="1A2B3C",Email="brunoloco63@gmail.com";
-        String Select="id_user, `name`,Last_token='"+TokenI+"' AS 'correcttoken', ((select minute_token from ies9021_database.settings ) > timestampdiff(minute,f_token,current_time())) AS 'tokenvalid'",
-                    Tabla="ies9021_database.users",
-                    Where=("email='"+Email.toLowerCase()+"' LIMIT 5;");
-        //List<String> RSL = selectQuery(SS, FF, WW);
-        List<String[]> RSL = selectQuery(Select,Tabla,Where);
-        for (String[] st : RSL) {
-            System.out.println(Arrays.toString(st));
-        }
+//        String TokenI="1A2B3C",Email="brunoloco63@gmail.com";
+//        String Select="id_user, `name`,Last_token='"+TokenI+"' AS 'correcttoken', ((select minute_token from ies9021_database.settings ) > timestampdiff(minute,f_token,current_time())) AS 'tokenvalid'",
+//                    Tabla="ies9021_database.users",
+//                    Where=("email='"+Email.toLowerCase()+"' LIMIT 5;");
+//        //List<String> RSL = selectQuery(SS, FF, WW);
+//        List<String[]> RSL = selectQuery(Select,Tabla,Where);
+//        for (String[] st : RSL) {
+//            System.out.println(Arrays.toString(st));
+//        }
 //        ArrayList<String[]> RSO = JsonDataFetcher.SEND(Select, Tabla, Where);
 //        for (String[] OT : RSO) {
 //            System.out.println(Arrays.toString(OT));
@@ -83,8 +94,34 @@ public class CodeTester extends javax.swing.JFrame {
 //        System.out.println(RSO.get(0)[1]);//name
 //        System.out.println(RSO.get(0)[2]);//Token
 //        System.out.println(RSO.get(0)[3]);//Limite Tiempo
+        String Alfa=",andres,alejandro,xd,,s,e,,w,";
+        if(Alfa.charAt(0)==44){Alfa=Alfa.substring(1);}
+        String[] TXA = Alfa.replaceAll(",,", ",").split(",");
+        
+            System.out.println("TXA = "+TXA.length);
+            for (int i = 0; i < TXA.length; i++) {
+                TXA[i]=TXA[i].trim();
+            }
+            System.out.println("TXAx = "+TXA.length);
+            System.out.println(Arrays.toString(TXA));
+        System.out.println(Arrays.toString(Arrays.stream(Alfa.split("\\s*,\\s*")).filter(part->!part.isEmpty()).toArray(String[]::new)));
         this.dispose();
     }//GEN-LAST:event_BTNActionPerformed
+
+    private void TXAWordKKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TXAWordKKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        String TXA=TXAWordK.getText();
+        if (!(Character.isAlphabetic(c) || c == 8 || c == 127
+            || c == 44 || c == '\t' || c == 9)) {
+            evt.consume();
+        }
+        else if(c==44&&TXA.contains(",,")){
+            TXAWordK.setText(TXA.replace(",,", ",")+",");
+            evt.consume();}
+        if(TXA.contains(",,")){TXAWordK.setText(TXA.replaceAll(",,", ","));}
+        System.out.println((c==44&&(TXA.contains(",,")||TXA.contains(" ,"))));
+    }//GEN-LAST:event_TXAWordKKeyTyped
 
     /**
      * @param args the command line arguments
@@ -123,5 +160,6 @@ public class CodeTester extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BTN;
+    private javax.swing.JTextField TXAWordK;
     // End of variables declaration//GEN-END:variables
 }
