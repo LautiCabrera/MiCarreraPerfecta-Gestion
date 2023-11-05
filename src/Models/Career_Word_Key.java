@@ -5,6 +5,7 @@ import static Utils.JsonDataFetcher.selectQuery;
 import Utils.ResultSetIES9021;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Career_Word_Key {
 
@@ -182,5 +183,28 @@ public class Career_Word_Key {
     private ArrayList<String[]> ObtenerDatos(String Select,String Table, String Where){
         return new ArrayList<>(selectQuery(Select, Table, Where));
     }
+    
+    public void createCWK(List<String> Lista,int Career,int User){
+    
+    }
 
+    public void CreateCWK(String Lista,int career, int User){
+        ArrayList<String[]> ListaID=BuscarWKID(Lista);
+        ArrayList<String> SendList= new ArrayList<>();
+        for (String[] IDs : ListaID) {
+            
+            String Send= "INSERT INTO ies9021_database.career_word_key "
+                    + "(`id_career`, `id_word_key`, `id_user_create`, `id_user_update`, `f_create`, `f_update`)"
+                    + " VALUES ('"+career+"','"+IDs[0]+"','"+User+"','"+User+"',current_time() ,current_time())";
+            SendList.add(Send);
+        }
+    }
+    
+    private ArrayList<String[]> BuscarWKID(String Lista){
+        Lista="'"+Lista.replaceAll(",", "','")+"'";
+        String SS=" id_work_key "
+              ,TT=" ies9021_database.words_key "
+              ,WW=" word IN ( "+Lista+" )";
+        return ObtenerDatos(SS, TT, WW);
+    }
 }

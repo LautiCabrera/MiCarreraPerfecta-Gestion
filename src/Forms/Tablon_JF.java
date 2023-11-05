@@ -20,7 +20,8 @@ public class Tablon_JF extends javax.swing.JFrame {
      * Creates new form Tablon_JF
      */
     General_Methods GEM;
-    String ClassType[]={"branch", "branch_intelligence", "branch_words_key",
+    private int User;
+    private String UserName, ClassType[]={"branch", "branch_intelligence", "branch_words_key",
         "campus", "campus_career", "career", "career_branch_word_key",
         "career_word_key","email_sender", "intelligences", "management", "modality",
         "preference", "preference_words_key", "range", "requeriment",
@@ -38,6 +39,21 @@ public class Tablon_JF extends javax.swing.JFrame {
         initComponents();
         JCBClass.setModel(new DefaultComboBoxModel<>(ClassType));
         this.GEM=GEM;
+        User=GEM.getUser();
+        UserName=GEM.getNombre();
+    }
+    
+    public int getUser(){
+        return User;
+    }
+    
+    public String getName(){
+        return UserName;
+    }
+    
+    private void Inicio(){
+        InicioJF IJF= new InicioJF();
+        IJF.setVisible(true);
     }
 
     /**
@@ -55,7 +71,12 @@ public class Tablon_JF extends javax.swing.JFrame {
         JCBClass = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jPanel1.setMaximumSize(new java.awt.Dimension(290, 160));
         jPanel1.setMinimumSize(new java.awt.Dimension(290, 160));
@@ -151,14 +172,15 @@ public class Tablon_JF extends javax.swing.JFrame {
 
     private void BTNSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNSalirActionPerformed
         // TODO add your handling code here:
-        InicioJF IJF= new InicioJF();
-        IJF.setVisible(true);
+        Inicio();
         this.dispose();
     }//GEN-LAST:event_BTNSalirActionPerformed
 
     private void BTNEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNEntrarActionPerformed
         // TODO add your handling code here:
         Object ClaseAUsar=null;
+        boolean Operative=false;
+        try {
         switch (JCBClass.getSelectedItem().toString()) {
         case "branch":
             ClaseAUsar = new Branch();
@@ -182,7 +204,12 @@ public class Tablon_JF extends javax.swing.JFrame {
 //            ClaseAUsar = Career_Branch_Word_Key.class;
             break;
         case "career_word_key":
-            ClaseAUsar = new Career_Word_Key();
+            
+            Career_Word_Key_JF1_1 CWKJF = new Career_Word_Key_JF1_1(this);
+            CWKJF.setVisible(true);
+            Operative = true;
+            
+            
             break;
         case "email_sender":
 //            ClaseAUsar = Email_Sender.class;
@@ -224,12 +251,16 @@ public class Tablon_JF extends javax.swing.JFrame {
             // Código por defecto si no se encuentra ninguna coincidencia
             break;
     }
-        if(ClaseAUsar!=null){
-            General_Interface_JF GIJF= new General_Interface_JF(JCBClass.getSelectedItem().toString(),GEM,ClaseAUsar);
-            GIJF.setVisible(true);
-            this.dispose();
-        }
+        } catch (Exception e) {
+                e.printStackTrace();
+            }
+        if(Operative){this.setVisible(false);}
     }//GEN-LAST:event_BTNEntrarActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        Inicio();
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments

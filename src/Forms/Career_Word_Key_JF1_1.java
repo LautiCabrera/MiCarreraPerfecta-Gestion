@@ -2,6 +2,7 @@ package Forms;
 
 import Models.Career_Word_Key;
 import Models.University;
+import Models.WordsKey;
 import Utils.JsonDataFetcher;
 import Utils.ResultSetIES9021;
 import static Utils.DDBBConnection.SendQuery;
@@ -9,6 +10,7 @@ import static Utils.JsonDataFetcher.selectQuery;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -31,22 +33,26 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
         UW= User Working
      */
     ArrayList<String[]> RSS;
-    int UNII[], CAMPI[], SCR = -1, UW;
+    int UNII[], CAMPI[], SCR = -1, CareerSelected, UW;
     boolean NotShowAgain = false;
+    Tablon_JF TJF;
     DefaultTableModel TablaCareer;
 
     public Career_Word_Key_JF1_1() {
         initComponents();
+        TJF= new Tablon_JF();
         ConfigurationStart();
     }
     
-    public Career_Word_Key_JF1_1(int User) {
+    public Career_Word_Key_JF1_1(Tablon_JF TJF) {
         initComponents();
-        UW=User;
+        UW=TJF.getUser();
+        this.TJF =TJF;
         ConfigurationStart();
     }
 
     private void ConfigurationStart() {
+        jPanel3.requestFocus();
         TablaCareer= new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int columns){
@@ -256,7 +262,19 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
         JTCareer = new javax.swing.JTable();
         BTNSave = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Career Word Key");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
+
+        jPanel3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel3MouseClicked(evt);
+            }
+        });
 
         BTNLoad.setText("Cargar");
         BTNLoad.setEnabled(false);
@@ -496,6 +514,7 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
     private void JTCareerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTCareerMouseClicked
         // TODO add your handling code here:
             SCR = JTCareer.getSelectedRow();
+            CareerSelected=Integer.parseInt(TablaCareer.getValueAt(SCR, 0).toString());
             int Val;
             if(TablaCareer.getColumnCount()>4){
                 Val=Integer.parseInt(TablaCareer.getValueAt(SCR, 3).toString());
@@ -578,15 +597,21 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
                 , "Confirmación", JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE, null, Opcion, Opcion[0])==JOptionPane.YES_OPTION){
             TXAWordsK.setEnabled(false);
-            String TX=TXAWordsK.getText(), TXA[];
-            TX=TX.replace(",,", ",");
-            if(TX.charAt(0)==44){TX=TX.substring(1);}
-            TXA=TX.split(",");
-            System.out.println(Arrays.toString(TXA));
+            String TXA=TXAWordsK.getText();
+            TXA=TXA.replace(",,", ",");
+            if(TXA.charAt(0)==44){TXA=TXA.substring(1);}
+            if(TXA.endsWith(",")){TXA=TXA.substring(0,TXA.length()-1);}
             JOptionPane.showMessageDialog(this, "Deez Nutz");
+            List<String> Lista=new ArrayList<>();
+            for (String THX : TXA.split(",")) {
+                String Word=THX;
+                Lista.add(Word);
+            }
             //Enviar Datos al enzo
-            //WordsKey WK = new WordsKey()
-            //WK.createWORD
+            WordsKey WK = new WordsKey();            
+            WK.createWord(Lista, UW, this);
+            Career_Word_Key CWK = new Career_Word_Key();
+            CWK.CreateCWK(TXA,CareerSelected, UW);
             //Confirmar el envio de datos
             //Buscar los datos
         }
@@ -625,6 +650,16 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
             evt.consume();}
         if(TXA.contains(",,")){TXAWordsK.setText(TXA.replaceAll(",,", ","));}
     }//GEN-LAST:event_TXAWordsKKeyTyped
+
+    private void jPanel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel3MouseClicked
+        // TODO add your handling code here:
+        jPanel3.requestFocus();
+    }//GEN-LAST:event_jPanel3MouseClicked
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        TJF.setVisible(true);
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
