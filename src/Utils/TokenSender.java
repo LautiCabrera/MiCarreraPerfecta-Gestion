@@ -61,8 +61,8 @@ public abstract class TokenSender {
         String asunto = "TOKEN Programacion 2";
         String Token=TokenGen();
         String mensaje = "Su token es: "+Token;
-            System.out.println(contrasena+" CON");
-            System.out.println(Token+" tok");
+            //System.out.println(contrasena+" CON");
+            //System.out.println(Token+" tok");
             if(SendTokenDB(Token,User)){
                 MimeMessage mail = new MimeMessage(sesion);
              

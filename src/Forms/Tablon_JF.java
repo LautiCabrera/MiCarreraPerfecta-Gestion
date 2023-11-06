@@ -29,18 +29,23 @@ public class Tablon_JF extends javax.swing.JFrame {
     
     public Tablon_JF() {
         initComponents();
-        JCBClass.setModel(new DefaultComboBoxModel<>(ClassType));
         this.GEM = new General_Methods();
-        GEM.setNombre("Bruno");
-        GEM.setUser(21);
+        GEM.setNombre("TesterGround");
+        GEM.setUser(-21);
+        ConfigurationStart(GEM);
     }
     
     public Tablon_JF(General_Methods GEM) {
         initComponents();
+        ConfigurationStart(GEM);
+    }
+    
+    private void ConfigurationStart(General_Methods GEM){
         JCBClass.setModel(new DefaultComboBoxModel<>(ClassType));
         this.GEM=GEM;
         User=GEM.getUser();
         UserName=GEM.getNombre();
+        this.setTitle("Hola "+UserName);
     }
     
     public int getUser(){
@@ -204,12 +209,9 @@ public class Tablon_JF extends javax.swing.JFrame {
 //            ClaseAUsar = Career_Branch_Word_Key.class;
             break;
         case "career_word_key":
-            
             Career_Word_Key_JF1_1 CWKJF = new Career_Word_Key_JF1_1(this);
             CWKJF.setVisible(true);
-            Operative = true;
-            
-            
+            Operative = true;        
             break;
         case "email_sender":
 //            ClaseAUsar = Email_Sender.class;

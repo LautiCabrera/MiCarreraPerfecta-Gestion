@@ -184,19 +184,27 @@ public class Career_Word_Key {
         return new ArrayList<>(selectQuery(Select, Table, Where));
     }
     
-    public void createCWK(List<String> Lista,int Career,int User){
-    
-    }
+//    public void createCWK(List<String> ListaWords,int Career,int User){
+//    
+//    }
 
-    public void CreateCWK(String Lista,int career, int User){
-        ArrayList<String[]> ListaID=BuscarWKID(Lista);
+    public void CreateCWK(String ListaWords,int career, int User){
+        try {
+            ArrayList<String[]> ListaID=BuscarWKID(ListaWords);
         ArrayList<String> SendList= new ArrayList<>();
         for (String[] IDs : ListaID) {
-            
             String Send= "INSERT INTO ies9021_database.career_word_key "
                     + "(`id_career`, `id_word_key`, `id_user_create`, `id_user_update`, `f_create`, `f_update`)"
                     + " VALUES ('"+career+"','"+IDs[0]+"','"+User+"','"+User+"',current_time() ,current_time())";
             SendList.add(Send);
+        }
+        for (String string : SendList) {
+            SendQuery(string);
+        }
+        String ActualizarCarrera = "UPDATE `ies9021_database`.`career` SET `id_user_update` = '"+User+"', `f_update` = current_time() WHERE (`id_career` = '"+career+"');";
+        SendQuery(ActualizarCarrera);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
     

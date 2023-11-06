@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import Utils.General_Methods;
 import static Utils.TokenSender.SendMessage;
+import java.awt.Dimension;
 
 /**
  *
@@ -29,7 +30,12 @@ public class InicioJF extends javax.swing.JFrame {
         GEM= new General_Methods();
     }
     
-    
+    private void SetObjectSize(Dimension Sizze){
+        BTNTokenSender.setSize(Sizze);
+        TXTEmail.setSize(Sizze);
+        TXTToken.setSize(Sizze);
+        BTNIngresar.setSize(Sizze);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -206,17 +212,14 @@ public class InicioJF extends javax.swing.JFrame {
               "Hemos tenido un problema\nPor favor, contacte a Soporte, o intente mas tarde");
                     break;
             }
-//            if(GEM.Existe(TXTEmail.getText())){
-//                GEM.SendMessage(TXTEmail.getText());
-//            }else{
-//            JOptionPane.showMessageDialog(this,"Email Invalido");
-//            }
-        
         BTNTokenSender.setEnabled(false);
+        Dimension Sizze= BTNTokenSender.getSize();
         BTNTokenSender.setText("Cargando");
+        SetObjectSize(Sizze);
         Timer timer = new Timer(10000, (ActionEvent e) -> {
             BTNTokenSender.setEnabled(true); // Habilitar el botón después de 10 segundos
-            BTNTokenSender.setText("Token >");
+            BTNTokenSender.setText("Pedir Token");
+            SetObjectSize(Sizze);
             ((Timer) e.getSource()).stop(); // Detener el temporizador
         });
 
