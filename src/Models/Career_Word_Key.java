@@ -202,7 +202,7 @@ public class Career_Word_Key {
 
     private ArrayList<String[]> BuscarWKID(String Lista) {
         Lista = "'" + Lista.replaceAll(",", "','") + "'";
-        String SS = " id_work_key ", TT = " ies9021_database.words_key ", WW = " word IN ( " + Lista + " )";
+        String SS = " id_word_key ", TT = " ies9021_database.words_key ", WW = " word IN ( " + Lista + " )";
         return ObtenerDatos(SS, TT, WW);
     }
     

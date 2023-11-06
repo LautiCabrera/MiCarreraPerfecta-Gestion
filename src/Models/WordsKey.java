@@ -160,7 +160,7 @@ public class WordsKey {
         if (result.getState()) {
             System.out.println("Palabras clave creadas con éxito.");
             JOptionPane.showMessageDialog(window, "Palabras clave creadas con éxito.", "Actualización Exitosa", JOptionPane.INFORMATION_MESSAGE);
-            window.dispose();
+            //window.dispose();
         } else {
             System.out.println("No se pudieron crear las palabras clave.");
             JOptionPane.showMessageDialog(window, "No se pudieron crear las palabras clave.", "Error de Creación", JOptionPane.ERROR_MESSAGE);

@@ -43,6 +43,7 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
     public Career_Word_Key_JF1_1() {
         initComponents();
         TJF = new Tablon_JF();
+        UW=-21;
         ConfigurationStart();
     }
 
