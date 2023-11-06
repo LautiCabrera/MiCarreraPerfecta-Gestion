@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+<<<<<<< Updated upstream
+    <list default="true" id="2c949d67-7dcc-48b8-b9bb-7f87a004aeda" name="Changes" comment="" />
+=======
+    <list default="true" id="5d241389-7c34-4197-969a-d1136d2208d4" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/build/classes/.netbeans_automatic_build" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/.netbeans_update_resources" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Forms/Carrer_Word_Key_JF$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Forms/Carrer_Word_Key_JF.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Forms/Carrer_Word_Key_JF.form" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Forms/General_Interface_JF$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Forms/General_Interface_JF$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Forms/General_Interface_JF$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Forms/General_Interface_JF$4.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Forms/General_Interface_JF$5.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Forms/General_Interface_JF$6.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Forms/General_Interface_JF$7.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Forms/General_Interface_JF$8.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Forms/General_Interface_JF.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Forms/General_Interface_JF.form" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Forms/General_Methods.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Forms/InicioJF$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Forms/InicioJF$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Forms/InicioJF$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Forms/InicioJF$4.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Forms/InicioJF$5.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Forms/InicioJF$6.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Forms/InicioJF.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Forms/InicioJF.form" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Forms/InicioJFMethods.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Models/CWK_Methods.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Models/Career_Word_Key.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Models/Inicio.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Utils/DDBBConnection.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Utils/ResultSetIES9021.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/micarreraperfecta/MiCarreraPerfecta.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/MiCarreraPerfectaGeneral.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/README.TXT" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Forms/CampusForms/CampusAddForm.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/Forms/CampusForms/CampusAddForm.form" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Forms/CampusForms/CampusAddForm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Forms/CampusForms/CampusAddForm.java" afterDir="false" />
+    </list>
+>>>>>>> Stashed changes
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+<<<<<<< Updated upstream
+  <component name="ProjectId" id="2WCZVCivroUjbjgawH5kRTZJtT4" />
+=======
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2WB1UftpF5kXwDSnD5YmJAzwFD9" />
+>>>>>>> Stashed changes
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+<<<<<<< Updated upstream
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "cidr.known.project.marker": "true"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="2c949d67-7dcc-48b8-b9bb-7f87a004aeda" name="Changes" comment="" />
+      <created>1696238549605</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1696238549605</updated>
+=======
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="5d241389-7c34-4197-969a-d1136d2208d4" name="Changes" comment="" />
+      <created>1696191200892</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1696191200892</updated>
+>>>>>>> Stashed changes
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
