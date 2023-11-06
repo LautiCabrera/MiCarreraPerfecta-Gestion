@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;
 
 public class University {
-    
+
     @JsonProperty("id_university")
     private int id_university;
     @JsonProperty("name")
@@ -19,7 +19,7 @@ public class University {
     private Date f_update;
 
     public University() {
-        
+
     }
 
     public University(int id_university, String name, int id_management, int id_user_create, int id_user_update, Date f_create, Date f_update) {
@@ -31,37 +31,29 @@ public class University {
         this.f_create = f_create;
         this.f_update = f_update;
     }
-                 
+
     public int getId() {
         return id_university;
     }
-    
+
     public void setId(int id) {
         this.id_university = id;
     }
-    
+
     public String getName() {
         return name;
     }
-    
+
     public void setName(String name) {
         this.name = name;
     }
 
-    public int getId_university() {
-        return id_university;
-    }
-
-    public void setId_university(int id_university) {
-        this.id_university = id_university;
-    }
-
-    public int getId_managment() {
+    public int getId_management() {
         return id_management;
     }
 
-    public void setId_managment(int id_managment) {
-        this.id_management = id_managment;
+    public void setId_management(int id_management) {
+        this.id_management = id_management;
     }
 
     public int getId_user_create() {
@@ -95,5 +87,12 @@ public class University {
     public void setF_update(Date f_update) {
         this.f_update = f_update;
     }
-    
+
+    public void setIdManagement(int idManagement) {
+        this.id_management = idManagement;
+    }
+
+    public void setIdUserCreate(int idUserCreate) {
+        this.id_user_create = idUserCreate;
+    }
 }

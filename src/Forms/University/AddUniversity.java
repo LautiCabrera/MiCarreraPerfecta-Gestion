@@ -2,34 +2,39 @@ package Forms.University;
 
 import Models.University;
 import Utils.DDBBConnection;
+import Utils.JsonDataFetcher;
 import Utils.ResultSetIES9021;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-<<<<<<< Updated upstream
-import javax.swing.*;
-
-public class AddUniversity extends javax.swing.JFrame {
-    DefaultTableModel modelo;
-  
-=======
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+
 public class AddUniversity extends javax.swing.JFrame {
 
-    DefaultTableModel modelo;
+    private boolean cancelFlag = false;
 
->>>>>>> Stashed changes
+  //  DefaultTableModel modelo;
+
     public AddUniversity() {
         initComponents();
         setLocationRelativeTo(null);
+        DefaultTableModel model=(DefaultTableModel) Tabla.getModel();
+        Tabla.setModel(model);
+        
+        listar();
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         TXTuniversity = new javax.swing.JTextField();
@@ -43,6 +48,13 @@ public class AddUniversity extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         Tabla = new javax.swing.JTable();
+        btnModificar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
+        Actualizar = new javax.swing.JButton();
+
+        jButton1.setText("jButton1");
+
+        jButton2.setText("jButton2");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -68,7 +80,7 @@ public class AddUniversity extends javax.swing.JFrame {
 
         jLabel3.setText("ID Magnament:");
 
-        jLabel4.setText("User Update:");
+        jLabel4.setText("User Create:");
 
         btnGuardar.setText("Guardar");
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
@@ -98,17 +110,16 @@ public class AddUniversity extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnGuardar)
                         .addGap(23, 23, 23)))
-                .addGap(54, 54, 54)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(TXTmagnamet, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
-                        .addComponent(TXTupdateuser))
-                    .addComponent(TXTuniversity, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(54, 54, 54)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(TXTmagnamet, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+                                .addComponent(TXTupdateuser))
+                            .addComponent(TXTuniversity, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(btnCancelar))
                 .addContainerGap(232, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnCancelar)
-                .addGap(15, 15, 15))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -141,7 +152,23 @@ public class AddUniversity extends javax.swing.JFrame {
             new String [] {
                 "ID", "University Name", "ID Magnement", "ID User Create", "ID User Update", "F Create", "F Update"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        Tabla.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(Tabla);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -161,6 +188,27 @@ public class AddUniversity extends javax.swing.JFrame {
                 .addContainerGap(22, Short.MAX_VALUE))
         );
 
+        btnModificar.setText("Modificar");
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarActionPerformed(evt);
+            }
+        });
+
+        btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+
+        Actualizar.setText("Actualizar");
+        Actualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ActualizarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -168,24 +216,37 @@ public class AddUniversity extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addGap(239, 239, 239))
+                .addGap(90, 90, 90)
+                .addComponent(btnModificar)
+                .addGap(18, 18, 18)
+                .addComponent(btnEliminar)
+                .addGap(35, 35, 35))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(16, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Actualizar)
+                .addGap(45, 45, 45))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(17, 17, 17)
-                .addComponent(jLabel1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnModificar)
+                    .addComponent(btnEliminar)
+                    .addComponent(jLabel1))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(125, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Actualizar)
+                .addContainerGap(89, Short.MAX_VALUE))
         );
 
         jPanel1.getAccessibleContext().setAccessibleName("datos");
@@ -202,20 +263,40 @@ public class AddUniversity extends javax.swing.JFrame {
     }//GEN-LAST:event_TXTmagnametActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-<<<<<<< Updated upstream
-   this.dispose(); 
-=======
-        this.dispose();
-        Object parentForm;
->>>>>>> Stashed changes
-        if (parentForm != null) {
-            parentForm.setVisible(true);
-        }
+        cancelFlag = true;   
+         dispose();// Presionar el botón de cancelar
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         guardar();
+        listar();
     }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        dispose();
+
+        // Crear una instancia del formulario de modificación
+        ModifyUniversity modifyForm = new ModifyUniversity();
+
+        // Hacer visible el formulario de modificación
+        modifyForm.setVisible(true);
+    }//GEN-LAST:event_btnModificarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // Cerrar la ventana actual sin guardar cambios
+        dispose();
+
+        // Crear una instancia del formulario de eliminación
+        DeleteUniversity deleteForm = new DeleteUniversity();
+
+        // Hacer visible el formulario de eliminación
+        deleteForm.setVisible(true);
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void ActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ActualizarActionPerformed
+        listar();        // TODO add your handling code here:
+    }//GEN-LAST:event_ActualizarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -252,108 +333,87 @@ public class AddUniversity extends javax.swing.JFrame {
         });
     }
 
-    void guardar() {
-        String name = TXTuniversity.getText();
-        String idManagement = TXTmagnamet.getText();
-        String idUserCreate = TXTupdateuser.getText();
-        java.util.Date currentDate = new java.util.Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String f_create = dateFormat.format(currentDate);
+public void guardar() {
+    String name = TXTuniversity.getText();
+    String idManagement = TXTmagnamet.getText();
+    String idUserCreate = TXTupdateuser.getText();
 
-        if (idUserCreate.equals("") || idManagement.equals("") || name.equals("")) {
-            JOptionPane.showMessageDialog(null, "Alguno de los campos está vacío");
-        } else {
-<<<<<<< Updated upstream
-            String insertQuery = "INSERT INTO university (name, id_management, id_user_create,f_create, f_update) VALUES('" + name + "','" + idManagement + "','" + idUserCreate + "', '" + f_create + "','"f_create"');";          
-            ResultSetIES9021 result = DDBBConnection.SendQuery(insertQuery);
+    if (idUserCreate.isEmpty() || idManagement.isEmpty() || name.isEmpty()) {
+        JOptionPane.showMessageDialog(null, "Alguno de los campos está vacío");
+    } else {
+        try {
+            // Crear una instancia de University y establecer sus propiedades
+            University university = new University();
+            university.setName(name);
+            university.setId_management(Integer.parseInt(idManagement));
+            university.setId_user_create(Integer.parseInt(idUserCreate));
 
-        // Verificar el estado del resultado
-        if (result.getState()) {
-            JOptionPane.showMessageDialog(this, "Universidad creada con éxito.", "Actualización Exitosa", JOptionPane.INFORMATION_MESSAGE);
-            // Cierra la ventana de CampusAddForm después de la inserción
-            this.dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "No se pudo crear la universidad.", "Error de Creación", JOptionPane.ERROR_MESSAGE);
-        }
-        }
-    }
-    
-    
-    void listar(){
-        insertQuery="select * from university";
-        ResultSetIES9021 result = DDBBConnection.SendQuery(insertQuery);
-        ojbject[]University=new object[7];
-        while (result.next()) {
-            university[0]=result.getInt("ID");
-            university[1]=result.getString("University Name");
-            university[2]=result.getInt("ID Magnement");
-            university[3]=result.getInt("ID User Create");
-            university[4]=result.getInt("ID User Update");
-            university[5]=result.getString("F Create");
-            university[6]=result.getString("F Update");
-            modelo.addRow(university);
-        }
-        Tabla.setModel(modelo);
-    }
-=======
-            String insertQuery = "INSERT INTO university (name, id_management, id_user_create, f_create, f_update) VALUES('" + name + "','" + idManagement + "','" + idUserCreate + "', '" + f_create + "','" + f_create + "');";          
-            ResultSetIES9021 result = DDBBConnection.SendQuery(insertQuery);
+            // Obtener la fecha actual en el formato necesario
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date currentDate = new Date(System.currentTimeMillis());
+            String f_create = dateFormat.format(currentDate);
+            university.setF_create(currentDate);
+            university.setF_update(currentDate);
 
-            // Verificar el estado del resultado
+            // Insertar la universidad en la base de datos
+            ResultSetIES9021 result = DDBBConnection.SendQuery("INSERT INTO university (name, id_management, id_user_create, f_create, f_update) VALUES ('" + university.getName() + "','" + university.getId_management() + "','" + university.getId_user_create() + "', '" + f_create + "','" + f_create + "');");
+
             if (result.getState()) {
                 JOptionPane.showMessageDialog(this, "Universidad creada con éxito.", "Actualización Exitosa", JOptionPane.INFORMATION_MESSAGE);
-                // Cierra la ventana de CampusAddForm después de la inserción
-                this.dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "No se pudo crear la universidad.", "Error de Creación", JOptionPane.ERROR_MESSAGE);
             }
+            listar();
+        
+        } catch (Exception e) {
+            e.printStackTrace(); // Manejo de errores en la base de datos
+            JOptionPane.showMessageDialog(this, "Error al crear la universidad.", "Error de Creación", JOptionPane.ERROR_MESSAGE);
         }
-    }
-
-void listar() {
-    try {
-        String selectQuery = "SELECT * FROM university";
-        ResultSetIES9021<University> result = DDBBConnection.SendQuery(selectQuery);
-
-        DefaultTableModel modelo = new DefaultTableModel();
-        modelo.addColumn("ID");
-        modelo.addColumn("University Name");
-        modelo.addColumn("ID Management");
-        modelo.addColumn("ID User Create");
-        modelo.addColumn("ID User Update");
-        modelo.addColumn("F Create");
-        modelo.addColumn("F Update");
-
-        List<University> universities = result.getDatos();
-
-        for (University university : universities) {
-            Object[] rowData = new Object[7];
-            rowData[0] = university.getId();
-            rowData[1] = university.getName();
-            rowData[2] = university.getIdManagement();
-            rowData[3] = university.getIdUserCreate();
-            rowData[4] = university.getIdUserUpdate();
-            rowData[5] = university.getFCreate();
-            rowData[6] = university.getFUpdate();
-            modelo.addRow(rowData);
-        }
-
-        Tabla.setModel(modelo);
-    } catch (Exception e) {
-        e.printStackTrace(); // Manejo de errores de base de datos
-        JOptionPane.showMessageDialog(this, "Error al listar universidades.", "Error de Listado", JOptionPane.ERROR_MESSAGE);
     }
 }
->>>>>>> Stashed changes
+
+
+
+
+
+
+
+private void listar() {
+    try {
+        DefaultTableModel modelo = (DefaultTableModel) Tabla.getModel();
+        modelo.setRowCount(0);
+     
+        List<String[]> result = JsonDataFetcher.selectQuery("*", "university", "");
+
+
+        for (String[] datos : result) {
+            System.out.println(Arrays.toString(datos));
+            modelo.addRow(datos);
+        }
+    } catch (Exception e) {
+        e.printStackTrace(); // Database error handling
+        JOptionPane.showMessageDialog(this, "Error listing universities.", "Listing Error", JOptionPane.ERROR_MESSAGE);
+    }
+}
+
+
+
+
+
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Actualizar;
     private javax.swing.JTextField TXTmagnamet;
     private javax.swing.JTextField TXTuniversity;
     private javax.swing.JTextField TXTupdateuser;
     private javax.swing.JTable Tabla;
     private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnModificar;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -363,7 +423,3 @@ void listar() {
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes

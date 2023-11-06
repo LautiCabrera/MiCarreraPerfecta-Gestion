@@ -1,22 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1">
-        <file>
-            <url>src/Forms/CampusForms/CampusUpdateForm.java</url>
-            <bookmark id="1">
-                <name/>
-                <line>15</line>
-                <key/>
-            </bookmark>
-        </file>
-    </editor-bookmarks>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Seba/Desktop/Front%20End/Programacion%202/MiCarreraPerfecta-Gestion/src/Forms/CampusForms/CampusAddForm.java</file>
-            <file>file:/C:/Users/Seba/Desktop/Front%20End/Programacion%202/MiCarreraPerfecta-Gestion/src/Models/University.java</file>
-            <file>file:/C:/Users/Seba/Desktop/Front%20End/Programacion%202/MiCarreraPerfecta-Gestion/src/Forms/University/AddUniversity.java</file>
-            <file>file:/C:/Users/Seba/Desktop/Front%20End/Programacion%202/MiCarreraPerfecta-Gestion/src/Utils/DDBBConnection.java</file>
-            <file>file:/C:/Users/Seba/Desktop/Front%20End/Programacion%202/MiCarreraPerfecta-Gestion/src/Forms/CampusForms/Campus_Interface_JF.java</file>
+            <file>file:/C:/Users/samir/OneDrive/Escritorio/front/MiCarreraPerfecta-Gestion/src/Models/University.java</file>
+            <file>file:/C:/Users/samir/OneDrive/Escritorio/front/MiCarreraPerfecta-Gestion/src/Utils/DDBBConnection.java</file>
+            <file>file:/C:/Users/samir/OneDrive/Escritorio/front/MiCarreraPerfecta-Gestion/src/Forms/University/AddUniversity.java</file>
+            <file>file:/C:/Users/samir/OneDrive/Escritorio/front/MiCarreraPerfecta-Gestion/src/Forms/University/ModifyUniversity.java</file>
+            <file>file:/C:/Users/samir/OneDrive/Escritorio/front/MiCarreraPerfecta-Gestion/src/Utils/JavaFileGenerator.java</file>
+            <file>file:/C:/Users/samir/OneDrive/Escritorio/front/MiCarreraPerfecta-Gestion/src/Forms/University/DeleteUniversity.java</file>
+            <file>file:/C:/Users/samir/OneDrive/Escritorio/front/MiCarreraPerfecta-Gestion/src/Utils/ResultSetIES9021.java</file>
+            <file>file:/C:/Users/samir/OneDrive/Escritorio/front/MiCarreraPerfecta-Gestion/src/Utils/JsonDataFetcher.java</file>
         </group>
     </open-files>
 </project-private>
