@@ -42,22 +42,22 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
 
     public Career_Word_Key_JF1_1() {
         initComponents();
-        TJF= new Tablon_JF();
+        TJF = new Tablon_JF();
         ConfigurationStart();
     }
-    
+
     public Career_Word_Key_JF1_1(Tablon_JF TJF) {
         initComponents();
-        UW=TJF.getUser();
-        this.TJF =TJF;
+        UW = TJF.getUser();
+        this.TJF = TJF;
         ConfigurationStart();
     }
 
     private void ConfigurationStart() {
         jPanel3.requestFocus();
-        TablaCareer= new DefaultTableModel() {
+        TablaCareer = new DefaultTableModel() {
             @Override
-            public boolean isCellEditable(int row, int columns){
+            public boolean isCellEditable(int row, int columns) {
                 return false;
             }
         };
@@ -74,8 +74,8 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
         TXAWordsK.setText("");
         TXAWordsKFocusLost(null);
     }
-    
-    private void RegenReset(){
+
+    private void RegenReset() {
         BTNRegen.setEnabled(false);
         BTNSave.setEnabled(false);
         BTNLoad.setEnabled(false);
@@ -86,8 +86,8 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
             PintarTablas(false, -1);
         }
     }
-    
-    private void SearchReset(){
+
+    private void SearchReset() {
         JCBUniversity.setSelectedIndex(0);
         JCBUniversityActionPerformed(null);
     }
@@ -144,9 +144,9 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
         } else {
             Carreras = new String[]{"ID", "Nombre", "Campus", "Palabras Claves", "Ultima Modificacion"};
         }
-        
+
         TablaCareer.setColumnIdentifiers(Carreras);
-        
+
 //        System.out.println("PintarTablasRows ID = " + ID
 //                          +"\ncolumns = " + TablaCareer.getColumnCount());
         try {
@@ -182,7 +182,7 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
             Filler = ObtenerDatos(SS, TT, WW);
             if (!Filler.isEmpty()) {
                 for (String[] rowData : Filler) {
-                   TablaCareer.addRow(rowData);
+                    TablaCareer.addRow(rowData);
                 }
             }
         } catch (NumberFormatException e) {
@@ -190,35 +190,34 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
         }
     }
 
-    private String Cargar(int Val){
-        String List="",
-                TT=" ies9021_database.words_key W "
-                + "inner join career_word_key CW ON W.id_word_key = CW.id_word_key "
-              ,WW="CW.id_career = "+Val;
-        ArrayList<String[]> Palabras= ObtenerDatos("word", TT, WW);
+    private String Cargar(int Val) {
+        String List = "",
+                TT = " ies9021_database.words_key W "
+                + "inner join career_word_key CW ON W.id_word_key = CW.id_word_key ", WW = "CW.id_career = " + Val;
+        ArrayList<String[]> Palabras = ObtenerDatos("word", TT, WW);
         for (String[] Palabra : Palabras) {
-            List+=Arrays.toString(Palabra)+", ";
+            List += Arrays.toString(Palabra) + ", ";
         }
-        List=List.substring(0, List.length()-2).replace("]", "").replace("[", "");
+        List = List.substring(0, List.length() - 2).replace("]", "").replace("[", "");
         return List;
     }
 
     private void Regen(String ID) {
         BTNRegen.setEnabled(false);
-        try{
-        Career_Word_Key CWK = new Career_Word_Key();
-        ResultSetIES9021 RSI=CWK.Delete(ID);
-        if(RSI.getState()){
-            JOptionPane.showMessageDialog(this, "Operacion Realizada con Exito","COMPLETE",JOptionPane.PLAIN_MESSAGE);
-            if(JCBCampus.isEnabled()){
-                RegenReset();
-            }else{
-                PintarTablas(false, ID);
+        try {
+            Career_Word_Key CWK = new Career_Word_Key();
+            ResultSetIES9021 RSI = CWK.Delete(ID);
+            if (RSI.getState()) {
+                JOptionPane.showMessageDialog(this, "Operacion Realizada con Exito", "COMPLETE", JOptionPane.PLAIN_MESSAGE);
+                if (JCBCampus.isEnabled()) {
+                    RegenReset();
+                } else {
+                    PintarTablas(false, ID);
+                }
+            } else {
+                System.out.println(RSI.getClarification());
             }
-        }else{
-            System.out.println(RSI.getClarification());
-        }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -506,23 +505,28 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
 
     private void JTCareerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTCareerMouseClicked
         // TODO add your handling code here:
-            SCR = JTCareer.getSelectedRow();
-            CareerSelected=Integer.parseInt(TablaCareer.getValueAt(SCR, 0).toString());
-            int Val;
-            if(TablaCareer.getColumnCount()>4){
-                Val=Integer.parseInt(TablaCareer.getValueAt(SCR, 3).toString());
-            }else{
-                Val=Integer.parseInt(TablaCareer.getValueAt(SCR, 2).toString());
-            }
-            if(Val>1){BTNLoad.setEnabled(true);BTNRegen.setEnabled(true);
-            }else{BTNLoad.setEnabled(false);BTNRegen.setEnabled(false);}
-            BTNSave.setEnabled(true);
-            TXAWordsK.setEnabled(true);
+        SCR = JTCareer.getSelectedRow();
+        CareerSelected = Integer.parseInt(TablaCareer.getValueAt(SCR, 0).toString());
+        int Val;
+        if (TablaCareer.getColumnCount() > 4) {
+            Val = Integer.parseInt(TablaCareer.getValueAt(SCR, 3).toString());
+        } else {
+            Val = Integer.parseInt(TablaCareer.getValueAt(SCR, 2).toString());
+        }
+        if (Val > 1) {
+            BTNLoad.setEnabled(true);
+            BTNRegen.setEnabled(true);
+        } else {
+            BTNLoad.setEnabled(false);
+            BTNRegen.setEnabled(false);
+        }
+        BTNSave.setEnabled(true);
+        TXAWordsK.setEnabled(true);
     }//GEN-LAST:event_JTCareerMouseClicked
 
     private void BTNRegenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNRegenActionPerformed
         // TODO add your handling code here:
-        String Val=String.valueOf(TablaCareer.getValueAt(SCR, 0).toString());
+        String Val = String.valueOf(TablaCareer.getValueAt(SCR, 0).toString());
         if (NotShowAgain) {
             Regen(Val);
         } else {
@@ -577,54 +581,60 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
 
     private void BTNLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNLoadActionPerformed
         // TODO add your handling code here:
-        int Val=Integer.parseInt(TablaCareer.getValueAt(SCR, 0).toString());
+        int Val = Integer.parseInt(TablaCareer.getValueAt(SCR, 0).toString());
         TXAWordsK.setText(Cargar(Val));
         TXAWordsK.setForeground(Color.black);
     }//GEN-LAST:event_BTNLoadActionPerformed
 
     private void BTNSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNSaveActionPerformed
         // TODO add your handling code here:
-        if(!(TXAWordsK.getForeground().equals(Color.lightGray)||TXAWordsK.getText().isBlank()||TXAWordsK.getText().isEmpty())){
-        Object[] Opcion ={"Si","No"};
-        if(JOptionPane.showOptionDialog(this, "¿Está seguro de que desea guardar las siguientes palabras?"
-                , "Confirmación", JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE, null, Opcion, Opcion[0])==JOptionPane.YES_OPTION){
-            TXAWordsK.setEnabled(false);
-            String TXA=TXAWordsK.getText();
-            TXA=TXA.replace(",,", ",");
-            if(TXA.charAt(0)==44){TXA=TXA.substring(1);}
-            if(TXA.endsWith(",")){TXA=TXA.substring(0,TXA.length()-1);}
-            JOptionPane.showMessageDialog(this, "Deez Nutz");
-            List<String> Lista=new ArrayList<>();
-            for (String THX : TXA.split(",")) {
-                String Word=THX;
-                Lista.add(Word);
+        if (!(TXAWordsK.getForeground().equals(Color.lightGray) || TXAWordsK.getText().isBlank() || TXAWordsK.getText().isEmpty())) {
+            Object[] Opcion = {"Si", "No"};
+            if (JOptionPane.showOptionDialog(this, "¿Está seguro de que desea guardar las siguientes palabras?",
+                     "Confirmación", JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE, null, Opcion, Opcion[0]) == JOptionPane.YES_OPTION) {
+                TXAWordsK.setEnabled(false);
+                String TXA = TXAWordsK.getText();
+                TXA = TXA.replace(",,", ",");
+                if (TXA.charAt(0) == 44) {
+                    TXA = TXA.substring(1);
+                }
+                if (TXA.endsWith(",")) {
+                    TXA = TXA.substring(0, TXA.length() - 1);
+                }
+                JOptionPane.showMessageDialog(this, "Deez Nutz");
+                List<String> Lista = new ArrayList<>();
+                for (String THX : TXA.split(",")) {
+                    String Word = THX;
+                    Lista.add(Word);
+                }
+                //Enviar Datos al enzo
+                WordsKey WK = new WordsKey();
+                WK.createWord(Lista, UW, this);
+                Career_Word_Key CWK = new Career_Word_Key();
+                CWK.CreateCWK(TXA, CareerSelected, UW);
+                //Confirmar el envio de datos
+                //Buscar los datos
             }
-            //Enviar Datos al enzo
-            WordsKey WK = new WordsKey();            
-            WK.createWord(Lista, UW, this);
-            Career_Word_Key CWK = new Career_Word_Key();
-            CWK.CreateCWK(TXA,CareerSelected, UW);
-            //Confirmar el envio de datos
-            //Buscar los datos
-        }
-        TXAWordsK.setEnabled(true);
+            TXAWordsK.setEnabled(true);
         }
     }//GEN-LAST:event_BTNSaveActionPerformed
 
     private void TXAWordsKFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TXAWordsKFocusGained
         // TODO add your handling code here:
-        if(TXAWordsK.getForeground().equals(Color.lightGray)){
+        if (TXAWordsK.getForeground().equals(Color.lightGray)) {
             TXAWordsK.setForeground(Color.black);
             TXAWordsK.setText("");
-            if(SCR!=-1){BTNSave.setEnabled(true);}
+            if (SCR != -1) {
+                BTNSave.setEnabled(true);
+            }
         }
     }//GEN-LAST:event_TXAWordsKFocusGained
 
     private void TXAWordsKFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TXAWordsKFocusLost
         // TODO add your handling code here:
-        String TXA=TXAWordsK.getText().replace(",", "");
-        if(TXA.isBlank()||TXA.isEmpty()){
+        String TXA = TXAWordsK.getText().replace(",", "");
+        if (TXA.isBlank() || TXA.isEmpty()) {
             TXAWordsK.setForeground(Color.lightGray);
             TXAWordsK.setText("Ingrese las palabras clave separadas por coma");
         }
@@ -633,15 +643,17 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
     private void TXAWordsKKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TXAWordsKKeyTyped
         // TODO add your handling code here:
         char c = evt.getKeyChar();
-        String TXA=TXAWordsK.getText();
+        String TXA = TXAWordsK.getText();
         if (!(Character.isAlphabetic(c) || c == 8 || c == 127
-            || c == 44 || c == '\t' || c == 9)) {
+                || c == 44 || c == '\t' || c == 9)) {
+            evt.consume();
+        } else if (c == 44 && TXA.contains(",,")) {
+            TXAWordsK.setText(TXA.replace(",,", ",") + ",");
             evt.consume();
         }
-        else if(c==44&&TXA.contains(",,")){
-            TXAWordsK.setText(TXA.replace(",,", ",")+",");
-            evt.consume();}
-        if(TXA.contains(",,")){TXAWordsK.setText(TXA.replaceAll(",,", ","));}
+        if (TXA.contains(",,")) {
+            TXAWordsK.setText(TXA.replaceAll(",,", ","));
+        }
     }//GEN-LAST:event_TXAWordsKKeyTyped
 
     private void jPanel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel3MouseClicked

@@ -18,9 +18,9 @@ public class Career_Word_Key {
     private String f_update;
 
     //Constructores
+    public Career_Word_Key() {
+    }
 
-    public Career_Word_Key() {}
-    
     public Career_Word_Key(Object[] Datos) {
         this.id_career_word_key = Integer.parseInt(Datos[0].toString());
         this.id_career = Integer.parseInt(Datos[1].toString());
@@ -34,21 +34,20 @@ public class Career_Word_Key {
     public Career_Word_Key(int id_Career, int id_Word_key, int idUser) {
         this.id_career = id_Career;
         this.id_word_key = id_Word_key;
-        this.id_user_create =idUser;
-        this.id_user_update=idUser;
-        f_create="current_time()";
-        f_update="current_time()";
+        this.id_user_create = idUser;
+        this.id_user_update = idUser;
+        f_create = "current_time()";
+        f_update = "current_time()";
     }
-    
+
     public void Modify_Career_Word_key(int id_Career, int id_Word_key, int idUser) {
         this.id_career = id_Career;
         this.id_word_key = id_Word_key;
-        this.id_user_update=idUser;
-        f_update="current_time()";
+        this.id_user_update = idUser;
+        f_update = "current_time()";
     }
 
     //Get and Set
-
     public int getId_career_word_key() {
         return id_career_word_key;
     }
@@ -102,27 +101,26 @@ public class Career_Word_Key {
     }
 
     //Metodos
+    public void create() {
+        String query = "INSERT INTO `ies9021_database`.`career_word_key` "
+                + "(`id_career`, `id_word_key`, `id_user_create`, `id_user_update`, `f_create`, `f_update`) VALUES"
+                + " ('" + id_career + "', '" + id_word_key + "', '" + id_user_create + "', '" + id_user_update + "', " + f_create + ", " + f_update + ");";
+        SendQuery(query);
+    }
 
-    public void create(){
-        String query="INSERT INTO `ies9021_database`.`career_word_key` "
+    public void create(String id_career, String id_word_key, String id_user_create) {
+        String query = "INSERT INTO `ies9021_database`.`career_word_key` "
                 + "(`id_career`, `id_word_key`, `id_user_create`, `id_user_update`, `f_create`, `f_update`) VALUES"
-                + " ('"+id_career+"', '"+id_word_key+"', '"+id_user_create+"', '"+id_user_update+"', "+f_create+", "+f_update+");";
+                + " ('" + id_career + "', '" + id_word_key + "', '" + id_user_create + "', '" + id_user_create + "', current_time(), current_time());";
         SendQuery(query);
     }
-    
-    public void create(String id_career,String id_word_key,String id_user_create){
-        String query="INSERT INTO `ies9021_database`.`career_word_key` "
-                + "(`id_career`, `id_word_key`, `id_user_create`, `id_user_update`, `f_create`, `f_update`) VALUES"
-                + " ('"+id_career+"', '"+id_word_key+"', '"+id_user_create+"', '"+id_user_create+"', current_time(), current_time());";
-        SendQuery(query);
-    }
-    
-    public ResultSetIES9021 Delete(String ID){
-        ResultSetIES9021 RSI= new ResultSetIES9021();
+
+    public ResultSetIES9021 Delete(String ID) {
+        ResultSetIES9021 RSI = new ResultSetIES9021();
         try {
-            String Lista=revision_CWK(ID),Query;
-            if(!(Lista.isEmpty()||Lista.isBlank())){
-                Query="DELETE FROM ies9021_database.career_word_key WHERE (`id_career_word_key` IN ("+Lista+"));";
+            String Lista = revision_CWK(ID), Query;
+            if (!(Lista.isEmpty() || Lista.isBlank())) {
+                Query = "DELETE FROM ies9021_database.career_word_key WHERE (`id_career_word_key` IN (" + Lista + "));";
                 return SendQuery(Query);
             }
             RSI.setState(false);
@@ -135,84 +133,82 @@ public class Career_Word_Key {
         RSI.setClarification("No se pudo comprobar la base de datos");
         return RSI;
     }
-    
-    private String revision_CWK(String ID){
-        String SS =" id_career_word_key "
-              ,TT =" ies9021_database.career_word_key "
-              ,WW =" id_career = "+ID+"; "
-              ,List="";
+
+    private String revision_CWK(String ID) {
+        String SS = " id_career_word_key ", TT = " ies9021_database.career_word_key ", WW = " id_career = " + ID + "; ", List = "";
         try {
-            ArrayList<String[]> S=ObtenerDatos(SS, TT, WW);
-        for (String[] strings : S) {
-            List+=Arrays.toString(strings);
-        }
-        List=List.substring(0, List.length()-1).replace("[", "").replace("]", ",");
-        System.out.println("Revision_CWK "+List);
-        revision_CBWK(List);
-        /*
+            ArrayList<String[]> S = ObtenerDatos(SS, TT, WW);
+            for (String[] strings : S) {
+                List += Arrays.toString(strings);
+            }
+            List = List.substring(0, List.length() - 1).replace("[", "").replace("]", ",");
+            System.out.println("Revision_CWK " + List);
+            revision_CBWK(List);
+            /*
         Career_Branch_Word_Key CBWK = new Career_Branch_Word_Key();
         CBWK.delete(CBWK)
-        */
+             */
         } catch (Exception e) {
             e.printStackTrace();
         }
         return List;
     }
-    
-    private void revision_CBWK(String Lista){
-        String SS=" id_career_branch_work_key "
-              ,TT=" ies9021_database.career_branch_word_key "
-              ,WW=" id_career IN ( "+Lista+" )";
+
+    private void revision_CBWK(String Lista) {
+        String SS = " id_career_branch_work_key ", TT = " ies9021_database.career_branch_word_key ", WW = " id_career IN ( " + Lista + " )";
         ArrayList<String[]> Dev;
         try {
-            Dev=ObtenerDatos(SS, TT, WW);
-            if(!Dev.isEmpty()){
-                Lista="";
+            Dev = ObtenerDatos(SS, TT, WW);
+            if (!Dev.isEmpty()) {
+                Lista = "";
                 for (String[] strings : Dev) {
-                    Lista+=Arrays.toString(strings);
+                    Lista += Arrays.toString(strings);
                 }
-                Lista=Lista.substring(0, Lista.length()-1).replace("[", "").replace("]", ",");
-                System.out.println("Revision_CBWK = "+Lista);
+                Lista = Lista.substring(0, Lista.length() - 1).replace("[", "").replace("]", ",");
+                System.out.println("Revision_CBWK = " + Lista);
                 //Delete cbwk
-            }    
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
-    private ArrayList<String[]> ObtenerDatos(String Select,String Table, String Where){
+
+    private ArrayList<String[]> ObtenerDatos(String Select, String Table, String Where) {
         return new ArrayList<>(selectQuery(Select, Table, Where));
     }
-    
+
 //    public void createCWK(List<String> ListaWords,int Career,int User){
 //    
 //    }
-
-    public void CreateCWK(String ListaWords,int career, int User){
+    public void CreateCWK(String ListaWords, int career, int User) {
         try {
-            ArrayList<String[]> ListaID=BuscarWKID(ListaWords);
-        ArrayList<String> SendList= new ArrayList<>();
-        for (String[] IDs : ListaID) {
-            String Send= "INSERT INTO ies9021_database.career_word_key "
-                    + "(`id_career`, `id_word_key`, `id_user_create`, `id_user_update`, `f_create`, `f_update`)"
-                    + " VALUES ('"+career+"','"+IDs[0]+"','"+User+"','"+User+"',current_time() ,current_time())";
-            SendList.add(Send);
-        }
-        for (String string : SendList) {
-            SendQuery(string);
-        }
-        String ActualizarCarrera = "UPDATE `ies9021_database`.`career` SET `id_user_update` = '"+User+"', `f_update` = current_time() WHERE (`id_career` = '"+career+"');";
-        SendQuery(ActualizarCarrera);
+            ArrayList<String[]> ListaID = BuscarWKID(ListaWords);
+            ArrayList<String> SendList = new ArrayList<>();
+            for (String[] IDs : ListaID) {
+                String Send = "INSERT INTO ies9021_database.career_word_key "
+                        + "(`id_career`, `id_word_key`, `id_user_create`, `id_user_update`, `f_create`, `f_update`)"
+                        + " VALUES ('" + career + "','" + IDs[0] + "','" + User + "','" + User + "',current_time() ,current_time())";
+                SendList.add(Send);
+            }
+            for (String string : SendList) {
+                SendQuery(string);
+            }
+            String ActualizarCarrera = "UPDATE `ies9021_database`.`career` SET `id_user_update` = '" + User + "', `f_update` = current_time() WHERE (`id_career` = '" + career + "');";
+            SendQuery(ActualizarCarrera);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
-    private ArrayList<String[]> BuscarWKID(String Lista){
-        Lista="'"+Lista.replaceAll(",", "','")+"'";
-        String SS=" id_work_key "
-              ,TT=" ies9021_database.words_key "
-              ,WW=" word IN ( "+Lista+" )";
+
+    private ArrayList<String[]> BuscarWKID(String Lista) {
+        Lista = "'" + Lista.replaceAll(",", "','") + "'";
+        String SS = " id_work_key ", TT = " ies9021_database.words_key ", WW = " word IN ( " + Lista + " )";
         return ObtenerDatos(SS, TT, WW);
     }
+    
+    public List<String[]> ObtenerCareerWordKey(int id_Career){
+        String SS = " id_career_word_key ", TT = " ies9021_database.career_word_key ",WW = " id_career = "+id_Career;
+        return ObtenerDatos(SS, TT, WW);
+    }
+    
 }
