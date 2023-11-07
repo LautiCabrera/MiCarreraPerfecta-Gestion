@@ -50,30 +50,6 @@ public class CampusAddForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        txtName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNameActionPerformed(evt);
-            }
-        });
-
-        txtLatitude.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtLatitudeActionPerformed(evt);
-            }
-        });
-
-        txtLongitude.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtLongitudeActionPerformed(evt);
-            }
-        });
-
-        txtWww.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtWwwActionPerformed(evt);
-            }
-        });
-
         Save.setText("Guardar");
         Save.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -110,24 +86,7 @@ public class CampusAddForm extends javax.swing.JFrame {
 
         jLabel10.setText("Creador:");
 
-        comboBoxUniversity.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboBoxUniversityActionPerformed(evt);
-            }
-        });
-
         comboBoxMain.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Si", "No" }));
-        comboBoxMain.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboBoxMainActionPerformed(evt);
-            }
-        });
-
-        comboBoxUsers.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboBoxUsersActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -245,9 +204,9 @@ public class CampusAddForm extends javax.swing.JFrame {
         String longitude = txtLongitude.getText();
         String www = txtWww.getText();
         String email = txtEmail.getText();
-        selectedUniversityId = comboBoxUniversity.getSelectedIndex();
-        selectedUserId = comboBoxUsers.getSelectedIndex();
-        selectedMainValue = comboBoxMain.getSelectedIndex();
+        selectedUniversityId = comboBoxUniversity.getSelectedIndex() + 1;
+        selectedUserId = comboBoxUsers.getSelectedIndex() + 1;
+        selectedMainValue = campus.handleSedeSelection(comboBoxMain);
         campus.saveCampus(name,location,latitude,longitude,www,email,selectedUniversityId,selectedUserId,selectedMainValue,this);
     }//GEN-LAST:event_SaveActionPerformed
 
@@ -257,34 +216,6 @@ public class CampusAddForm extends javax.swing.JFrame {
             parentForm.setVisible(true);
         }
     }//GEN-LAST:event_CancelActionPerformed
-
-    private void comboBoxUniversityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxUniversityActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_comboBoxUniversityActionPerformed
-
-    private void comboBoxMainActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxMainActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_comboBoxMainActionPerformed
-
-    private void comboBoxUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxUsersActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_comboBoxUsersActionPerformed
-
-    private void txtNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNameActionPerformed
-
-    private void txtLatitudeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLatitudeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtLatitudeActionPerformed
-
-    private void txtLongitudeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLongitudeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtLongitudeActionPerformed
-
-    private void txtWwwActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtWwwActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtWwwActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

@@ -68,12 +68,6 @@ public class CampusUpdateForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        txtEmail.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtEmailActionPerformed(evt);
-            }
-        });
-
         Save.setText("Guardar");
         Save.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -110,19 +104,8 @@ public class CampusUpdateForm extends javax.swing.JFrame {
 
         jLabel11.setText("Actualizó:");
 
-        comboBoxUniversity.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboBoxUniversityActionPerformed(evt);
-            }
-        });
-
         comboBoxMain.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Si", "No" }));
         comboBoxMain.setToolTipText("");
-        comboBoxMain.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboBoxMainActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -240,8 +223,7 @@ public class CampusUpdateForm extends javax.swing.JFrame {
         String www = txtWww.getText();
         String email = txtEmail.getText();
         selectedUniversityId = comboBoxUniversity.getSelectedIndex() +1;
-        System.out.println("selectUni: " + selectedUniversityId);
-        selectedUserId = comboBoxUsers.getSelectedIndex();
+        selectedUserId = comboBoxUsers.getSelectedIndex() + 1;
         selectedMainValue = campus.handleSedeSelection(comboBoxMain);
         campus.updateCampus(name,location,latitude,longitude,www,email,selectedUniversityId,selectedUserId,selectedMainValue,idCampus,this);
     }//GEN-LAST:event_SaveActionPerformed
@@ -252,19 +234,7 @@ public class CampusUpdateForm extends javax.swing.JFrame {
             parentForm.setVisible(true);
         }
     }//GEN-LAST:event_CancelActionPerformed
-
-    private void comboBoxUniversityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxUniversityActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_comboBoxUniversityActionPerformed
         
-    private void txtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtEmailActionPerformed
-
-    private void comboBoxMainActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxMainActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_comboBoxMainActionPerformed
-
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.

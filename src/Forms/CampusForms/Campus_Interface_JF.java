@@ -2,6 +2,7 @@ package Forms.CampusForms;
 
 import javax.swing.JOptionPane;
 import Models.Campus;
+import java.awt.event.KeyEvent;
 import javax.swing.event.ListSelectionEvent;
 
 public class Campus_Interface_JF extends javax.swing.JFrame {
@@ -137,6 +138,11 @@ public class Campus_Interface_JF extends javax.swing.JFrame {
         });
 
         TXTSearch.setText("Buscar");
+        TXTSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                TXTSearchKeyPressed(evt);
+            }
+        });
 
         btnNextPage.setText(">");
         btnNextPage.addActionListener(new java.awt.event.ActionListener() {
@@ -270,8 +276,18 @@ public class Campus_Interface_JF extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNextPageActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-
+        // TODO add your handling code here:
     }//GEN-LAST:event_jTable1MouseClicked
+
+    private void TXTSearchKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TXTSearchKeyPressed
+         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            // Si la tecla presionada es Enter, realiza la búsqueda
+            btnPreviousPage.setEnabled(false);
+            btnNextPage.setEnabled(false);
+            String searchText = TXTSearch.getText();
+            campus.searchCampus(searchText, jTable1, this);
+        }
+    }//GEN-LAST:event_TXTSearchKeyPressed
     
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {

@@ -5,8 +5,6 @@ import Utils.JsonDataFetcher;
 import Utils.ResultSetIES9021;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.lang.reflect.Field;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -334,16 +332,10 @@ public class Campus {
     // *******************************
      
     public void saveCampus(String name, String location, String latitude, String longitude, String www, String email, int selectedUniversityId, int selectedUserId, int selectedMainValue, JFrame window) {
-        // Obtener la fecha actual
-        java.util.Date currentDate = new java.util.Date();
-        // Convertir la fecha actual a un formato de fecha adecuado
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String f_create = dateFormat.format(currentDate);
-
         // Crear la consulta SQL para la inserción en la tabla "campus"
         String insertQuery = "INSERT INTO campus (id_university, name, location, latitude, longitude, main, www, email, id_user_create, id_user_update, f_create, f_update) VALUES " +
                 "(" + selectedUniversityId + ", '" + name + "', '" + location + "', " + Float.parseFloat(latitude) + ", " + Float.parseFloat(longitude) + ", " +
-                selectedMainValue + ", '" + www + "', '" + email + "', " + selectedUserId + ", " + selectedUserId + ", '" + f_create + "', '" + f_create + "');";
+                selectedMainValue + ", '" + www + "', '" + email + "', " + selectedUserId + ", " + selectedUserId + ", NOW(), NOW());";
 
         // Ejecutar la consulta utilizando el método SendQuery
         ResultSetIES9021 result = DDBBConnection.SendQuery(insertQuery);
@@ -362,17 +354,11 @@ public class Campus {
     // *******************************
     
     public void updateCampus(String name, String location, String latitude, String longitude, String www, String email, int selectedUniversityId, int selectedUserId, int selectedMainValue, String idCampus, JFrame window) {
-        // Obtener la fecha actual
-        java.util.Date currentDate = new java.util.Date();
-        // Convertir la fecha actual a un formato de fecha adecuado
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String f_update = dateFormat.format(currentDate);
-
         // Crear la consulta SQL para la actualización en la tabla "campus"
         String updateQuery = "UPDATE campus SET id_university = " + selectedUniversityId + ", name = '" + name + "', location = '" + location +
                 "', latitude = " + Float.parseFloat(latitude) + ", longitude = " + Float.parseFloat(longitude) +
                 ", main = " + selectedMainValue + ", www = '" + www + "', email = '" + email +
-                "', id_user_update = " + selectedUserId + ", f_update = '" + f_update + "' WHERE id_campus = " + idCampus + ";";
+                "', id_user_update = " + selectedUserId + ", f_update = NOW() WHERE id_campus =  " + idCampus + ";";
 
         // Ejecutar la consulta utilizando el método SendQuery
         ResultSetIES9021 result = DDBBConnection.SendQuery(updateQuery);
@@ -397,7 +383,6 @@ public class Campus {
         String selectedID = table.getValueAt(selectedRow, 0).toString();
         // Verifica si el ID está siendo usado en otras tablas
         boolean idUsed = campusUsed(selectedID);
-
         if (idUsed) {
             // El ID está asociado a otras tablas, muestra un mensaje de error
             JOptionPane.showMessageDialog(window, "No se puede eliminar este campus porque el ID está asociado a otras tablas.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -408,7 +393,7 @@ public class Campus {
                 JOptionPane.YES_NO_OPTION);
             if (response == JOptionPane.YES_OPTION) {
                 // El ID no está asociado a otras tablas, procede con la eliminación
-                String query = "DELETE FROM campus WHERE id_campus = " + selectedID;
+                String query = "DELETE FROM `campus` WHERE `id_campus` = " + selectedID + ";";
                 try {
                     ResultSetIES9021 queryResult = DDBBConnection.SendQuery(query);
 
@@ -429,32 +414,17 @@ public class Campus {
     // Función para verificar si un campus puede ser eliminado o no
     public boolean campusUsed(String idCampus) {
         int id = Integer.parseInt(idCampus);
-        List<String> tablesToCheck = Arrays.asList("campus_career", "university"); 
-        String idFieldName = "id_campus"; 
-
-        for (String tableName : tablesToCheck) {
-            // Construye la consulta SQL para buscar el ID en la tabla actual
-            String query = "SELECT COUNT(*) FROM " + tableName + " WHERE " + idFieldName + " = " + id;
-
-            // Ejecuta la consulta utilizando ResultSetIES9021
-            ResultSetIES9021 result = DDBBConnection.SendQuery(query);
-
-            if (result.getState()) {
-                List<Integer> counts = result.getDatos();
-                if (!counts.isEmpty()) {
-                    int count = counts.get(0); // Resultado del recuento de filas
-                    if (count > 0) {
-                        // Si count es mayor que 0, significa que el ID existe en esta tabla
-                        return true;
-                    }
-                }
-            } else {
-                String clarification = result.getClarification();
-                System.out.println("Error al ejecutar la consulta en " + tableName + ": " + clarification);
-            }
-        }
-
-        // Si llegas hasta aquí, significa que el ID no se encontró en ninguna de las tablas
+        String idFieldName = "id_campus";
+        String tableName = "campus_career";
+        int count = DDBBConnection.getCount(tableName, idFieldName + " = " + id);
+        if (count > 0) {
+            // Si count es mayor que 0, el ID existe en esta tabla
+            return true;
+        } else {
+           System.out.println("Error al ejecutar la consulta en " + tableName);
+         }
+        
+        // Si llegas hasta aquí, el ID no se encontró en ninguna de las tablas
         return false;
     }
     
