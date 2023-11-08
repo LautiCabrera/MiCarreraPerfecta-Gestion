@@ -43,7 +43,7 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
     public Career_Word_Key_JF1_1() {
         initComponents();
         TJF = new Tablon_JF();
-        UW=-21;
+        UW = -21;
         ConfigurationStart();
     }
 
@@ -514,7 +514,7 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
         } else {
             Val = Integer.parseInt(TablaCareer.getValueAt(SCR, 2).toString());
         }
-        if (Val > 1) {
+        if (Val > 0) {
             BTNLoad.setEnabled(true);
             BTNRegen.setEnabled(true);
         } else {
@@ -592,7 +592,7 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
         if (!(TXAWordsK.getForeground().equals(Color.lightGray) || TXAWordsK.getText().isBlank() || TXAWordsK.getText().isEmpty())) {
             Object[] Opcion = {"Si", "No"};
             if (JOptionPane.showOptionDialog(this, "¿Está seguro de que desea guardar las siguientes palabras?",
-                     "Confirmación", JOptionPane.YES_NO_OPTION,
+                    "Confirmación", JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE, null, Opcion, Opcion[0]) == JOptionPane.YES_OPTION) {
                 TXAWordsK.setEnabled(false);
                 String TXA = TXAWordsK.getText();
@@ -603,7 +603,7 @@ public class Career_Word_Key_JF1_1 extends javax.swing.JFrame {
                 if (TXA.endsWith(",")) {
                     TXA = TXA.substring(0, TXA.length() - 1);
                 }
-                JOptionPane.showMessageDialog(this, "Deez Nutz");
+                //JOptionPane.showMessageDialog(this, "Deez Nutz");
                 List<String> Lista = new ArrayList<>();
                 for (String THX : TXA.split(",")) {
                     String Word = THX;

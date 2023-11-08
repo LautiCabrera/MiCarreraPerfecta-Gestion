@@ -118,6 +118,7 @@ public class Career_Word_Key {
     public ResultSetIES9021 Delete(String ID) {
         ResultSetIES9021 RSI = new ResultSetIES9021();
         try {
+            System.out.println("Pre RCWK");
             String Lista = revision_CWK(ID), Query;
             if (!(Lista.isEmpty() || Lista.isBlank())) {
                 Query = "DELETE FROM ies9021_database.career_word_key WHERE (`id_career_word_key` IN (" + Lista + "));";
@@ -135,7 +136,8 @@ public class Career_Word_Key {
     }
 
     private String revision_CWK(String ID) {
-        String SS = " id_career_word_key ", TT = " ies9021_database.career_word_key ", WW = " id_career = " + ID + "; ", List = "";
+        String SS = " id_career_word_key ", TT = " ies9021_database.career_word_key ", WW = " id_career = " + ID + "; ",
+                List = "";
         try {
             ArrayList<String[]> S = ObtenerDatos(SS, TT, WW);
             for (String[] strings : S) {
@@ -155,7 +157,7 @@ public class Career_Word_Key {
     }
 
     private void revision_CBWK(String Lista) {
-        String SS = " id_career_branch_work_key ", TT = " ies9021_database.career_branch_word_key ", WW = " id_career IN ( " + Lista + " )";
+        String SS = " id_career_branch_word_key ", TT = " ies9021_database.career_branch_word_key ", WW = " id_career_word_key IN ( " + Lista + " )";
         ArrayList<String[]> Dev;
         try {
             Dev = ObtenerDatos(SS, TT, WW);
@@ -166,6 +168,7 @@ public class Career_Word_Key {
                 }
                 Lista = Lista.substring(0, Lista.length() - 1).replace("[", "").replace("]", ",");
                 System.out.println("Revision_CBWK = " + Lista);
+                DeleteCBWK(Lista);
                 //Delete cbwk
             }
         } catch (Exception e) {
@@ -205,10 +208,23 @@ public class Career_Word_Key {
         String SS = " id_word_key ", TT = " ies9021_database.words_key ", WW = " word IN ( " + Lista + " )";
         return ObtenerDatos(SS, TT, WW);
     }
-    
-    public List<String[]> ObtenerCareerWordKey(int id_Career){
-        String SS = " id_career_word_key ", TT = " ies9021_database.career_word_key ",WW = " id_career = "+id_Career;
+
+    public List<String[]> ObtenerCareerWordKey(int id_Career) {
+        String SS = " id_career_word_key ", TT = " ies9021_database.career_word_key ", WW = " id_career = " + id_Career;
         return ObtenerDatos(SS, TT, WW);
     }
-    
+
+    private void DeleteCBWK(String Lista) {
+        try {
+            String Query;
+            if (!(Lista.isEmpty() || Lista.isBlank())) {
+                Query = "DELETE FROM ies9021_database.career_branch_word_key WHERE (`id_career_branch_word_key` IN (" + Lista + "));";
+                SendQuery(Query);
+                System.out.println("Compleate");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 }
