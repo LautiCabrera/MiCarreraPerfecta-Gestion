@@ -8,13 +8,14 @@ import java.util.List;
 
 public class words_key_create extends javax.swing.JFrame {
 
+    //Creo el objeto "wordskey" para acceder a todos los metodos de la clase
     WordsKey wordskey = new WordsKey();
-    private words_key_interface parentForm;
-    private int selectedUserID;
+    private words_key_interface parentForm; //Defino el parent de este form
+    private int selectedUserID; //Declaro variable entera para el ID de usuario seleccionado
     
     public words_key_create() {
         initComponents();
-        wordskey.loadUsers(comboBoxUsers, null);
+        wordskey.loadUsers(comboBoxUsers, null); //Cargo los usuarios en el comboBox
     }
 
     @SuppressWarnings("unchecked")
@@ -135,6 +136,7 @@ public class words_key_create extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //Metodo para definir el parent de este form
     public void setParent(words_key_interface parent){
         this.parentForm = parent;
     }
@@ -146,7 +148,7 @@ public class words_key_create extends javax.swing.JFrame {
         System.out.println("Palabras clave ingresada: " + wordsList);
         //String word = txtfield_create.getText();
         selectedUserID = WordsKey.handleUserSelection(comboBoxUsers);
-        wordskey.createWord(wordsList, selectedUserID, this);
+        wordskey.createWord(wordsList, selectedUserID, this,true);
     }//GEN-LAST:event_btn_createActionPerformed
 
     private void comboBoxUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxUsersActionPerformed

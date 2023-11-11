@@ -131,19 +131,13 @@ public class WordsKey {
     }
 
     // Metodo para crear palabras claves
-    public void createWord(List<String> words, int userID, JFrame window) {
-        // Obtener la fecha actual
-        java.util.Date currentDate = new java.util.Date();
-        // Convertir la fecha actual a un formato de fecha adecuado
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String f_create = dateFormat.format(currentDate);
-
+    public void createWord(List<String> words, int userID, JFrame window, boolean closewindow) {
         // Crear la consulta SQL para la inserción en la tabla "words_key"
         StringBuilder insertQuery = new StringBuilder("INSERT INTO words_key (word, id_user_create, id_user_update, f_create, f_update) VALUES ");
 
         // Agregar cada palabra a la consulta SQL
         for (String word : words) {
-            insertQuery.append("('").append(word).append("', ").append(userID).append(", ").append(userID).append(", '").append(f_create).append("', '").append(f_create).append("'),");
+            insertQuery.append("('").append(word).append("', ").append(userID).append(", ").append(userID).append(", NOW(), NOW()),");
         }
 
         // Eliminar la coma adicional al final de la consulta
@@ -160,7 +154,12 @@ public class WordsKey {
         if (result.getState()) {
             System.out.println("Palabras clave creadas con éxito.");
             JOptionPane.showMessageDialog(window, "Palabras clave creadas con éxito.", "Actualización Exitosa", JOptionPane.INFORMATION_MESSAGE);
-            window.dispose();
+            if(closewindow == true){
+               System.out.println("La ventana se configuro para cerrarse una vez creadas las palabras claves");
+               window.dispose(); 
+            }else{
+               System.out.println("La ventana se configuro para que no se cierre una vez creadas las palabras claves");
+            }
         } else {
             System.out.println("No se pudieron crear las palabras clave.");
             JOptionPane.showMessageDialog(window, "No se pudieron crear las palabras clave.", "Error de Creación", JOptionPane.ERROR_MESSAGE);
@@ -169,18 +168,13 @@ public class WordsKey {
     }
 
     // Metodo para editar palabras clave
-    public void updateWord(String word, String idWord, JComboBox<String> comboBoxUsers, JFrame window) {
+    public void updateWord(String word, String idWord, JComboBox<String> comboBoxUsers, JFrame window, boolean closewindow) {
         //Obtengo el Id del usuario seleccionado en el combobox(usuario que realizara la modificacion)
         int idUserUpdate;
         idUserUpdate = WordsKey.handleUserSelection(comboBoxUsers);
-        // Obtener la fecha actual
-        java.util.Date currentDate = new java.util.Date();
-        // Convertir la fecha actual a un formato de fecha adecuado
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String f_update = dateFormat.format(currentDate);
-
+        
         // Crear la consulta SQL para la actualización en la tabla "words_key"
-        String updateQuery = "UPDATE words_key SET word = '" + word + "', id_user_update = " + idUserUpdate + ", f_update = '" + f_update + "' WHERE id_word_key = " + idWord + ";";
+        String updateQuery = "UPDATE words_key SET word = '" + word + "', id_user_update = " + idUserUpdate + ", f_update = NOW() WHERE id_word_key = " + idWord + ";";
 
         // Ejecutar la consulta utilizando el método SendQuery
         ResultSetIES9021 result = DDBBConnection.SendQuery(updateQuery);
@@ -188,8 +182,12 @@ public class WordsKey {
         // Verificar el estado del resultado
         if (result.getState()) {
             JOptionPane.showMessageDialog(window, "La palabra clave se actualizó con éxito.", "Actualización Exitosa", JOptionPane.INFORMATION_MESSAGE);
-            // Cierra la ventana de "words_key_update" después de la actualización
-            window.dispose();
+            if(closewindow == true){
+               System.out.println("La ventana se configuro para cerrarse una vez creadas las palabras claves");
+               window.dispose(); 
+            }else{
+               System.out.println("La ventana se configuro para que no se cierre una vez creadas las palabras claves");
+            }
         } else {
             JOptionPane.showMessageDialog(window, "No se pudo actualizar la palabra clave.", "Error de Actualización", JOptionPane.ERROR_MESSAGE);
         }
@@ -228,45 +226,26 @@ public class WordsKey {
     // Metodo para verificar si una palabra clave puede ser eliminada o no
     public boolean wordUsed(String idWordKey) {
         // Define una lista de nombres de tablas en las que deseas verificar la existencia del ID
-        int id = parseInt(idWordKey);
+        int id = Integer.parseInt(idWordKey);
         System.out.println(id);
-        List<String> tablesToCheck = Arrays.asList("branch_words_key"); // Reemplaza con los nombres de tus tablas
+        List<String> tablesToCheck = Arrays.asList("branch_words_key","career_word_key","preference_words_key"); // Reemplaza con los nombres de tus tablas
         System.out.println(tablesToCheck);
         // Define el nombre del campo en esas tablas donde deseas buscar el ID
         String idFieldName = "id_word_key"; // Reemplaza con el nombre del campo correspondiente
+        int count;
 
         for (String tableName : tablesToCheck) {
-            // Construye la consulta SQL para buscar el ID en la tabla actual
-            System.out.println(tableName);
-            String query = "SELECT COUNT(*) FROM " + tableName + " WHERE " + idFieldName + " = " + id;
-            System.out.println(query);
-
-            // Ejecuta la consulta utilizando ResultSetIES9021
-            ResultSetIES9021 result = DDBBConnection.SendQuery(query);
-
-            if (result.getState()) {
-                System.out.println("Entro al if getState");
-                System.out.println(result.getDatos());
-                List<Integer> counts = result.getDatos();
-                System.out.println(counts);
-                if (!counts.isEmpty()) {
-                    int count = counts.get(0); // Obtén el resultado del recuento de filas
-                    System.out.println("Entro al if Empty ");
-                    if (count > 0) {
-                        // Si count es mayor que 0, significa que el ID existe en esta tabla
-                        System.out.println("Retorna true");
-                        return true;
-                    }
-                }
+            // Hago la consulta "COUNT"
+            count = DDBBConnection.getCount(tableName, idFieldName + " = " + id);
+            if(count>0){
+                // Si count es mayor que 0, el ID existe en esta tabla
+                System.out.println("Se encontró una coincidencia en otra tabla");
+                return true;
             } else {
-                // Manejo de errores si la consulta no fue exitosa
-                String clarification = result.getClarification();
-                System.out.println("Error al ejecutar la consulta en " + tableName + ": " + clarification);
-                // Puedes elegir cómo manejar este error, como lanzar una excepción
+                System.out.println("Error al ejecutar la consulta en " + tableName);
             }
-            System.out.println("1 vuelta");
+            System.out.println("+1 vuelta");
         }
-
         // Si llegas hasta aquí, significa que el ID no se encontró en ninguna de las tablas
         return false;
     }

@@ -7,7 +7,7 @@ public abstract class DDBBConnection {
 
     private static String DB = "ies9021_database";
     private static String URL = "jdbc:mysql://ies9021.edu.ar:3306/" + DB
-            + "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+            + "?zeroDateTimeBehavior=round&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     private static String User = "ies9021_userdb";
     private static String Password = "Xsw23edc.127";
     private static String Driver = "com.mysql.cj.jdbc.Driver";
@@ -40,7 +40,7 @@ public abstract class DDBBConnection {
     public static ResultSetIES9021 SendQuery(String query) {
 
         ResultSetIES9021 RSIES9021 = new ResultSetIES9021();
-        if (/* QueryVerification(query) */ true) {
+        if (QueryVerification(query)) {
             Conection = Conectar();
             PreparedStatement statement = null;
             boolean result = false;
@@ -54,7 +54,6 @@ public abstract class DDBBConnection {
                 logConnection("Conexión exitosa", query);
                 Disconect();
 
-                
             } catch (SQLException e) {
                 logConnection("Conexión fallida", query);
                 e.printStackTrace();
@@ -69,8 +68,7 @@ public abstract class DDBBConnection {
     private static void logConnection(String title, String description) {
         String insertQuery = "INSERT INTO logs (title, description, id_user, date) VALUES (?, ?, ?, ?)";
 
-        try (Connection connection = Conectar();
-                PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+        try (Connection connection = Conectar(); PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
 
             preparedStatement.setString(1, title);
             preparedStatement.setString(2, description);
@@ -104,30 +102,55 @@ public abstract class DDBBConnection {
         return null;
     }
 
-    private static boolean QueryVerification(String Query) {
-        String testQuery = Query.toLowerCase().substring(0, 6);
-        boolean verification = false;
-        if (testQuery.equals("insert") || testQuery.equals("select") ||
-                testQuery.equals("update") || testQuery.equals("delete")) {
-            switch (Query.toLowerCase().charAt(0)) {
-                case 's':
-                    verification = true;
-                    break;
-                case 'i':
-                    break;
-                case 'u':
-                    verification = testQuery.matches("UPDATE\\s+\\w+\\s+SET\\s+\\w+\\s*=\\s*[^;]+WHERE\\s+[^;]+;\r\n");
-                    break;
-                case 'd':
-                    verification = testQuery.matches("DELETE\\s+FROM\\s'+\\w+\\s+WHERE\\s+[^;]+;");
-                    break;
-            }
+    /**
+     * La función getCount recupera el recuento de filas de una tabla
+     * especificada en una base de datos, opcionalmente filtrada por una
+     * cláusula WHERE.
+     *
+     * @param tableName El parámetro tableName es una cadena que representa el
+     * nombre de la tabla en la base de datos desde la cual desea contar el
+     * número de filas.
+     * @param whereClause El parámetro `whereClause` es una cadena que
+     * representa la condición que se aplicará en la consulta SQL. Se utiliza
+     * para filtrar las filas devueltas por la consulta según criterios
+     * específicos. Por ejemplo, si `whereClause` es `"edad > 18"`, la consulta
+     * solo contará el
+     * @return El método devuelve un valor entero, que representa el recuento de
+     * filas en la tabla especificada que coinciden con la cláusula donde dada.
+     */
+    public static int getCount(String tableName, String whereClause) {
+        String query = "SELECT COUNT(*) FROM " + tableName;
+        if (whereClause != null && !whereClause.isEmpty()) {
+            query += " WHERE " + whereClause;
         }
+        int conteo = 0;
 
-        if (verification) {
-            logConnection("Valid Connection attempt", testQuery);
+        ResultSet resultSet = null;
+        try {
+
+            resultSet = fetchData(query);
+            if (resultSet.next()) {
+                conteo = resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            logConnection("Conexión fallida", query);
+        }
+        return conteo;
+    }
+
+    public static boolean QueryVerification(String query) {
+        
+        boolean verification = false;
+        String selectPattern = "SELECT .* FROM .*";
+            String insertPattern = "INSERT INTO .* VALUES .*";
+            String updatePattern = "UPDATE .* SET .* WHERE .*";
+            String deletePattern = "DELETE FROM .* WHERE .*";
+
+        if (query.matches(selectPattern) || query.matches(insertPattern) || query.matches(updatePattern) || query.matches(deletePattern)) {
+            logConnection("Valid Connection attempt", query);
+            verification = true;
         } else {
-            logConnection("Invalid Connection attempt", testQuery);
+            logConnection("Invalid Connection attempt", query);
         }
 
         return verification;

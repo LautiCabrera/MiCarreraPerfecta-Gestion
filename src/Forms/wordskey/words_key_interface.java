@@ -1,7 +1,6 @@
 package Forms.wordskey;
 
 import Models.WordsKey;
-import Utils.JsonDataFetcher;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 
@@ -11,8 +10,9 @@ import javax.swing.event.ListSelectionEvent;
  */
 public class words_key_interface extends javax.swing.JFrame {
 
-    JsonDataFetcher dataFetcher = new JsonDataFetcher();
+    //Creo el objeto "wordskey" para acceder a todos los metodos de la clase
     WordsKey wordskey = new WordsKey();
+    //Defino la pagina actual y el limite por cada pagina (Paginación)
     private int currentPage = 1;
     private final int wordsLimit = 10;
     
@@ -21,17 +21,20 @@ public class words_key_interface extends javax.swing.JFrame {
         ConfigurationStart();
     }
     
+    //Congifuración al iniciar
     private void ConfigurationStart(){
-        loadTableData();
-        currentPage = 1;
-        configSelectionListener();
-        ResetButtons();
+        loadTableData(); //Cargo todas las "wordskey" en la tabla
+        currentPage = 1; //Defino la página inicial en 1
+        configSelectionListener(); //Llamo a esta función para verificar si hay una fila seleccionada
+        ResetButtons(); //Recargo la config inicial de los botones
     }
     
+    //Metodo para llenar la tabla
     private void loadTableData() {
         wordskey.loadAllWordsKey(table_wordskey, currentPage, wordsLimit, this);
     }
     
+    //Metodo para verificar si hay una fila de la tabla seleccionada
     private void configSelectionListener() {
         table_wordskey.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
             // Verifica si hay una fila seleccionada
@@ -43,6 +46,7 @@ public class words_key_interface extends javax.swing.JFrame {
         });
     }
     
+    //Metodo para reiniciar la configuración de los botones
     private void ResetButtons() {
         btn_create.setText("Crear");
         btn_create.setEnabled(true);
@@ -303,6 +307,7 @@ public class words_key_interface extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //Botón para buscar palabras clave
     private void btn_searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_searchActionPerformed
         btn_pagprev.setEnabled(false);
         btn_pagnext.setEnabled(false);
@@ -310,6 +315,7 @@ public class words_key_interface extends javax.swing.JFrame {
         wordskey.findWord(searchText, table_wordskey, this);
     }//GEN-LAST:event_btn_searchActionPerformed
 
+    //Botón para retroceder una página
     private void btn_pagprevActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_pagprevActionPerformed
         if(currentPage > 1){
             currentPage--;
@@ -319,29 +325,31 @@ public class words_key_interface extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btn_pagprevActionPerformed
 
+    //Botón para avanzar una página
     private void btn_pagnextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_pagnextActionPerformed
         currentPage++;
         loadTableData();
     }//GEN-LAST:event_btn_pagnextActionPerformed
 
+    //Botón para recargar los datos
     private void btn_refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_refreshActionPerformed
         table_wordskey.clearSelection();
         ConfigurationStart();
     }//GEN-LAST:event_btn_refreshActionPerformed
 
+    //Botón para eliminar una palabra clave
     private void btn_deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_deleteActionPerformed
-  
-        wordskey.deleteWord(table_wordskey, this);
-                
+        wordskey.deleteWord(table_wordskey, this);     
     }//GEN-LAST:event_btn_deleteActionPerformed
            
-    
+    //Botón para crear una palabra clave
     private void btn_createActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_createActionPerformed
         words_key_create addWord = new words_key_create();
         addWord.setParent(this);
         addWord.setVisible(true);
     }//GEN-LAST:event_btn_createActionPerformed
 
+    //Botón para actualizar una palabra clave
     private void btn_updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_updateActionPerformed
         // Verifica si se ha seleccionado una fila
         int selectedRow = table_wordskey.getSelectedRow();

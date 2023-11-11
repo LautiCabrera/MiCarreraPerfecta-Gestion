@@ -6,15 +6,15 @@ import Models.WordsKey;
 
 public class words_key_update extends javax.swing.JFrame {
 
-    WordsKey wordskey = new WordsKey();
-    private words_key_interface parentForm;
-    private String idWord;
-    private String idUser;
-    private int idUserUpdate;
+    WordsKey wordskey = new WordsKey(); //Creo el objeto "wordskey" para acceder a todos los metodos de la clase
+    private words_key_interface parentForm; //Defino el parent de este form
+    private String idWord; //Declaro variable tipo string para el ID de la palabra clave seleccionada
+    private String idUser; //Declaro variable tipo string para el ID de usuario seleccionado
+    private int idUserUpdate; //Declaro variable entera para el ID de usuario que actualiza
     
     public words_key_update() {
         initComponents();
-        wordskey.loadUsers(comboBoxUsers, idUser);
+        wordskey.loadUsers(comboBoxUsers, idUser); //Cargo los usuarios en el comboBox
     }
 
     @SuppressWarnings("unchecked")
@@ -134,6 +134,7 @@ public class words_key_update extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //Metodo para definir el parent de este form
     public void setParent(words_key_interface parent){
         this.parentForm = parent;
     }
@@ -160,7 +161,7 @@ public class words_key_update extends javax.swing.JFrame {
         idUserUpdate = WordsKey.handleUserSelection(comboBoxUsers);
         System.out.println("El ID que actualiza es; "+idUserUpdate);
 
-        wordskey.updateWord(word, idWord, comboBoxUsers, this);
+        wordskey.updateWord(word, idWord, comboBoxUsers, this,true);
     }//GEN-LAST:event_btn_modifyActionPerformed
 
     private void comboBoxUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxUsersActionPerformed
