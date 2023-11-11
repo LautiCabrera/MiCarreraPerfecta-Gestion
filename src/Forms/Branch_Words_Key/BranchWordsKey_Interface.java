@@ -6,6 +6,11 @@ package Forms.Branch_Words_Key;
 
 import Controllers.BranchWordsKeyController;
 import Forms.ErrorDialog;
+import Models.Branch;
+import Utils.JsonDataFetcher;
+import static Utils.JsonDataFetcher.selectQuery;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -21,7 +26,6 @@ public class BranchWordsKey_Interface extends javax.swing.JFrame {
      */
     public BranchWordsKey_Interface() {
         initComponents();
-        cargarTabla();
     }
 
     /**
@@ -44,6 +48,8 @@ public class BranchWordsKey_Interface extends javax.swing.JFrame {
         Search = new javax.swing.JButton();
         Delete = new javax.swing.JButton();
         Refresh = new javax.swing.JButton();
+        BranchComboBox = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -70,16 +76,24 @@ public class BranchWordsKey_Interface extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "id_branch", "id_word_key", "id_career", "branch_words_keycol"
+                "id", "id_branch", "id_word_key", "id_career", "id_user_create", "branch_words_keycol"
             }
-        ));
-        jTable1.setCellSelectionEnabled(true);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jTable1.setColumnSelectionAllowed(false);
         jScrollPane2.setViewportView(jTable1);
 
         Search.setBackground(new java.awt.Color(255, 255, 153));
@@ -106,36 +120,56 @@ public class BranchWordsKey_Interface extends javax.swing.JFrame {
             }
         });
 
+        BranchComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ingenierias", "Medicina", "Cs. de la educacion", "Artes y diseño", "Ciencias Económicas", "HUmanidades y Ciencias Sociales", "Cs. aplicadas a la industria", "Cs. Agrarias", "Logistica", "Cs. de la Computacion", "Cs. exactas y Naturales", "Filosofia y letras", "Derecho", "Seguridad Publica", "Odontologia", "Cs de la Salud", "Turismo" }));
+        BranchComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BranchComboBoxActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Seleccione la rama:");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 508, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(174, 174, 174)
-                        .addComponent(titulo)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Search, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(Delete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(Refresh, javax.swing.GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 511, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(BranchComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(101, 101, 101)))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(Delete, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Search, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Refresh, javax.swing.GroupLayout.DEFAULT_SIZE, 83, Short.MAX_VALUE))
                 .addContainerGap())
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(166, 166, 166)
+                .addComponent(titulo)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(56, 56, 56)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(titulo)
-                    .addComponent(Search))
+                .addComponent(titulo)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(21, 21, 21)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(BranchComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1))
+                        .addGap(18, 18, 18)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(76, 76, 76)
+                        .addGap(90, 90, 90)
+                        .addComponent(Search)
+                        .addGap(18, 18, 18)
                         .addComponent(Delete)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(Refresh)))
@@ -150,28 +184,31 @@ public class BranchWordsKey_Interface extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 6, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void SearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchActionPerformed
-       String searchTerm = JOptionPane.showInputDialog(null, "Ingrese el término de búsqueda:");
+  
+        String searchTerm = JOptionPane.showInputDialog(null, "Ingrese el término de búsqueda:");
 
-    if (searchTerm != null && !searchTerm.isEmpty()) {
-        for (int row = 0; row < jTable1.getRowCount(); row++) {
-            Object cellValue = jTable1.getValueAt(row, 0);
-            if (cellValue != null && cellValue.toString().equals(searchTerm)) {
-                // Encontraste una coincidencia, resaltar la fila
-                jTable1.setRowSelectionInterval(row, row);
-                jTable1.scrollRectToVisible(jTable1.getCellRect(row, 0, true));
-                return; // Salir del bucle si se encontró una coincidencia
+        if (searchTerm != null && !searchTerm.isEmpty()) {
+            for (int row = 0; row < jTable1.getRowCount(); row++) {
+                Object cellValue = jTable1.getValueAt(row, 0);
+                if (cellValue != null && cellValue.toString().equals(searchTerm)) {
+                    // Encontraste una coincidencia, resaltar la fila
+                    jTable1.setRowSelectionInterval(row, row);
+                    jTable1.scrollRectToVisible(jTable1.getCellRect(row, 0, true));
+                    return; // Salir del bucle si se encontró una coincidencia
+                }
             }
+            // Si no se encontraron coincidencias
+            JOptionPane.showMessageDialog(null, "No se encontraron coincidencias para '" + searchTerm + "'.");
         }
-        // Si no se encontraron coincidencias
-        JOptionPane.showMessageDialog(null, "No se encontraron coincidencias para '" + searchTerm + "'.");
-    }
     }//GEN-LAST:event_SearchActionPerformed
 
     private void DeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteActionPerformed
@@ -200,6 +237,10 @@ public class BranchWordsKey_Interface extends javax.swing.JFrame {
     private void RefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshActionPerformed
         cargarTabla();
     }//GEN-LAST:event_RefreshActionPerformed
+
+    private void BranchComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BranchComboBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BranchComboBoxActionPerformed
     private void errorMessage(String msg) {
         ErrorDialog errorDiag = new ErrorDialog(this, true);
         errorDiag.getErrorMessage(msg);
@@ -215,7 +256,27 @@ public class BranchWordsKey_Interface extends javax.swing.JFrame {
         for (String[] row : data) {
             model.addRow(row);
         }
+         
+        DefaultTableModel column = (DefaultTableModel) jTable1.getColumnModel();
+//        column.setValueAt(BranchWordsKeyController.buscarPorNombreDeBranch(WIDTH), 1, 1);
     }
+    
+//     private String cargar(int Val) {
+//        String List = "",
+//                TT = " ies9021_database.words_key W "
+//                + "inner join career_word_key CW ON W.id_word_key = CW.id_word_key ", WW = "CW.id_career = " + Val;
+//        ArrayList<String[]> Palabras = obtenerDatos("word", TT, WW);
+//        for (String[] palabra : Palabras) {
+//            List += Arrays.toString(palabra) + ", ";
+//        }
+//        List = List.substring(0, List.length() - 2).replace("]", "").replace("[", "");
+//        return List;
+//    }
+//     
+//    private ArrayList obtenerDatos(String SS, String TT, String WW) {
+//         return new ArrayList<>(selectQuery(SS, TT, WW));
+//    }
+       
     /**
      * @param args the command line arguments
      */
@@ -252,9 +313,11 @@ public class BranchWordsKey_Interface extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> BranchComboBox;
     private javax.swing.JButton Delete;
     private javax.swing.JButton Refresh;
     private javax.swing.JButton Search;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
@@ -264,4 +327,6 @@ public class BranchWordsKey_Interface extends javax.swing.JFrame {
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JLabel titulo;
     // End of variables declaration//GEN-END:variables
+
+   
 }

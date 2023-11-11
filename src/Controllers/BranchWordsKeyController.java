@@ -26,4 +26,9 @@ public class BranchWordsKeyController {
         String query = "DELETE FROM branch_words_key WHERE id_branch_word_key = "+ id;
         DDBBConnection.SendQuery(query);
     }
+    
+    public static void buscarPorNombreDeBranch(int id){
+        String query = "select name from branch where id_branch =" + id;
+        DDBBConnection.SendQuery(query);
+    }
 }
