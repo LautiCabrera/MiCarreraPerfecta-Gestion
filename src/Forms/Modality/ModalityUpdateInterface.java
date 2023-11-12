@@ -107,7 +107,7 @@ public class ModalityUpdateInterface extends javax.swing.JFrame {
     private void saveBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBTNActionPerformed
        String modalityUpdate = modalityUpdateTxt.getText();
        String idUserUpdate = idUserUpdateTxt.getText(); 
-       modality.updateModality(id, modalityUpdate, idUserUpdate, this);
+       modality.saveUpdateModality(id, modalityUpdate, idUserUpdate, this);
     }//GEN-LAST:event_saveBTNActionPerformed
 
     private void cancelBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBTNActionPerformed

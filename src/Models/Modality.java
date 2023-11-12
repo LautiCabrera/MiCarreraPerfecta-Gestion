@@ -3,6 +3,7 @@ package Models;
 import Utils.DDBBConnection;
 import Utils.JsonDataFetcher;
 import Utils.ResultSetIES9021;
+import java.awt.HeadlessException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -97,11 +98,11 @@ public class Modality {
     //+++++++++++++++Metodos para el funcionamiento de la interfas principal+++++++++++++++
     //METODO PARA LA CARGA DE DATOS
     public void loadTableData(JTable table, JFrame window) {
+        String tableName = "modality"; // Nombre de la tabla
+        String whereClause = null;
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);
         model.setColumnIdentifiers(new String[]{"id_modality", "modality", "virtual", "id_user_create", "id_user_update", "fcreate", "fupdate"});
-        String tableName = "modality"; // Nombre de la tabla
-        String whereClause = null;
         Class<Modality> returnType = Modality.class; // Clase que se utiliza para mapear los resultados
         ResultSetIES9021<Modality> result = dataFetcher.fetchTableData(tableName, whereClause, returnType); // Llama al método para obtener los datos
 
@@ -124,10 +125,9 @@ public class Modality {
     //METODO PARA LA BUSQUEDA 
     public void searchModality(String searchText, JTable table, JFrame window) {
         // Utiliza JsonDataFetcher para buscar campus por nombre
-        String whereClause = "name LIKE '%" + searchText + "%'";
+        String whereClause = "modality LIKE '%" + searchText + "%'";
         Class<Modality> returnType = Modality.class;
         ResultSetIES9021<Modality> result = dataFetcher.fetchTableData("modality", whereClause, returnType);
-
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);
         model.setColumnIdentifiers(new String[]{"id_modality", "modality", "virtual", "id_user_create", "id_user_update", "fcreate", "fupdate"});
@@ -150,7 +150,7 @@ public class Modality {
         }
     }
     //FIN DEL METODO
-    
+
     //METODOS PARA EL BOTON ELIMINAR 
     public void deleteModality(JTable table, JFrame window) {
         // Obtén el ID de la fila seleccionada
@@ -159,14 +159,14 @@ public class Modality {
         // Verifica si el ID está siendo usado en otras tablas
         boolean idUsed = modalityUsed(selectedID);
 
-        if (idUsed) {
+        if (idUsed == true) {
             // El ID está asociado a otras tablas, muestra un mensaje de error
             JOptionPane.showMessageDialog(window, "No se puede eliminar este campus porque el ID está asociado a otras tablas.", "Error", JOptionPane.ERROR_MESSAGE);
         } else {
-            int confirmInitial = JOptionPane.showConfirmDialog(null, "¿Estás seguro de que deseas eliminar este campus?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+            int confirmInitial = JOptionPane.showConfirmDialog(null, "¿Estás seguro de que deseas eliminar este campus?", "Confirmar eliminación", JOptionPane.YES_NO_CANCEL_OPTION);
             if (confirmInitial == JOptionPane.YES_OPTION) {
                 String randomText = generateRandomText();
-                String userInput = JOptionPane.showInputDialog(this, "Para confirmar, ingrese el siguiente texto:\n" + randomText);
+                String userInput = JOptionPane.showInputDialog("Para confirmar, ingrese el siguiente texto:\n" + randomText);
                 if (userInput != null && userInput.equals(randomText)) {
                     // Si el ID no está asociado a otras tablas, procede con la eliminación
                     String query = "DELETE FROM campus WHERE id_campus = " + selectedID;
@@ -180,7 +180,7 @@ public class Modality {
                         } else {
                             JOptionPane.showMessageDialog(null, "No se pudo eliminar el registro: " + queryResult.getClarification());
                         }
-                    } catch (Exception error) {
+                    } catch (HeadlessException error) {
                         JOptionPane.showMessageDialog(window, "Error inesperado al eliminar la fila: " + error.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 } else if (userInput != null && !userInput.equals(randomText)) {
@@ -198,52 +198,38 @@ public class Modality {
     // Metodo para verificar si una fila puede ser eliminada o no 
     public boolean modalityUsed(String idModality) {
         int id = Integer.parseInt(idModality);
-        List<String> tablesToCheck = Arrays.asList("career");
         String idFieldName = "id_modality";
-
-        for (String tableName : tablesToCheck) {
-            // Construye la consulta SQL para buscar el ID en la tabla actual
-            String query = "SELECT COUNT(*) FROM " + tableName + " WHERE " + idFieldName + " = " + id;
-
-            // Ejecuta la consulta utilizando ResultSetIES9021
-            ResultSetIES9021 result = DDBBConnection.SendQuery(query);
-
-            if (result.getState()) {
-                List<Integer> counts = result.getDatos();
-                if (!counts.isEmpty()) {
-                    int count = counts.get(0); // Resultado del recuento de filas
-                    if (count > 0) {
-                        // Si count es mayor que 0, significa que el ID existe en esta tabla
-                        return true;
-                    }
-                }
-            } else {
-                String clarification = result.getClarification();
-                System.out.println("Error al ejecutar la consulta en " + tableName + ": " + clarification);
-            }
-        }
-
-        // Si llega hasta aquí, significa que el ID no se encontró en ninguna de las tablas
+        String tableName = "career";
+        int count = DDBBConnection.getCount(tableName, idFieldName + " = " + id);
+        if (count > 0) {
+            // Si count es mayor que 0, el ID existe en esta tabla
+            return true;
+        } else {
+           System.out.println("Error al ejecutar la consulta en " + tableName);
+         }
+        
+        // Si llegas hasta aquí, el ID no se encontró en ninguna de las tablas
         return false;
     }
+
     //Metodo para generar un texto aleatorio 
     private String generateRandomText() {
         int length = 6; // Longitud del texto aleatorio
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         StringBuilder randomText = new StringBuilder();
-            for (int i = 0; i < length; i++) {
-                int index = (int) (Math.random() * characters.length());
-                randomText.append(characters.charAt(index));
-            } 
+        for (int i = 0; i < length; i++) {
+            int index = (int) (Math.random() * characters.length());
+            randomText.append(characters.charAt(index));
+        }
         return randomText.toString();
     }
-    
+
     //++++++++++Metodos para el funcionamiento de la interfas de añadir++++++++++
     //METODO PARA EL BOTON GUARDAR 
     public void saveModalityBTN(String modality, String idUserCreate, JFrame window) {
-        // Obtener la fecha actual
+        // Obtiene la fecha actual
         java.util.Date currentDate = new java.util.Date();
-        // Convertir la fecha actual a un formato de fecha adecuado
+        // Conviete la fecha actual a un formato de fecha adecuado
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String fCreateAdd = dateFormat.format(currentDate);
         //Parametros para pasar la query
@@ -251,11 +237,17 @@ public class Modality {
         String idCreate = idUserCreate;
         String idUpdate = idCreate;
         String fUpdateAdd = fCreateAdd;
-        // Crear la consulta SQL para la inserción en la tabla "campus"
+        // Crea la consulta SQL para la inserción en la tabla "campus"
         String query = "INSERT INTO modality (modality, virtual, id_user_create, id_user_update, fcreate, fupdate) " + "VALUES ('" + modality + "', '" + virtualModality + "', " + idCreate + ", " + idUpdate + ", '" + fCreateAdd + "', '" + fUpdateAdd + "')";
+        String validatedModality = validateText(modality);
+        if (validatedModality == null) {
+            // El texto de la modalidad es inválido
+            JOptionPane.showMessageDialog(window, "El campo 'modalidad' no puede estar vacio ni contener numeros.", "Error de Validación", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         //Ejecuto la consulta 
         ResultSetIES9021 result = DDBBConnection.SendQuery(query);
-        // Verificar el estado del resultado
+        // Verifica el estado del resultado
         if (result.getState()) {
             JOptionPane.showMessageDialog(window, "Campus creado con éxito.", "Actualización Exitosa", JOptionPane.INFORMATION_MESSAGE);
             window.dispose();
@@ -266,26 +258,49 @@ public class Modality {
 
     //+++++++++++++++Metodos para el funcionamiento de la interfas de editar+++++++++++++++
     //METODO PARA EL BOTON GUARDAR 
-    public void updateModality(String id_modality, String modality, String idUserUpdate, JFrame window) {
-        // Obtener la fecha actual
+    public void saveUpdateModality(String id_modality, String modality, String idUserUpdate, JFrame window) {
+        // Obtiene la fecha actual
         java.util.Date currentDate = new java.util.Date();
-        // Convertir la fecha actual a un formato de fecha adecuado
+        // Convierte la fecha actual a un formato de fecha adecuado
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String f_update = dateFormat.format(currentDate);
 
         // Crear la consulta SQL para la actualización en la tabla "campus"
         String updateQuery = "UPDATE modality SET  modality = '" + modality + "', id_user_update = '" + idUserUpdate
                 + "', fupdate = " + f_update + "' WHERE id_modality = " + id_modality + ";";
-
-        // Ejecutar la consulta utilizando el método SendQuery
+        // Valida el texto de la modalidad
+        String validatedModality = validateText(modality);
+        if (validatedModality == null) {
+            // El texto de la modalidad es inválido
+            JOptionPane.showMessageDialog(window, "El campo 'modalidad' no puede estar vacio ni contener numeros.", "Error de Validación", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        // Ejecuta la consulta utilizando el método SendQuery
         ResultSetIES9021 result = DDBBConnection.SendQuery(updateQuery);
 
-        // Verificar el estado del resultado
+        // Verifica el estado del resultado
         if (result.getState()) {
             JOptionPane.showMessageDialog(window, "Los datos del campus se actualizaron con éxito.", "Actualización Exitosa", JOptionPane.INFORMATION_MESSAGE);
             window.dispose();
         } else {
             JOptionPane.showMessageDialog(window, "No se pudo actualizar el campus.", "Error de Actualización", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    //FIN DEL METODO
+
+    //FUNCION PARA VERIFICAR TEXTO
+    public String validateText(String text) {
+        // Verifica que el texto no esté vacío
+        if (text.isEmpty()) {
+            return null;
+        }
+        // Verifica que el texto no contenga números
+        for (char c : text.toCharArray()) {
+            if (Character.isDigit(c)) {
+                return null;
+            }
+        }
+        // Transforma el texto a mayúsculas
+        return text.toUpperCase();
     }
 }
