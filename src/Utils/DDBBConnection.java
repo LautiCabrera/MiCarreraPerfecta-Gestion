@@ -6,8 +6,7 @@ import java.time.LocalDate;
 public abstract class DDBBConnection {
 
     private static String DB = "ies9021_database";
-    private static String URL = "jdbc:mysql://ies9021.edu.ar:3306/" + DB
-            + "?zeroDateTimeBehavior=round&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+    private static String URL = "jdbc:mysql://ies9021.edu.ar:3306/" + DB   + "?zeroDateTimeBehavior=round&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     private static String User = "ies9021_userdb";
     private static String Password = "Xsw23edc.127";
     private static String Driver = "com.mysql.cj.jdbc.Driver";
@@ -41,6 +40,7 @@ public abstract class DDBBConnection {
 
         ResultSetIES9021 RSIES9021 = new ResultSetIES9021();
         if (QueryVerification(query)) {
+            System.out.println("Hola");
             Conection = Conectar();
             PreparedStatement statement = null;
             boolean result = false;
@@ -52,6 +52,7 @@ public abstract class DDBBConnection {
                 RSIES9021.setState(true);
                 RSIES9021.setClarification("Consulta ejecutada satisfactoriamente");
                 logConnection("Conexión exitosa", query);
+                System.out.println("Hola2");
                 Disconect();
 
             } catch (SQLException e) {
