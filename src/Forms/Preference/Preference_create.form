@@ -107,7 +107,7 @@
     <Component class="javax.swing.JComboBox" name="groupComboBox">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="10">
+          <StringArray count="11">
             <StringItem index="0" value="Cognitivas"/>
             <StringItem index="1" value="Sociales"/>
             <StringItem index="2" value="Motoras"/>
@@ -118,6 +118,7 @@
             <StringItem index="7" value="Resoluci&#xf3;n de problemas"/>
             <StringItem index="8" value="Adaptaci&#xf3;n"/>
             <StringItem index="9" value="&#xc9;ticas y morales"/>
+            <StringItem index="10" value="corao puto"/>
           </StringArray>
         </Property>
       </Properties>

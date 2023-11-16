@@ -94,7 +94,7 @@ public class Preference_create extends javax.swing.JDialog {
 
         jLabel3.setText("Name");
 
-        groupComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cognitivas", "Sociales", "Motoras", "Creativas", "Emocionales", "Lingüísticas", "Tecnológicas", "Resolución de problemas", "Adaptación", "Éticas y morales" }));
+        groupComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cognitivas", "Sociales", "Motoras", "Creativas", "Emocionales", "Lingüísticas", "Tecnológicas", "Resolución de problemas", "Adaptación", "Éticas y morales", "corao puto" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
