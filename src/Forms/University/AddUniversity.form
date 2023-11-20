@@ -12,6 +12,53 @@
         <Property name="text" type="java.lang.String" value="jButton2"/>
       </Properties>
     </Component>
+    <Container class="javax.swing.JScrollPane" name="jScrollPane2">
+      <AuxValues>
+        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+      </AuxValues>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+      <SubComponents>
+        <Component class="javax.swing.JList" name="jList1">
+          <Properties>
+            <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
+              <StringArray count="5">
+                <StringItem index="0" value="Item 1"/>
+                <StringItem index="1" value="Item 2"/>
+                <StringItem index="2" value="Item 3"/>
+                <StringItem index="3" value="Item 4"/>
+                <StringItem index="4" value="Item 5"/>
+              </StringArray>
+            </Property>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+          </AuxValues>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Container class="javax.swing.JScrollPane" name="jScrollPane3">
+      <AuxValues>
+        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+      </AuxValues>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+      <SubComponents>
+        <Component class="javax.swing.JTree" name="jTree1">
+        </Component>
+      </SubComponents>
+    </Container>
+    <Component class="javax.swing.ButtonGroup" name="buttonGroup1">
+    </Component>
+    <Component class="javax.swing.JSlider" name="jSlider1">
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel5">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="jLabel5"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JSpinner" name="jSpinner1">
+    </Component>
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
@@ -50,7 +97,7 @@
                   <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
                   <Component id="jPanel2" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="16" max="32767" attributes="0"/>
+              <EmptySpace pref="8" max="32767" attributes="0"/>
           </Group>
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="32767" attributes="0"/>
@@ -74,7 +121,7 @@
               <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="Actualizar" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="89" max="32767" attributes="0"/>
+              <EmptySpace pref="86" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -116,19 +163,18 @@
                       </Group>
                   </Group>
                   <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="btnCancelar" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="54" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="TXTmagnamet" pref="131" max="32767" attributes="0"/>
-                                  <Component id="TXTupdateuser" alignment="0" max="32767" attributes="0"/>
-                              </Group>
-                              <Component id="TXTuniversity" min="-2" pref="131" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="TXTuniversity" alignment="0" max="32767" attributes="0"/>
+                              <Component id="BoxMagnamet" alignment="0" max="32767" attributes="0"/>
+                              <Component id="BoxUsers" max="32767" attributes="0"/>
                           </Group>
+                          <EmptySpace min="-2" pref="195" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="btnCancelar" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="232" max="32767" attributes="0"/>
+                  <EmptySpace pref="37" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -143,14 +189,14 @@
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="TXTmagnamet" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="BoxMagnamet" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="TXTupdateuser" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="BoxUsers" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="45" max="32767" attributes="0"/>
+                  <EmptySpace pref="48" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="btnGuardar" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="btnCancelar" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -165,13 +211,6 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="TXTuniversityActionPerformed"/>
           </Events>
-        </Component>
-        <Component class="javax.swing.JTextField" name="TXTmagnamet">
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="TXTmagnametActionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JTextField" name="TXTupdateuser">
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
@@ -203,6 +242,61 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCancelarActionPerformed"/>
           </Events>
+        </Component>
+        <Component class="javax.swing.JComboBox" name="BoxMagnamet">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="2">
+                <StringItem index="0" value="Publica"/>
+                <StringItem index="1" value="Privada"/>
+              </StringArray>
+            </Property>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BoxMagnametActionPerformed"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JComboBox" name="BoxUsers">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="28">
+                <StringItem index="0" value="Leandro Moyano"/>
+                <StringItem index="1" value="Nicolas Basconcello"/>
+                <StringItem index="2" value="Juan Salinas"/>
+                <StringItem index="3" value="Amaya Dylan"/>
+                <StringItem index="4" value="Amaya Rodrigo"/>
+                <StringItem index="5" value="Arboit Ilko"/>
+                <StringItem index="6" value="Arce Lucas"/>
+                <StringItem index="7" value="Arenas Veronica"/>
+                <StringItem index="8" value="Bustamante Enzo"/>
+                <StringItem index="9" value="Bustos Pedro"/>
+                <StringItem index="10" value="Cabrera Lautaro"/>
+                <StringItem index="11" value="Castillo Joaquin"/>
+                <StringItem index="12" value="Coria Adrian"/>
+                <StringItem index="13" value="Fornasari Pablo"/>
+                <StringItem index="14" value="Coria Agustin"/>
+                <StringItem index="15" value="Garcia Dario"/>
+                <StringItem index="16" value="Martorana Bruno"/>
+                <StringItem index="17" value="Godoy Julian"/>
+                <StringItem index="18" value="Olguin Bruno"/>
+                <StringItem index="19" value="Ramirez Yoel"/>
+                <StringItem index="20" value="Rico Enzo"/>
+                <StringItem index="21" value="Tello Sebastian"/>
+                <StringItem index="22" value="Urizar Arnaldo"/>
+                <StringItem index="23" value="Sarmiento Marisa"/>
+                <StringItem index="24" value="Salde&#xf1;a Juan"/>
+                <StringItem index="25" value="Rodriguez Federico"/>
+                <StringItem index="26" value="Gogol Javier"/>
+                <StringItem index="27" value="Nicol&#xe1;s Suarez"/>
+              </StringArray>
+            </Property>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>

@@ -48,7 +48,6 @@ public class ModifyUniversity extends javax.swing.JFrame {
         listar();
     }
 
-
     private boolean cancelFlag = false;
     DefaultTableModel modelo;
 
@@ -200,37 +199,63 @@ public class ModifyUniversity extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-int selectedRow = Tabla.getSelectedRow();
-    if (selectedRow < 0) {
-        JOptionPane.showMessageDialog(this, "Selecciona una fila para guardar los cambios.", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
+        int selectedRow = Tabla.getSelectedRow();
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "Selecciona una fila para guardar los cambios.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-    String id = Tabla.getValueAt(selectedRow, 0).toString();
-    String name = Tabla.getValueAt(selectedRow, 1).toString();
-    String idManagement = Tabla.getValueAt(selectedRow, 2).toString();
+        String id = Tabla.getValueAt(selectedRow, 0).toString();
+        String name = Tabla.getValueAt(selectedRow, 1).toString();
+        String idManagement = Tabla.getValueAt(selectedRow, 2).toString();
+        String idUserUpdate = Tabla.getValueAt(selectedRow, 4).toString();
 
-    if (name.isEmpty() || idManagement.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Nombre y ID de Management son obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
+        if (name.isEmpty() || idManagement.isEmpty() || idUserUpdate.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Nombre, ID de Management y ID de Usuario son obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-    // Obtén la fecha actual en el formato necesario
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    Date currentDate = new Date(System.currentTimeMillis());
-    String f_update = dateFormat.format(currentDate);
+        // Verificar si el ID Management es 1 o 2
+        try {
+            int idManagementValue = Integer.parseInt(idManagement);
+            if (idManagementValue != 1 && idManagementValue != 2) {
+                JOptionPane.showMessageDialog(this, "El ID de Management debe ser 1 o 2.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "El ID de Management debe ser un número entero.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-    // Construye la consulta SQL de actualización con f_update
-    String updateQuery = "UPDATE university SET name = '" + name + "', id_management = " + idManagement + ", f_update = '" + f_update + "' WHERE id_university = " + id;
+        // Verificar si el ID User Update está en el rango permitido
+        try {
+            int idUserUpdateValue = Integer.parseInt(idUserUpdate);
+            if (idUserUpdateValue < 1 || idUserUpdateValue > 30) {
+                JOptionPane.showMessageDialog(this, "El ID de Usuario para Actualización debe estar entre 1 y 30.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "El ID de Usuario para Actualización debe ser un número entero.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-    ResultSetIES9021 result = DDBBConnection.SendQuery(updateQuery);
+        // Obtén la fecha actual en el formato necesario
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date currentDate = new Date(System.currentTimeMillis());
+        String f_update = dateFormat.format(currentDate);
 
-    if (result.getState()) {
-        JOptionPane.showMessageDialog(this, "Universidad actualizada con éxito.", "Actualización Exitosa", JOptionPane.INFORMATION_MESSAGE);
-        modifiedRows.clear();
-    } else {
-        JOptionPane.showMessageDialog(this, "No se pudo actualizar la universidad.", "Error de Actualización", JOptionPane.ERROR_MESSAGE);
-    }
+        // Construye la consulta SQL de actualización con f_update
+        String updateQuery = "UPDATE university SET name = '" + name + "', id_management = " + idManagement + ", id_user_update = " + idUserUpdate + ", f_update = '" + f_update + "' WHERE id_university = " + id;
+
+        ResultSetIES9021 result = DDBBConnection.SendQuery(updateQuery);
+
+        if (result.getState()) {
+            JOptionPane.showMessageDialog(this, "Universidad actualizada con éxito.", "Actualización Exitosa", JOptionPane.INFORMATION_MESSAGE);
+            modifiedRows.clear();
+        } else {
+            JOptionPane.showMessageDialog(this, "No se pudo actualizar la universidad.", "Error de Actualización", JOptionPane.ERROR_MESSAGE);
+        }
+
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed

@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import java.sql.SQLException;
 
 /**
  *
@@ -45,7 +46,7 @@ public class DeleteUniversity extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         TXTuniversity = new javax.swing.JTextField();
-        btnGuardar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         ID_University = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
@@ -116,10 +117,10 @@ public class DeleteUniversity extends javax.swing.JFrame {
             }
         });
 
-        btnGuardar.setText("Eliminar");
-        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+        btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarActionPerformed(evt);
+                btnEliminarActionPerformed(evt);
             }
         });
 
@@ -154,7 +155,7 @@ public class DeleteUniversity extends javax.swing.JFrame {
                 .addGap(49, 198, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnGuardar)
+                .addComponent(btnEliminar)
                 .addGap(26, 26, 26)
                 .addComponent(btnCancelar)
                 .addGap(30, 30, 30))
@@ -174,7 +175,7 @@ public class DeleteUniversity extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar)
-                    .addComponent(btnGuardar))
+                    .addComponent(btnEliminar))
                 .addContainerGap())
         );
 
@@ -237,10 +238,25 @@ public class DeleteUniversity extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_TXTuniversityActionPerformed
 
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        Delete();
-        listar();
-    }//GEN-LAST:event_btnGuardarActionPerformed
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+
+        int selectedRow = Tabla.getSelectedRow();
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "Selecciona una fila para eliminar la universidad.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int confirmacion = JOptionPane.showConfirmDialog(this, "¿Seguro que quieres eliminar esta universidad?", "Confirmar Eliminación", JOptionPane.YES_NO_OPTION);
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            String universityIDText = ID_University.getText();
+            if (!universityIDText.isEmpty()) {
+                Delete();
+                listar();
+            } else {
+                JOptionPane.showMessageDialog(this, "El campo de ID de universidad está vacío.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void ID_UniversityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ID_UniversityActionPerformed
         // TODO add your handling code here:
@@ -340,8 +356,14 @@ public class DeleteUniversity extends javax.swing.JFrame {
         int universityID = Integer.parseInt(universityIDText);
 
         try {
-            String deleteQuery = "DELETE FROM university WHERE id_university = " + universityID;
+            // Verificar dependencias antes de intentar eliminar
+            if (tieneDependencias(universityID)) {
+                JOptionPane.showMessageDialog(this, "La universidad tiene dependencias en la tabla campus. No se puede eliminar.", "Error de Eliminación", JOptionPane.ERROR_MESSAGE);
+                return; // Salir de la función si hay dependencias
+            }
 
+            // Si no hay dependencias, proceder con la eliminación
+            String deleteQuery = "DELETE FROM university WHERE id_university = " + universityID;
             ResultSetIES9021 result = DDBBConnection.SendQuery(deleteQuery);
 
             // Verificar el estado del resultado
@@ -352,13 +374,48 @@ public class DeleteUniversity extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(this, "No se pudo eliminar la universidad.", "Error de Eliminación", JOptionPane.ERROR_MESSAGE);
             }
-            listar();
+
             // Puedes agregar lógica adicional según sea necesario
         } catch (Exception e) {
             e.printStackTrace(); // Manejo de errores en la base de datos
             JOptionPane.showMessageDialog(this, "Error al eliminar la universidad.", "Error de Eliminación", JOptionPane.ERROR_MESSAGE);
         }
     }
+
+private boolean tieneDependencias(int universityID) {
+    try {
+        // Consulta utilizando INNER JOIN para verificar dependencias
+        String query = "SELECT COUNT(*) FROM campus WHERE id_university = " + universityID;
+        ResultSetIES9021<Object> result = DDBBConnection.SendQuery(query);
+
+        if (result.getState()) {
+            List<Object> data = result.getDatos();
+            int count = (data.isEmpty()) ? 0 : Integer.parseInt(data.get(0).toString());
+
+            boolean tieneDependencias = count > 0;
+
+            if (tieneDependencias) {
+                System.out.println("La universidad con ID " + universityID + " tiene dependencias en la tabla campus.");
+            } else {
+                System.out.println("No hay dependencias para la universidad con ID: " + universityID);
+            }
+
+            return tieneDependencias;
+        } else {
+            System.err.println("Error al ejecutar la consulta: " + result.getClarification());
+            return false;
+        }
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(null, "Error al convertir el ID de universidad a entero.");
+        return false;
+    } catch (Exception e) {
+        e.printStackTrace();
+        return false;
+    }
+}
+
+
+
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -369,7 +426,7 @@ public class DeleteUniversity extends javax.swing.JFrame {
     private javax.swing.JTextField TXTuniversity;
     private javax.swing.JTable Tabla;
     private javax.swing.JButton btnCancelar;
-    private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnEliminar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;

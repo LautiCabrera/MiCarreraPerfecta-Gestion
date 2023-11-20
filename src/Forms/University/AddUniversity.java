@@ -35,16 +35,24 @@ public class AddUniversity extends javax.swing.JFrame {
 
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTree1 = new javax.swing.JTree();
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        jSlider1 = new javax.swing.JSlider();
+        jLabel5 = new javax.swing.JLabel();
+        jSpinner1 = new javax.swing.JSpinner();
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         TXTuniversity = new javax.swing.JTextField();
-        TXTmagnamet = new javax.swing.JTextField();
-        TXTupdateuser = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
+        BoxMagnamet = new javax.swing.JComboBox<>();
+        BoxUsers = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         Tabla = new javax.swing.JTable();
@@ -55,6 +63,17 @@ public class AddUniversity extends javax.swing.JFrame {
         jButton1.setText("jButton1");
 
         jButton2.setText("jButton2");
+
+        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane2.setViewportView(jList1);
+
+        jScrollPane3.setViewportView(jTree1);
+
+        jLabel5.setText("jLabel5");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -67,12 +86,6 @@ public class AddUniversity extends javax.swing.JFrame {
         TXTuniversity.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 TXTuniversityActionPerformed(evt);
-            }
-        });
-
-        TXTmagnamet.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TXTmagnametActionPerformed(evt);
             }
         });
 
@@ -96,6 +109,15 @@ public class AddUniversity extends javax.swing.JFrame {
             }
         });
 
+        BoxMagnamet.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Publica", "Privada" }));
+        BoxMagnamet.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BoxMagnametActionPerformed(evt);
+            }
+        });
+
+        BoxUsers.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Leandro Moyano", "Nicolas Basconcello", "Juan Salinas", "Amaya Dylan", "Amaya Rodrigo", "Arboit Ilko", "Arce Lucas", "Arenas Veronica", "Bustamante Enzo", "Bustos Pedro", "Cabrera Lautaro", "Castillo Joaquin", "Coria Adrian", "Fornasari Pablo", "Coria Agustin", "Garcia Dario", "Martorana Bruno", "Godoy Julian", "Olguin Bruno", "Ramirez Yoel", "Rico Enzo", "Tello Sebastian", "Urizar Arnaldo", "Sarmiento Marisa", "Saldeña Juan", "Rodriguez Federico", "Gogol Javier", "Nicolás Suarez" }));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -111,15 +133,15 @@ public class AddUniversity extends javax.swing.JFrame {
                         .addComponent(btnGuardar)
                         .addGap(23, 23, 23)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnCancelar)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(54, 54, 54)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(TXTmagnamet, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
-                                .addComponent(TXTupdateuser))
-                            .addComponent(TXTuniversity, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(btnCancelar))
-                .addContainerGap(232, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(TXTuniversity)
+                            .addComponent(BoxMagnamet, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(BoxUsers, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(195, 195, 195)))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -131,12 +153,12 @@ public class AddUniversity extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(TXTmagnamet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(BoxMagnamet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(TXTupdateuser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                    .addComponent(BoxUsers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGuardar)
                     .addComponent(btnCancelar))
@@ -226,7 +248,7 @@ public class AddUniversity extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(8, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(Actualizar)
@@ -246,7 +268,7 @@ public class AddUniversity extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Actualizar)
-                .addContainerGap(89, Short.MAX_VALUE))
+                .addContainerGap(86, Short.MAX_VALUE))
         );
 
         jPanel1.getAccessibleContext().setAccessibleName("datos");
@@ -257,10 +279,6 @@ public class AddUniversity extends javax.swing.JFrame {
     private void TXTuniversityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTuniversityActionPerformed
         String name;
     }//GEN-LAST:event_TXTuniversityActionPerformed
-
-    private void TXTmagnametActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTmagnametActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TXTmagnametActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         cancelFlag = true;   
@@ -298,6 +316,10 @@ public class AddUniversity extends javax.swing.JFrame {
         listar();        // TODO add your handling code here:
     }//GEN-LAST:event_ActualizarActionPerformed
 
+    private void BoxMagnametActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BoxMagnametActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BoxMagnametActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -333,20 +355,32 @@ public class AddUniversity extends javax.swing.JFrame {
         });
     }
 
-public void guardar() {
+private void guardar() {
     String name = TXTuniversity.getText();
-    String idManagement = TXTmagnamet.getText();
-    String idUserCreate = TXTupdateuser.getText();
 
-    if (idUserCreate.isEmpty() || idManagement.isEmpty() || name.isEmpty()) {
-        JOptionPane.showMessageDialog(null, "Alguno de los campos está vacío");
+    if (name.isEmpty()) {
+        JOptionPane.showMessageDialog(null, "El campo 'University Name' está vacío");
     } else {
         try {
             // Crear una instancia de University y establecer sus propiedades
             University university = new University();
             university.setName(name);
-            university.setId_management(Integer.parseInt(idManagement));
-            university.setId_user_create(Integer.parseInt(idUserCreate));
+
+            // Obtener el valor seleccionado del JComboBox y asignar un valor numérico
+            String selectedMagnament = (String) BoxMagnamet.getSelectedItem();
+            int idManagement = 0;
+
+            if (selectedMagnament.equals("Publica")) {
+                idManagement = 2;
+            } else if (selectedMagnament.equals("Privada")) {
+                idManagement = 1;
+            }
+
+            university.setId_management(idManagement);
+
+            // Obtener el ID del usuario seleccionado
+            int idUser = ObtenerUsuario();
+            university.setId_user_create(idUser);
 
             // Obtener la fecha actual en el formato necesario
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -364,20 +398,16 @@ public void guardar() {
                 JOptionPane.showMessageDialog(this, "No se pudo crear la universidad.", "Error de Creación", JOptionPane.ERROR_MESSAGE);
             }
             listar();
-        
+
         } catch (Exception e) {
-            e.printStackTrace(); // Manejo de errores en la base de datos
+            e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error al crear la universidad.", "Error de Creación", JOptionPane.ERROR_MESSAGE);
         }
     }
 }
 
 
-
-
-
-
-
+// Esta funcion sirve para rellenar la lista de Universidades
 private void listar() {
     try {
         DefaultTableModel modelo = (DefaultTableModel) Tabla.getModel();
@@ -396,6 +426,72 @@ private void listar() {
     }
 }
 
+public int ObtenerUsuario() {
+    String selectedUser = (String) BoxUsers.getSelectedItem();
+
+    // Asignar el número de ID correspondiente al usuario seleccionado
+    switch (selectedUser) {
+        case "Leandro Moyano":
+            return 1;
+        case "Nicolas Basconcello":
+            return 2;
+        case "Juan Salinas":
+            return 3;
+        case "Amaya Dylan":
+            return 4;
+        case "Amaya Rodrigo":
+            return 5;
+        case "Arboit Ilko":
+            return 6;
+        case "Arce Lucas":
+            return 7;
+        case "Arenas Veronica":
+            return 8;
+        case "Bustamante Enzo":
+            return 9;
+        case "Bustos Pedro":
+            return 10;
+        case "Cabrera Lautaro":
+            return 11;
+        case "Castillo Joaquin":
+            return 12;
+        case "Coria Adrian":
+            return 13;
+        case "Fornasari Pablo":
+            return 14;
+        case "Coria Agustin":
+            return 15;
+        case "Garcia Dario":
+            return 16;
+        case "Martorana Bruno":
+            return 20;
+        case "Godoy Julian":
+            return 19;
+        case "Olguin Bruno":
+            return 21;
+        case "Ramirez Yoel":
+            return 22;
+        case "Rico Enzo":
+            return 23;
+        case "Tello Sebastian":
+            return 24;
+        case "Urizar Arnaldo":
+            return 25;
+        case "Sarmiento Marisa":
+            return 26;
+        case "Saldeña Juan":
+            return 27;
+        case "Rodriguez Federico":
+            return 28;
+        case "Gogol Javier":
+            return 29;
+        case "Nicolás Suarez":
+            return 30;
+        default:
+            return 0; // Valor predeterminado o manejo de error
+    }
+}
+
 
 
 
@@ -404,22 +500,30 @@ private void listar() {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Actualizar;
-    private javax.swing.JTextField TXTmagnamet;
+    private javax.swing.JComboBox<String> BoxMagnamet;
+    private javax.swing.JComboBox<String> BoxUsers;
     private javax.swing.JTextField TXTuniversity;
-    private javax.swing.JTextField TXTupdateuser;
     private javax.swing.JTable Tabla;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnModificar;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JSlider jSlider1;
+    private javax.swing.JSpinner jSpinner1;
+    private javax.swing.JTree jTree1;
     // End of variables declaration//GEN-END:variables
 }
