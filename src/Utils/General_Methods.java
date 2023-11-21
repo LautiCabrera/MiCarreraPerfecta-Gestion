@@ -13,7 +13,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 //import static Utils.DDBBConnection.*;
 import Forms.InicioJF;
-import Forms.Career_Word_Key_JF;
 import static Utils.JsonDataFetcher.selectQuery;
 import java.util.List;
 import java.util.Properties;
