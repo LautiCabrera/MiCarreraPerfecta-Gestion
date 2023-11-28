@@ -24,16 +24,17 @@ public abstract class PreferenceController {
         return preferenceList;
     }
 
-    public static void createPreference(String group, String name) {
-        String query = "INSERT INTO preference (`group`, `name`, id_user_create, id_user_update, f_create, f_update) VALUES ('"
-                + group + "', '" + name + "', 6, 6, NOW(), NOW())";
+    public static void createPreference(String group, String name, int id_wk) {
+        String query = "INSERT INTO preference (`group`, `name`, id_word_key, id_user_create, id_user_update, f_create, f_update) VALUES ('"
+                + group + "', '" + name + "', " + id_wk + ", 6, 6, NOW(), NOW())";
         ResultSetIES9021 SendQuery = DDBBConnection.SendQuery(query);
     }
     
-    public static void modifyPreference(String group, String name, int id){
+    public static void modifyPreference(String group, String name, int id_wk, int id){
         String updateQuery = "UPDATE preference " +
                     "SET `group` = '" + group + "', " +
                     "`name` = '" + name + "', " +
+                    "id_word_key = " + id_wk + ", " +
                     "f_update = NOW()"+
                     " WHERE id_preference = " + id;
         System.out.println(updateQuery);

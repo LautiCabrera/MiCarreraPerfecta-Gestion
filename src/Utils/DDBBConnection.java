@@ -7,7 +7,7 @@ public abstract class DDBBConnection {
 
     private static String DB = "ies9021_database";
     private static String URL = "jdbc:mysql://ies9021.edu.ar:3306/" + DB
-            + "?zeroDateTimeBehavior=round&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+            + "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     private static String User = "ies9021_userdb";
     private static String Password = "Xsw23edc.127";
     private static String Driver = "com.mysql.cj.jdbc.Driver";
@@ -54,6 +54,7 @@ public abstract class DDBBConnection {
                 logConnection("Conexión exitosa", query);
                 Disconect();
 
+                
             } catch (SQLException e) {
                 logConnection("Conexión fallida", query);
                 e.printStackTrace();
@@ -68,7 +69,8 @@ public abstract class DDBBConnection {
     private static void logConnection(String title, String description) {
         String insertQuery = "INSERT INTO logs (title, description, id_user, date) VALUES (?, ?, ?, ?)";
 
-        try (Connection connection = Conectar(); PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+        try (Connection connection = Conectar();
+                PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
 
             preparedStatement.setString(1, title);
             preparedStatement.setString(2, description);
@@ -85,7 +87,7 @@ public abstract class DDBBConnection {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet result = null;
-
+        System.out.println(query);   
         try {
             connection = Conectar();
             statement = connection.prepareStatement(query);
@@ -102,55 +104,31 @@ public abstract class DDBBConnection {
         return null;
     }
 
-    /**
-     * La función getCount recupera el recuento de filas de una tabla
-     * especificada en una base de datos, opcionalmente filtrada por una
-     * cláusula WHERE.
-     *
-     * @param tableName El parámetro tableName es una cadena que representa el
-     * nombre de la tabla en la base de datos desde la cual desea contar el
-     * número de filas.
-     * @param whereClause El parámetro `whereClause` es una cadena que
-     * representa la condición que se aplicará en la consulta SQL. Se utiliza
-     * para filtrar las filas devueltas por la consulta según criterios
-     * específicos. Por ejemplo, si `whereClause` es `"edad > 18"`, la consulta
-     * solo contará el
-     * @return El método devuelve un valor entero, que representa el recuento de
-     * filas en la tabla especificada que coinciden con la cláusula donde dada.
-     */
-    public static int getCount(String tableName, String whereClause) {
-        String query = "SELECT COUNT(*) FROM " + tableName;
-        if (whereClause != null && !whereClause.isEmpty()) {
-            query += " WHERE " + whereClause;
-        }
-        int conteo = 0;
-
-        ResultSet resultSet = null;
-        try {
-
-            resultSet = fetchData(query);
-            if (resultSet.next()) {
-                conteo = resultSet.getInt(1);
-            }
-        } catch (SQLException e) {
-            logConnection("Conexión fallida", query);
-        }
-        return conteo;
-    }
-
-    public static boolean QueryVerification(String query) {
-        
+    public static boolean QueryVerification(String Query) {
+        String testQuery = Query.toLowerCase().substring(0, 6);
         boolean verification = false;
-        String selectPattern = "SELECT .* FROM .*";
-            String insertPattern = "INSERT INTO .* VALUES .*";
-            String updatePattern = "UPDATE .* SET .* WHERE .*";
-            String deletePattern = "DELETE FROM .* WHERE .*";
+        if (testQuery.equals("insert") || testQuery.equals("select") ||
+                testQuery.equals("update") || testQuery.equals("delete")) {
+            switch (Query.toLowerCase().charAt(0)) {
+                case 's':
+                    verification = Query.matches("SELECT (\\w+|\\W) FROM [A-Za-z0-9]+(_[A-Za-z0-9]+)* WHERE ( ?[A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))+((,| AND| OR)( [A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))?)*");
+                    break;
+                case 'i':
+                verification = Query.matches("INSERT INTO [A-Za-z0-9]+ \\([^)]*\\) VALUES \\([^)]*\\)(,\\s\\([^)]*\\))*");
+                    break;
+                case 'u':
+                    verification = Query.matches("UPDATE \\w+ SET ( ?[A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))+(,?( [A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))?)* WHERE ( ?[A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))+((,| AND| OR)( [A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))?)*");
+                    break;
+                case 'd':
+                    verification = Query.matches("DELETE FROM \\w+ WHERE ( ?[A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))+((,| AND| OR)( [A-Za-z0-9]+(_[A-Za-z0-9]+)* = (('\\w+')|(\\d+)))?)*");
+                    break;
+            }
+        }
 
-        if (query.matches(selectPattern) || query.matches(insertPattern) || query.matches(updatePattern) || query.matches(deletePattern)) {
-            logConnection("Valid Connection attempt", query);
-            verification = true;
+        if (verification) {
+            logConnection("Valid Connection attempt", Query);
         } else {
-            logConnection("Invalid Connection attempt", query);
+            logConnection("Invalid Connection attempt", Query);
         }
 
         return verification;

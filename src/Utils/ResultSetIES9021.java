@@ -13,15 +13,15 @@ public class ResultSetIES9021<T> {
     }
 
     public void setState(boolean state) {
-        this.State = state;
+        State = state;
     }
 
     public void setClarification(String clarification) {
-        this.Clarification = clarification;
+        Clarification = clarification;
     }
 
     public void addObject(T objectInstance) {
-        this.datos.add(objectInstance);
+        datos.add(objectInstance);
     }
 
     public List<T> getDatos() {

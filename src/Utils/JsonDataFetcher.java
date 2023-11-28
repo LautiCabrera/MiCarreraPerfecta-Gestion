@@ -233,5 +233,34 @@ public class JsonDataFetcher<T> {
         return dataList;
     }
     
-    
+    public static ArrayList<String[]> SEND(String selectParams, String tableName, String whereClause) {
+        String query = "SELECT " + selectParams + " FROM " + tableName;
+        if (whereClause != null && !whereClause.isEmpty()) {
+            query += " WHERE " + whereClause;
+        }
+
+        ArrayList<String[]> AList = new ArrayList<>();
+        ResultSet resultSet = DDBBConnection.fetchData(query);
+        
+        try {
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int columnCount = metaData.getColumnCount();
+            
+            while (resultSet.next()) {
+                String Datos[]= new String[columnCount];
+            
+                for (int i = 0; i < Datos.length; i++) {
+                    Datos[i]=resultSet.getString(i+1);
+                    if(Datos[i].isEmpty()){Datos[i]="";}
+                }
+                
+                AList.add(Datos);
+                
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return AList;
+    }
 }
