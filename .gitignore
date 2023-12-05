@@ -1,4 +1,4 @@
-/build/
-/nbproject/
-/test/
-/.vscode/
+build/
+nbproject/
+test/
+.vscode/
