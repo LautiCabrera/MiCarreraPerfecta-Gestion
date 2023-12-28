@@ -1,8 +1,5 @@
 package Models;
 
-import edu.stanford.nlp;
-
-
 public class Branch_Words_Key {
     private int id_branch_word_key;
     private int id_branch;
@@ -99,6 +96,5 @@ public class Branch_Words_Key {
     public void setF_update(String f_update) {
         this.f_update = f_update;
     }  
-    
-    
+   
 }
