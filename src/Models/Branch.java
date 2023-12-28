@@ -218,7 +218,7 @@ public class Branch {
                        
             for(int i = 0; i < branchesList.size(); i++) {                               
                 Branch branch = branchesList.get(i);     
-                // Falta optimizar (demora en la carga de datos)
+                // Falta optimizar (demora en la cara de datos)
                 //String queryWhere = String.format("id_branch = %d ;",branch.getIdBranch());                                            
                 //int countWK = DDBBConnection.getCount("branch_words_key", queryWhere);
                 //int countCareer= DDBBConnection.getCount("career", queryWhere);
