@@ -1,5 +1,6 @@
-package Forms;
+package Forms.CareerWordKey;
 
+import Forms.Tablon_JF;
 import Models.Career_Word_Key;
 import Models.University;
 import Models.WordsKey;
