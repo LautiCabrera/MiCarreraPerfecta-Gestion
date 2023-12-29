@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Forms.BranchIntelligence;
 
 import Models.BranchIntelligence;
@@ -93,7 +89,6 @@ public class branch_intelligence_interface extends javax.swing.JFrame {
         btn_update = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(660, 365));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -347,9 +342,7 @@ public class branch_intelligence_interface extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_deleteActionPerformed
 
     private void btn_createActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_createActionPerformed
-        branch_intelligence_create addRelation = new branch_intelligence_create();
-        addRelation.setParent(this);
-        addRelation.setVisible(true);
+        
     }//GEN-LAST:event_btn_createActionPerformed
 
     private void btn_updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_updateActionPerformed

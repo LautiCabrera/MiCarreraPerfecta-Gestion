@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Forms.BranchIntelligence;
 
 import Models.Branch;
@@ -15,7 +11,6 @@ import Models.Users;
  */
 public class branch_intelligence_update extends javax.swing.JFrame {
 
-    
     BranchIntelligence branchintelligence = new BranchIntelligence();
     private branch_intelligence_interface parentForm;
     private String idBranchIntelligence;
@@ -118,10 +113,6 @@ public class branch_intelligence_update extends javax.swing.JFrame {
                     .addComponent(comboBoxUsers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        comboBoxBranch.setSelectedIndex(-1);
-
-        comboBoxIntelligence.setSelectedIndex(-1);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);

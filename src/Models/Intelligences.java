@@ -1,8 +1,6 @@
 package Models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.sql.Timestamp;
-import java.sql.Date;
 
 public class Intelligences {
     
@@ -25,6 +23,7 @@ public class Intelligences {
     private java.util.Date update;
 
     public Intelligences() {
+        
     }
 
     public Intelligences(int id_intelligences, String name, String description, String text_user, int id_user_create, int id_user_update, java.util.Date create, java.util.Date update) {
@@ -101,7 +100,5 @@ public class Intelligences {
     public void setUpdate(java.util.Date update) {
         this.update = update;
     }
-    
-    
     
 }
