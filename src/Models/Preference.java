@@ -1,7 +1,11 @@
 package Models;
+import Utils.DDBBConnection;
+import Utils.JsonDataFetcher;
+import Utils.ResultSetIES9021;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.sql.Timestamp;
 import java.sql.Date;
+import java.util.List;
 public class Preference {
 	
 	private final static String TABLENAME = "preference";
@@ -78,4 +82,33 @@ public class Preference {
 		this.f_update = f_update;
 	}
 	
+        public static List<String[]> getPreferences() {
+            List<String[]> preferenceList = JsonDataFetcher.selectQuery("*", "preference", "");
+            for (String[] strings : preferenceList) {
+                System.out.println(strings);
+            }
+            return preferenceList;
+        }
+
+        public static void createPreference(String group, String name) {
+            String query = "INSERT INTO preference (`group`, `name`, id_user_create, id_user_update, f_create, f_update) VALUES ('"
+                    + group + "', '" + name + "', 6, 6, NOW(), NOW())";
+            ResultSetIES9021 SendQuery = DDBBConnection.SendQuery(query);
+        }
+
+        public static void modifyPreference(String group, String name, int id){
+            String updateQuery = "UPDATE preference " +
+                        "SET `group` = '" + group + "', " +
+                        "`name` = '" + name + "', " +
+                        "f_update = NOW()"+
+                        " WHERE id_preference = " + id;
+            System.out.println(updateQuery);
+            System.out.println(DDBBConnection.QueryVerification(updateQuery));
+            DDBBConnection.SendQuery(updateQuery);
+        }
+
+        public static void deletePreference(int id){
+            String query = "DELETE FROM preference WHERE id_preference = "+ id;
+            DDBBConnection.SendQuery(query);
+        }
 }

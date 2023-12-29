@@ -1,31 +1,15 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Forms.Preference;
 
-import Controllers.PreferenceController;
-import Forms.ErrorDialog;
+//import Forms.ErrorDialog;
 import Models.Preference;
-import Utils.DDBBConnection;
 import Utils.JsonDataFetcher;
 import Utils.ResultSetIES9021;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author wirix
- */
 public class Preference_Interface extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Preference_Interface
-     */
     public Preference_Interface() {
         initComponents();
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
@@ -231,7 +215,7 @@ public class Preference_Interface extends javax.swing.JFrame {
                 Object cellValue = jTable1.getValueAt(rowIndex, 0);
                 if (cellValue != null) {
                     System.out.println("Valor de la celda: " + cellValue.toString());
-                    PreferenceController.deletePreference(Integer.parseInt(cellValue.toString()));
+                    Preference.deletePreference(Integer.parseInt(cellValue.toString()));
                 } else {
                     errorMessage("La celda está vacía.");
                 }
@@ -248,21 +232,23 @@ public class Preference_Interface extends javax.swing.JFrame {
     }//GEN-LAST:event_refreshButtonActionPerformed
 
     private void errorMessage(String msg) {
-        ErrorDialog errorDiag = new ErrorDialog(this, true);
+        /*ErrorDialog errorDiag = new ErrorDialog(this, true);
         errorDiag.getErrorMessage(msg);
-        errorDiag.setVisible(true);
+        errorDiag.setVisible(true);*/
     }
 
     private void cargarTabla() {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel(); // Obtiene el modelo de la tabla existente
         model.setRowCount(0); // Limpia la tabla antes de cargar nuevos datos
 
-        List<String[]> data = PreferenceController.getPreferences();
+        List<String[]> data = Preference.getPreferences();
 
         for (String[] row : data) {
             model.addRow(row);
         }
     }
+    
+    
 
     /**
      * @param args the command line arguments

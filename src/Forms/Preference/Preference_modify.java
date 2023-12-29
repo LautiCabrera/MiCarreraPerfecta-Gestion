@@ -1,10 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/OkCancelDialog.java to edit this template
- */
 package Forms.Preference;
 
-import Controllers.PreferenceController;
 import Models.Preference;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -14,10 +9,6 @@ import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
-/**
- *
- * @author wirix
- */
 public class Preference_modify extends javax.swing.JDialog {
 
     /**
@@ -146,7 +137,7 @@ public class Preference_modify extends javax.swing.JDialog {
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         String newGroup = groupComboBox.getSelectedItem().toString();
         String newName = nameTextField.getText();
-        PreferenceController.modifyPreference(newGroup, newName, preferenceModifier.getIdPreference());
+        Preference.modifyPreference(newGroup, newName, preferenceModifier.getIdPreference());
         doClose(RET_OK);
     }//GEN-LAST:event_okButtonActionPerformed
 
