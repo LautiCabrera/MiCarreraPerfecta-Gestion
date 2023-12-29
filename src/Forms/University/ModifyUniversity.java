@@ -1,10 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Forms.University;
 
-import Models.University;
 import Utils.DDBBConnection;
 import Utils.JsonDataFetcher;
 import Utils.ResultSetIES9021;
@@ -18,10 +13,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author Seba
- */
 public class ModifyUniversity extends javax.swing.JFrame {
 
     DefaultTableModel model;
@@ -341,7 +332,6 @@ public class ModifyUniversity extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Error listing universities.", "Listing Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable Tabla;

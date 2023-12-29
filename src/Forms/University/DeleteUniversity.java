@@ -1,10 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Forms.University;
 
-import Models.University;
 import Utils.DDBBConnection;
 import Utils.JsonDataFetcher;
 import Utils.ResultSetIES9021;
@@ -12,17 +7,9 @@ import java.util.Arrays;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import java.sql.SQLException;
 
-/**
- *
- * @author Seba
- */
 public class DeleteUniversity extends javax.swing.JFrame {
 
-    /**
-     * Creates new form DeleteUniversity
-     */
     public DeleteUniversity() {
         initComponents();
         setLocationRelativeTo(null);
@@ -413,10 +400,6 @@ private boolean tieneDependencias(int universityID) {
         return false;
     }
 }
-
-
-
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Actualizar;

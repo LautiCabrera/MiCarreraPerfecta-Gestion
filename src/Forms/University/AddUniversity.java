@@ -4,8 +4,6 @@ import Models.University;
 import Utils.DDBBConnection;
 import Utils.JsonDataFetcher;
 import Utils.ResultSetIES9021;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -491,12 +489,6 @@ public int ObtenerUsuario() {
             return 0; // Valor predeterminado o manejo de error
     }
 }
-
-
-
-
-
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Actualizar;
