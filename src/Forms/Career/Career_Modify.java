@@ -1,11 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
 package Forms.Career;
 
-import Controllers.CareerController;
-import static Forms.Career.Career_Create.RET_OK;
 import Models.Career;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -285,7 +279,7 @@ public class Career_Modify extends javax.swing.JDialog {
         int newId_branch = Integer.parseInt(BranchComboBox.getSelectedItem().toString());
         int newId_range = Integer.parseInt(RangeComboBox.getSelectedItem().toString());
 
-        CareerController.modifyCareer(careerModifier.getIdCareer(),newName, newTitle_intermediate, newDescription, newDuration_months, newId_type_career, newId_modality, newId_branch, newId_range, careerModifier.getIdCareer());
+        Career.modifyCareer(careerModifier.getIdCareer(),newName, newTitle_intermediate, newDescription, newDuration_months, newId_type_career, newId_modality, newId_branch, newId_range, careerModifier.getIdCareer());
         doClose(RET_OK);  // TODO add your handling code here:
     }//GEN-LAST:event_ModifyActionPerformed
 

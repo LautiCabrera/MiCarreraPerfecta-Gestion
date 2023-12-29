@@ -1,12 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
 package Forms.Career;
 
-import Controllers.CareerController;
 import static Forms.Career.Career_Create.RET_CANCEL;
 import static Forms.Career.Career_Create.RET_OK;
+import Models.Career;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
@@ -15,10 +11,6 @@ import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
-/**
- *
- * @author Melisa
- */
 public class Career_Create extends javax.swing.JDialog {
 
     /**
@@ -252,7 +244,7 @@ public class Career_Create extends javax.swing.JDialog {
         int id_branch = Integer.parseInt(BranchComboBox.getSelectedItem().toString());
         int id_range = Integer.parseInt(RangeComboBox.getSelectedItem().toString());
 
-        CareerController.createCareer(name, title_intermediate, description, duration_months, id_type_career, id_modality, id_branch, id_range);
+        Career.createCareer(name, title_intermediate, description, duration_months, id_type_career, id_modality, id_branch, id_range);
         doClose(RET_OK); // TODO add your handling code here:
     }//GEN-LAST:event_OkButtonActionPerformed
 

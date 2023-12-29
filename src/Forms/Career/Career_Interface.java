@@ -1,8 +1,6 @@
 package Forms.Career;
 
-import Controllers.CareerController;
 import javax.swing.JOptionPane;
-import Forms.ErrorDialog;
 import Forms.Career.Career_Create;
 import Forms.Career.Career_Modify;
 import Models.Career;
@@ -190,7 +188,7 @@ public class Career_Interface extends javax.swing.JFrame {
                     Object cellValue = jTable1.getValueAt(rowIndex, 0);
                     if (cellValue != null) {
                         System.out.println("Valor de la celda: " + cellValue.toString());
-                        CareerController.deleteCareer(Integer.parseInt(cellValue.toString()));
+                        Career.deleteCareer(Integer.parseInt(cellValue.toString()));
                     } else {
                         errorMessage("La celda está vacía.");
                     }
@@ -234,16 +232,16 @@ public class Career_Interface extends javax.swing.JFrame {
     }//GEN-LAST:event_ModifyActionPerformed
 
     private void errorMessage(String msg) {
-        ErrorDialog errorDiag = new ErrorDialog(this, true);
+        /*ErrorDialog errorDiag = new ErrorDialog(this, true);
         errorDiag.getErrorMessage(msg);
-        errorDiag.setVisible(true);
+        errorDiag.setVisible(true);*/
     }
 
     private void cargarTabla() {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel(); // Obtiene el modelo de la tabla existente
         model.setRowCount(0); // Limpia la tabla antes de cargar nuevos datos
 
-        List<String[]> data = CareerController.getCareer();
+        List<String[]> data = Career.getCareer();
 
         for (String[] row : data) {
             model.addRow(row);
